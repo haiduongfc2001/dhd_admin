@@ -3,7 +3,7 @@
 function Header () {
     return (
         <h1>
-            Demo
+            Home Page
         </h1>
     )
 }
