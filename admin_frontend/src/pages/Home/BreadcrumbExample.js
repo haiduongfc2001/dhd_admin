@@ -1,15 +1,27 @@
+import React from 'react';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import styles from './Home.module.scss'
+import classNames from "classnames/bind";
 
-function BreadcrumbPage() {
+const cx= classNames.bind(styles)
+
+function BreadcrumbExample() {
     return (
-        <Breadcrumb>
-            <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-            <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-                Library
+        <Breadcrumb className={cx('breadcrumb')}>
+            <Breadcrumb.Item href="#">
+                Home
             </Breadcrumb.Item>
-            <Breadcrumb.Item active>Data</Breadcrumb.Item>
+            <Breadcrumb.Item
+                href="/"
+                active
+            >
+                Products
+            </Breadcrumb.Item>
+            {/*<Breadcrumb.Item>*/}
+            {/*    Data*/}
+            {/*</Breadcrumb.Item>*/}
         </Breadcrumb>
     );
 }
 
-export default BreadcrumbPage;
+export default BreadcrumbExample;
