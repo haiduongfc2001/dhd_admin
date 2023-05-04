@@ -4,11 +4,23 @@
 :root {
   //--primary: #ee4d2d;
   --primary: #321fdb;
+  --black: #000;
+  --text-color: #333;
 
   // Default layout
   --default-layout-header-height: 60px;
   --default-layout-width: 100%;
   --default-layout-sidebar-width: 300px;
+
+  // Default margin
+  --default-margin-left: 20px;
+  --default-margin-right: 20px;
+  --default-margin-top: 20px;
+  --default-margin-bottom: 20px;
+  --default-margin: 20px;
+
+  --default-font-size: 1.6rem;
+
 }
 
 * {
@@ -26,5 +38,16 @@ body {
   font-size: 1.6rem;
   line-height: 1.5;
   text-rendering: optimizeSpeed;
+  color: var(--text-color);
+}
+
+button, input, [tabindex] {
+  outline: none;
+  border: none;
+}
+
+a[href] {
+  color: var(--text-color);
+  text-decoration: none;
 }
 
