@@ -12,31 +12,9 @@ function ListProducts() {
     ]);
     const [newTodo, setNewTodo] = useState({});
 
-    const handleInputChange = (event) => {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        setNewTodo({
-            ...newTodo,
-            [name]: value,
-        });
-    };
-
-    const handleAddTodo = () => {
-        const id = todos.length + 1;
-        setTodos([...todos, {id, ...newTodo}]);
-        setNewTodo({});
-    };
-
-    const handleUpdateTodo = (id, newProduct, newQuantity) => {
-        setTodos(todos.map((todo) => {
-            if (todo.id === id) {
-                return {...todo, product: newProduct, quantity: newQuantity};
-            }
-            return todo;
-        }));
+    const handleUpdateTodo = () => {
+        // incomplete
     }
-
 
     const handleDeleteTodo = (id) => {
         setTodos(todos.filter((todo) => todo.id !== id));
@@ -71,15 +49,6 @@ function ListProducts() {
                 ))}
                 </tbody>
             </Table>
-            <Form inline>
-                <Form.Control name="product" placeholder="Product name" value={newTodo.product || ''}
-                              onChange={handleInputChange} className="mr-sm-2 mb-2" style={{ minHeight: "40px" }}/>
-                <Form.Control name="quantity" type="number" placeholder="Quantity" value={newTodo.quantity || ''}
-                              onChange={handleInputChange} className="mr-sm-2 mb-2" style={{ minHeight: "40px" }}/>
-                <Button variant="primary" onClick={handleAddTodo}>
-                    <IoMdAddCircle />
-                </Button>
-            </Form>
         </>
     );
 }
