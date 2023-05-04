@@ -1,6 +1,35 @@
 .wrapper {
+  --sidebar-font-size: 1.6rem;
+
   width: var(--default-layout-sidebar-width);
   min-height: 1000px;
   background-color: antiquewhite;
-  margin: 0 10px;
+}
+
+.inner {
+  margin: var(--default-margin);
+}
+
+.inner Button {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  min-width: calc(var(--default-layout-sidebar-width) - var(--default-margin) * 2);
+  border: none;
+}
+
+//.sidebar-menu-users.selected,
+.sidebar-users,
+.sidebar-products,
+.sidebar-orders,
+.sidebar-register {
+  font-size: var(--sidebar-font-size);
+}
+
+.icon-users,
+.icon-products,
+.icon-orders,
+.icon-register {
+  font-size: var(--sidebar-font-size);
+  margin-right: 16px;
 }
