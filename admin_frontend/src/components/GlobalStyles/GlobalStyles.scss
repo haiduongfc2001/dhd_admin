@@ -4,6 +4,11 @@
 :root {
   //--primary: #ee4d2d;
   --primary: #321fdb;
+
+  // Default layout
+  --default-layout-header-height: 60px;
+  --default-layout-width: 100%;
+  --default-layout-sidebar-width: 300px;
 }
 
 * {
