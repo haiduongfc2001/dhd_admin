@@ -3,6 +3,11 @@ import {Table, Form, Button} from 'react-bootstrap';
 import {BsTrash} from 'react-icons/bs';
 import {IoMdAddCircle} from 'react-icons/io';
 import {HiPencilAlt} from "react-icons/hi";
+import classNames from "classnames/bind"
+import styles from "./Product.module.scss"
+
+const cx = classNames.bind(styles)
+
 
 function ListProducts() {
     const [todos, setTodos] = useState([
@@ -60,11 +65,19 @@ function ListProducts() {
                         <td>{todo.product}</td>
                         <td>{todo.quantity}</td>
                         <td>
-                            <Button variant="warning" onClick={() => handleUpdateTodo(todo.id)}>
-                                <HiPencilAlt/>
+                            <Button
+                                variant="warning"
+                                onClick={() => handleUpdateTodo(todo.id)}
+                                className={cx('button-update')}
+                            >
+                                <HiPencilAlt className={cx('icon-update')}/>
                             </Button>
-                            <Button variant="danger" onClick={() => handleDeleteTodo(todo.id)}>
-                                <BsTrash/>
+                            <Button
+                                variant="danger"
+                                onClick={() => handleDeleteTodo(todo.id)}
+                                className={cx('button-delete')}
+                            >
+                                <BsTrash className={cx('icon-delete')}/>
                             </Button>
                         </td>
                     </tr>
@@ -73,11 +86,11 @@ function ListProducts() {
             </Table>
             <Form inline>
                 <Form.Control name="product" placeholder="Product name" value={newTodo.product || ''}
-                              onChange={handleInputChange} className="mr-sm-2 mb-2" style={{ minHeight: "40px" }}/>
+                              onChange={handleInputChange} className="mr-sm-2 mb-2" style={{minHeight: "40px"}}/>
                 <Form.Control name="quantity" type="number" placeholder="Quantity" value={newTodo.quantity || ''}
-                              onChange={handleInputChange} className="mr-sm-2 mb-2" style={{ minHeight: "40px" }}/>
+                              onChange={handleInputChange} className="mr-sm-2 mb-2" style={{minHeight: "40px"}}/>
                 <Button variant="primary" onClick={handleAddTodo}>
-                    <IoMdAddCircle />
+                    <IoMdAddCircle/>
                 </Button>
             </Form>
         </>

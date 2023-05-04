@@ -13,7 +13,6 @@
 }
 
 .wrapper div {
-  margin: 0 10px;
   display: flex;
   //justify-content: center;
   align-items: center;
@@ -21,6 +20,7 @@
 
 .inner {
   height: 100%;
+  margin: 0 var(--default-margin);
   width: var(--default-layout-width);
   background-color: #ffffff;
   display: flex;
