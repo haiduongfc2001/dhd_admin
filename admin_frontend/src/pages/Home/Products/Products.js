@@ -1,4 +1,5 @@
 import {useEffect, useRef, useState} from "react";
+import axios from 'axios';
 import {Table, Form, Button} from 'react-bootstrap';
 import {BsTrash} from 'react-icons/bs';
 import {IoMdAddCircle} from 'react-icons/io';
@@ -17,17 +18,20 @@ function ListProducts() {
     ]);
     const [newTodo, setNewTodo] = useState({});
 
-    const productNameRef = useRef(null);
+    const [products, setProducts] = useState([]);
 
-    // const handleInputChange = (event) => {
-    //     const target = event.target;
-    //     const name = target.name;
-    //     const value = target.value;
-    //     setNewTodo({
-    //         ...newTodo,
-    //         [name]: value,
-    //     });
-    // };
+    useEffect(() => {
+        axios.get('http://localhost:5000/products')
+            .then(response => {
+                setProducts(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
+
+
+    const productNameRef = useRef(null);
 
     function validateInput(value) {
         const regex = /^[1-9]\d*$/; // Only allow positive integers not starting with 0
@@ -77,22 +81,22 @@ function ListProducts() {
                 </tr>
                 </thead>
                 <tbody>
-                {todos.map((todo) => (
-                    <tr key={todo.id}>
-                        <td style={{textAlign: "center"}}>{todo.id}</td>
-                        <td>{todo.product}</td>
-                        <td>{todo.quantity}</td>
+                {products.map((product) => (
+                    <tr key={product._id}>
+                        <td style={{textAlign: "center"}}>{product._id}</td>
+                        <td>{product.name}</td>
+                        <td>{product.quantity}</td>
                         <td>
                             <Button
                                 variant="warning"
-                                onClick={() => handleUpdateTodo(todo.id)}
+                                onClick={() => handleUpdateTodo(product._id)}
                                 className={cx('button-update')}
                             >
                                 <HiPencilAlt className={cx('icon-update')}/>
                             </Button>
                             <Button
                                 variant="danger"
-                                onClick={() => handleDeleteTodo(todo.id)}
+                                onClick={() => handleDeleteTodo(product._id)}
                                 className={cx('button-delete')}
                             >
                                 <BsTrash className={cx('icon-delete')}/>
