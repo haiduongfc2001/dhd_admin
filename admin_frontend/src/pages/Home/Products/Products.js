@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Table, Form, Button} from 'react-bootstrap';
 import {BsTrash} from 'react-icons/bs';
 import {IoMdAddCircle} from 'react-icons/io';
@@ -17,20 +17,38 @@ function ListProducts() {
     ]);
     const [newTodo, setNewTodo] = useState({});
 
-    const handleInputChange = (event) => {
-        const target = event.target;
-        const name = target.name;
-        const value = target.value;
-        setNewTodo({
-            ...newTodo,
-            [name]: value,
-        });
-    };
+    const productNameRef = useRef(null);
+
+    // const handleInputChange = (event) => {
+    //     const target = event.target;
+    //     const name = target.name;
+    //     const value = target.value;
+    //     setNewTodo({
+    //         ...newTodo,
+    //         [name]: value,
+    //     });
+    // };
+
+    function validateInput(value) {
+        const regex = /^[1-9]\d*$/; // Only allow positive integers not starting with 0
+        return regex.test(value);
+    }
+
+    function handleInputChange(e) {
+        const {name, value} = e.target;
+        if (name === 'quantity' && !validateInput(value)) {
+            return; // Do not update state if input is invalid
+        }
+        setNewTodo(prevState => ({...prevState, [name]: value}));
+    }
+
 
     const handleAddTodo = () => {
         const id = todos.length + 1;
         setTodos([...todos, {id, ...newTodo}]);
         setNewTodo({});
+
+        productNameRef.current.focus();
     };
 
     const handleUpdateTodo = (id, newProduct, newQuantity) => {
@@ -51,7 +69,7 @@ function ListProducts() {
         <>
             <Table striped bordered hover>
                 <thead>
-                <tr>
+                <tr className={cx('table-product-category')}>
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Quantity</th>
@@ -61,7 +79,7 @@ function ListProducts() {
                 <tbody>
                 {todos.map((todo) => (
                     <tr key={todo.id}>
-                        <td>{todo.id}</td>
+                        <td style={{textAlign: "center"}}>{todo.id}</td>
                         <td>{todo.product}</td>
                         <td>{todo.quantity}</td>
                         <td>
@@ -84,11 +102,27 @@ function ListProducts() {
                 ))}
                 </tbody>
             </Table>
-            <Form inline>
-                <Form.Control name="product" placeholder="Product name" value={newTodo.product || ''}
-                              onChange={handleInputChange} className="mr-sm-2 mb-2" style={{minHeight: "40px"}}/>
-                <Form.Control name="quantity" type="number" placeholder="Quantity" value={newTodo.quantity || ''}
-                              onChange={handleInputChange} className="mr-sm-2 mb-2" style={{minHeight: "40px"}}/>
+            <Form inline className={cx('form-product')}>
+                <Form.Control
+                    ref={productNameRef}
+                    name="product"
+                    placeholder="Product name"
+                    value={newTodo.product || ''}
+                    onChange={handleInputChange}
+                    className="mr-sm-2 mb-2"
+                    size="lg"
+                    style={{minHeight: "40px"}}
+                />
+                <Form.Control
+                    name="quantity"
+                    type="number"
+                    placeholder="Quantity"
+                    value={newTodo.quantity || ''}
+                    onChange={handleInputChange}
+                    className="mr-sm-2 mb-2"
+                    size="lg"
+                    style={{minHeight: "40px"}}
+                />
                 <Button variant="primary" onClick={handleAddTodo}>
                     <IoMdAddCircle/>
                 </Button>

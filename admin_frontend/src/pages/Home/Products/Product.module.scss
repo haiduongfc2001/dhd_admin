@@ -13,3 +13,14 @@ td Button {
 .icon-delete {
   font-size: 1.4rem;
 }
+
+
+
+.form-product input {
+  caret-color: var(--primary);
+}
+
+.table-product-category th:nth-child(1),
+.table-product-category th:nth-child(3) {
+  width: var(--default-width-table);
+}
