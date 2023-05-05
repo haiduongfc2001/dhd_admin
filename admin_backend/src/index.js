@@ -1,0 +1,98 @@
+// const express = require('express')
+// const morgan = require('morgan')
+// const app = express()
+// const port = 4000
+
+// app.use(morgan('combined'))
+
+// app.get('/', (req, res) => {
+//     res.render('Home');
+// })
+
+// app.get('/products', (req, res) => {
+//     res.render('Products');
+// })
+
+const express = require('express');
+const mongoose = require('mongoose');
+const Product = require('./models/ProductsModel');
+
+const app = express();
+app.use(express.json());
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost/products', { useNewUrlParser: true });
+
+// Get all products
+app.get('/products', async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Get a specific product by ID
+app.get('/products/:id', async (req, res) => {
+    try {
+        const product = await Product.findOne({ id: req.params.id });
+        if (!product) throw new Error('Product not found');
+        res.json(product);
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+});
+
+// Create a new product
+app.post('/products', async (req, res) => {
+    const product = new Product({
+        id: req.body.id,
+        name: req.body.name,
+        quantity: req.body.quantity
+    });
+
+    try {
+        const newProduct = await product.save();
+        res.status(201).json(newProduct);
+        console.log(newProduct);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+// Update a product
+app.patch('/products/:id', async (req, res) => {
+    try {
+        const product = await Product.findOneAndUpdate(
+            { id: req.params.id },
+            { $set: req.body },
+            { new: true }
+        );
+        if (!product) throw new Error('Product not found');
+        res.json(product);
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+});
+
+// Delete a product
+app.delete('/products/:id', async (req, res) => {
+    try {
+        const product = await Product.findOneAndDelete({ id: req.params.id });
+        if (!product) throw new Error('Product not found');
+        res.json(product);
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+});
+
+// Start the server
+app.listen(4000, () => {
+    console.log('Server started');
+});
+
+
+// app.listen(port, () => {
+//     console.log(`Example app listening on port ${port}`)
+// })
