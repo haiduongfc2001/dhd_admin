@@ -97,8 +97,8 @@ app.get('/products', (req, res) => {
 });
 
 // Find product by id
-app.get('/product/:id', (req, res) => {
-    Product.findById(req.params.id).then((product) => {
+app.get('/product/:_id', (req, res) => {
+    Product.findById(req.params._id).then((product) => {
         if (product) {
             //Product data
             res.json(product);
@@ -113,15 +113,19 @@ app.get('/product/:id', (req, res) => {
 });
 
 // Delete a product
-app.delete('/product/:id', (req, res) => {
-    Product.findOneAndRemove(req.params.id).then(() => {
-        res.send('Product deleted with success!')
-    }).catch((err) => {
-        if (err) {
-            throw err;
+app.delete('/product/:_id', (req, res) => {
+    Product.findOneAndRemove({_id: req.params._id}).then((product) => {
+        if (product) {
+            res.send(`Product ${req.params._id} deleted successfully!`);
+        } else {
+            res.send(`Product ${req.params._id} not found!`);
         }
+    }).catch((err) => {
+        console.error(err);
+        res.status(500).send('Error deleting product');
     });
 });
+
 
 app.listen(5000, () => {
     console.log('Up to running! -- This is our Products service');

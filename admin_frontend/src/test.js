@@ -1,23 +1,25 @@
-import {useState} from "react";
-import {Table, Form, Button} from 'react-bootstrap';
-import {BsTrash} from 'react-icons/bs';
-import {IoMdAddCircle} from 'react-icons/io';
-import {HiPencilAlt} from "react-icons/hi";
+import {useEffect, useState} from "react";
+import axios from 'axios';
+import {Table, Button} from 'react-bootstrap';
+
 
 function ListProducts() {
-    const [todos, setTodos] = useState([
-        {id: 1, product: 'Product 1', quantity: 5},
-        {id: 2, product: 'Product 2', quantity: 10},
-        {id: 3, product: 'Product 3', quantity: 3},
-    ]);
-    const [newTodo, setNewTodo] = useState({});
 
-    const handleUpdateTodo = () => {
-        // incomplete
-    }
+    const [products, setProducts] = useState([]);
+    const  [newProduct, setNewProduct] = useState({});
 
-    const handleDeleteTodo = (id) => {
-        setTodos(todos.filter((todo) => todo.id !== id));
+    useEffect(() => {
+        axios.get('http://localhost:5000/products')
+            .then(response => {
+                setProducts(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
+
+    const handleDeleteProduct = (id) => {
+        setProducts(products.filter((product) => product._id !== id));
     };
 
     return (
@@ -32,17 +34,16 @@ function ListProducts() {
                 </tr>
                 </thead>
                 <tbody>
-                {todos.map((todo) => (
-                    <tr key={todo.id}>
-                        <td>{todo.id}</td>
-                        <td>{todo.product}</td>
-                        <td>{todo.quantity}</td>
+                {products.map((product) => (
+                    <tr key={product._id}>
+                        <td>{product._id}</td>
+                        <td>{product.name}</td>
+                        <td>{product.quantity}</td>
                         <td>
-                            <Button variant="warning" onClick={() => handleUpdateTodo(todo.id)}>
-                                <HiPencilAlt/>
-                            </Button>
-                            <Button variant="danger" onClick={() => handleDeleteTodo(todo.id)}>
-                                <BsTrash/>
+                            <Button
+                                onClick={() => handleDeleteProduct(product._id)}
+                            >
+                                <span>Delete</span>
                             </Button>
                         </td>
                     </tr>

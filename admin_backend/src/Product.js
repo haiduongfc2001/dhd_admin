@@ -5,10 +5,10 @@ mongoose.model('Product', {
 
     name: {
         type: 'String',
-        require: false,
+        require: true,
     },
     quantity: {
         type: 'Number',
-        require: false,
+        require: true,
     },
 })

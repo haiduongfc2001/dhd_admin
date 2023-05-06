@@ -1,75 +1,62 @@
-// const express = require('express')
-// const morgan = require('morgan')
-// const app = express()
-// const port = 4000
-
-// app.use(morgan('combined'))
-
-// app.get('/', (req, res) => {
-//     res.render('Home');
-// })
-
-// app.get('/products', (req, res) => {
-//     res.render('Products');
-// })
-
-// app.listen(port, () => {
-//     console.log(`Example app listening on port ${port}`)
-// })
-
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const mongoose = require('mongoose');
-
 const app = express();
+const bodyParser = require('body-parser');
 
-mongoose.connect('mongodb://127.0.0.1:27017/admin_database', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
+const cors = require('cors');
 
-const productSchema = new mongoose.Schema({
-    name: String,
-    quantity: Number
-});
-
-const Product = mongoose.model('Product', productSchema);
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// Allow cross-origin requests
 app.use(cors());
 
-app.get('/api/products', (req, res) => {
-    Product.find((err, products) => {
+app.use(bodyParser.json());
+
+// -----------------------
+const morgan = require('morgan');
+
+// Use morgan to log HTTP requests
+app.use(morgan('combined'));
+
+// Load mongoose
+const mongoose = require('mongoose');
+
+require('./Product');
+const Product = mongoose.model('Product')
+
+// Connect
+async function connect() {
+    try {
+        await mongoose.connect('mongodb://127.0.0.1:27017/admin_database', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('Database connected - Products Service');
+    } catch (error) {
+        console.log('Data not connected!!!');
+    }
+}
+connect();
+
+// Get all products
+app.get('/products', (req, res) => {
+    Product.find().then((products) => {
+        res.json(products);
+    }).catch((err) => {
         if (err) {
-            res.send(err);
-        } else {
-            res.json(products);
+            throw err;
         }
     });
 });
 
-app.post('/api/products', (req, res) => {
-    const product = new Product({
-        name: req.body.name,
-        quantity: req.body.quantity
-    });
-
-    product.save((err) => {
+// Delete a product
+app.delete('/product/:_id', (req, res) => {
+    Product.findOneAndRemove(req.params.id).then(() => {
+        res.send('Product deleted with success!');
+        console.log('Product deleted', req.params.quantity);
+    }).catch((err) => {
         if (err) {
-            res.send(err);
-        } else {
-            res.json({ message: 'Product created successfully' });
-            console.log('Product created successfully');
+            throw err;
         }
     });
 });
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
 
 

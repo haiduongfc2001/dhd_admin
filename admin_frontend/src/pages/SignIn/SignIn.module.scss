@@ -2,18 +2,24 @@
   height: 100vh; /* hoặc height: 100%; nếu không muốn dùng height 100vh */
   width: 100%;
   background-color: #a69c9c;
+  display: flex;
   justify-content: center;
   align-items: center;
-}
 
-.wrapper .card {
-  justify-content: center;
-  align-items: center;
+  .signin-form p {
+    //font-size: 1.4rem;
+  }
 }
-
+//
+//.wrapper .card {
+//  justify-content: center;
+//  align-items: center;
+//}
+//
 .logoadmin {
   height: 50px;
   width: 100px;
   justify-content: center;
   align-items: center;
 }
+
