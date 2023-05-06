@@ -1,25 +1,51 @@
-import {useEffect, useState} from "react";
-import axios from 'axios';
-import {Table, Button} from 'react-bootstrap';
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Table, Button, Form } from "react-bootstrap";
+import { HiPencilAlt } from "react-icons/hi";
 
 function ListProducts() {
-
     const [products, setProducts] = useState([]);
-    const  [newProduct, setNewProduct] = useState({});
 
     useEffect(() => {
-        axios.get('http://localhost:5000/products')
-            .then(response => {
+        axios
+            .get("http://localhost:5000/products")
+            .then((response) => {
                 setProducts(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
             });
     }, []);
 
-    const handleDeleteProduct = (id) => {
-        setProducts(products.filter((product) => product._id !== id));
+    const handleUpdateProduct = (productId, updatedProduct) => {
+        axios
+            .put(`http://localhost:5000/products/${productId}`, updatedProduct)
+            .then((response) => {
+                console.log(response.data);
+                // Update the products state variable with the updated product
+                setProducts(
+                    products.map((product) =>
+                        product._id === response.data._id ? response.data : product
+                    )
+                );
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const handleInputChange = (productId, event) => {
+        const { name, value } = event.target;
+        // Find the product being edited
+        const editedProduct = products.find((product) => product._id === productId);
+        // Update the edited product with the new values
+        setProducts(
+            products.map((product) =>
+                product._id === productId
+                    ? { ...editedProduct, [name]: value }
+                    : product
+            )
+        );
     };
 
     return (
@@ -37,13 +63,27 @@ function ListProducts() {
                 {products.map((product) => (
                     <tr key={product._id}>
                         <td>{product._id}</td>
-                        <td>{product.name}</td>
-                        <td>{product.quantity}</td>
+                        <td>
+                            <Form.Control
+                                name="name"
+                                type="text"
+                                value={product.name}
+                                onChange={(event) => handleInputChange(product._id, event)}
+                            />
+                        </td>
+                        <td>
+                            <Form.Control
+                                name="quantity"
+                                type="number"
+                                value={product.quantity}
+                                onChange={(event) => handleInputChange(product._id, event)}
+                            />
+                        </td>
                         <td>
                             <Button
-                                onClick={() => handleDeleteProduct(product._id)}
+                                onClick={() => handleUpdateProduct(product._id, product)}
                             >
-                                <span>Delete</span>
+                                <HiPencilAlt />
                             </Button>
                         </td>
                     </tr>

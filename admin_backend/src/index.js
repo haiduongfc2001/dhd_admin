@@ -66,23 +66,20 @@ app.get('/', (req, res) => {
     res.send('This is a products service');
 })
 
-// Create a new product
-app.post('/product', (req, res) => {
-    const newProduct = {
-        name: req.body.title,
-        quantity: req.body.quantity,
-    };
-    // Create a new Product
-    const product = new Product(newProduct);
-
-    product.save().then(() => {
-        console.log('New product created!')
-    }).catch(err => {
-        if (err) {
-            throw err;
-        }
-    });
-    res.send('A new product created with success!');
+// Add a new product
+app.post('/product', async (req, res) => {
+    try {
+        const { name, quantity } = req.body;
+        const product = new Product({
+            name,
+            quantity
+        });
+        await product.save();
+        res.send(product);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Server error');
+    }
 });
 
 // Get all products

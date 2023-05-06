@@ -11,15 +11,9 @@ const cx = classNames.bind(styles)
 
 
 function ListProducts() {
-    // const [todos, setTodos] = useState([
-    //     {id: 1, product: 'Product 1', quantity: 5},
-    //     {id: 2, product: 'Product 2', quantity: 10},
-    //     {id: 3, product: 'Product 3', quantity: 3},
-    // ]);
-    // const [newTodo, setNewTodo] = useState({});
 
     const [products, setProducts] = useState([]);
-    const  [newProduct, setNewProduct] = useState({});
+    const [newProduct, setNewProduct] = useState({});
 
     useEffect(() => {
         axios.get('http://localhost:5000/products')
@@ -49,34 +43,46 @@ function ListProducts() {
 
 
     const handleAddProduct = () => {
-        const id = products.length + 1;
-        setProducts([...products, {id, ...newProduct}]);
-        setNewProduct({});
-
-        axios.delete('http://localhost:5000/product')
-            .then(response => {
-                setProducts(products.filter((product) => product._id !== id));
+        axios
+            .post("http://localhost:5000/product", newProduct)
+            .then((response) => {
+                setProducts((prevState) => [...prevState, response.data]);
+                setNewProduct({});
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
             });
 
         productNameRef.current.focus();
     };
 
-    const handleUpdateProduct = (id, newProduct, newQuantity) => {
-        setProducts(products.map((product) => {
-            if (product.id === id) {
-                return {...product, product: newProduct, quantity: newQuantity};
-            }
-            return product;
-        }));
-    }
-
-
-    // const handleDeleteProduct = (id) => {
-    //     setProducts(products.filter((product) => product._id !== id));
+    // const handleUpdateProduct = (id, newProduct, newQuantity) => {
+    //     setProducts(products.map((product) => {
+    //         if (product.id === id) {
+    //             return {...product, product: newProduct, quantity: newQuantity};
+    //         }
+    //         return product;
+    //     }));
     // };
+
+    const handleUpdateProduct = (productId, updatedProduct) => {
+        axios
+            .put(`http://localhost:5000/products/${productId}`, updatedProduct)
+            .then((response) => {
+                console.log(response.data);
+                // Update the products state variable with the updated product
+                setProducts(
+                    products.map((product) =>
+                        product._id === response.data._id ? response.data : product
+                    )
+                );
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+
 
     const handleDeleteProduct = (id) => {
         axios.delete(`http://localhost:5000/product/${id}`)
@@ -111,14 +117,14 @@ function ListProducts() {
                                 onClick={() => handleUpdateProduct(product._id)}
                                 className={cx('button-update')}
                             >
-                                <HiPencilAlt className={cx('icon-update')}/>
+                                <HiPencilAlt className={cx('icon-action')}/>
                             </Button>
                             <Button
                                 variant="danger"
                                 onClick={() => handleDeleteProduct(product._id)}
                                 className={cx('button-delete')}
                             >
-                                <BsTrash className={cx('icon-delete')}/>
+                                <BsTrash className={cx('icon-action')}/>
                             </Button>
                         </td>
                     </tr>
@@ -128,9 +134,10 @@ function ListProducts() {
             <Form inline className={cx('form-product')}>
                 <Form.Control
                     ref={productNameRef}
-                    name="product"
+                    name="name"
+                    type="text"
                     placeholder="Product name"
-                    value={newProduct.product || ''}
+                    value={newProduct.name || ""}
                     onChange={handleInputChange}
                     className="mr-sm-2 mb-2"
                     size="lg"
@@ -147,7 +154,7 @@ function ListProducts() {
                     style={{minHeight: "40px"}}
                 />
                 <Button variant="primary" onClick={handleAddProduct}>
-                    <IoMdAddCircle/>
+                    <IoMdAddCircle className={cx('icon-action')}/>
                 </Button>
             </Form>
         </>
