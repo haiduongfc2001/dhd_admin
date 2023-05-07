@@ -9,6 +9,7 @@ import styles from "./Product.module.scss"
 import {AiFillSave} from "react-icons/ai";
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DeleteModal from "~/components/Layout/components/Modal/DeleteModal";
 
 const cx = classNames.bind(styles)
 
@@ -20,6 +21,19 @@ function ListProducts() {
     const [editableProduct, setEditableProduct] = useState(null);
     const nameRef = useRef(null);
     const quantityRef = useRef(null);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [productIdToDelete, setProductIdToDelete] = useState(null);
+
+    const handleCloseDeleteModal = () => {
+        setShowDeleteModal(false);
+        setProductIdToDelete(null);
+    };
+
+    const handleShowDeleteModal = (id) => {
+        setShowDeleteModal(true);
+        setProductIdToDelete(id);
+    };
 
     useEffect(() => {
         axios.get('http://localhost:5000/products')
@@ -54,11 +68,20 @@ function ListProducts() {
             .then((response) => {
                 setProducts((prevState) => [...prevState, response.data]);
                 setNewProduct({});
-                toast('Product added successfully!');
+                toast.success('Product added successfully!', {
+                    position: "bottom-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
             })
             .catch((error) => {
                 console.log(error);
-                toast('Error adding product!');
+                toast.error('Error adding product!');
             });
 
         productNameRef.current.focus();
@@ -138,13 +161,6 @@ function ListProducts() {
                         </td>
 
                         <td>
-                            {/*<Button*/}
-                            {/*    variant="warning"*/}
-                            {/*    onClick={() => handleUpdateProduct(product._id)}*/}
-                            {/*    className={cx('button-update')}*/}
-                            {/*>*/}
-                            {/*    <HiPencilAlt className={cx('icon-action')}/>*/}
-                            {/*</Button>*/}
                             {editableProduct === product._id ?
                                 <Button
                                     variant="success"
@@ -164,8 +180,8 @@ function ListProducts() {
                             }
                             <Button
                                 variant="danger"
-                                onClick={() => handleDeleteProduct(product._id)}
                                 className={cx('button-delete')}
+                                onClick={() => handleShowDeleteModal(product._id)}
                             >
                                 <BsTrash className={cx('icon-action')}/>
                             </Button>
@@ -174,6 +190,21 @@ function ListProducts() {
                 ))}
                 </tbody>
             </Table>
+
+            {/*{productIdToDelete && (*/}
+            {/*    <DeleteModal*/}
+            {/*        handleDeleteProduct={handleDeleteProduct}*/}
+            {/*        productId={productIdToDelete}*/}
+            {/*        handleClose={handleCloseDeleteModal}*/}
+            {/*    />*/}
+            {/*)}*/}
+
+            <DeleteModal
+                show={showDeleteModal}
+                handleClose={handleCloseDeleteModal}
+                handleDelete={() => handleDeleteProduct(productIdToDelete)}
+            />
+
             <Form inline="true" className={cx('form-product')}>
                 <Form.Control
                     ref={productNameRef}
