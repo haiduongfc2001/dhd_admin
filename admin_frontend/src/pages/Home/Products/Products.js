@@ -87,25 +87,31 @@ function ListProducts() {
         productNameRef.current.focus();
     };
 
-    const handleUpdateProduct = (id) => {
-        const updatedProduct = {
+    const handleEditProduct = (id) => {
+        const editedProduct = {
             name: nameRef.current.value,
             quantity: quantityRef.current.value
         }
-        axios.put(`http://localhost:5000/product/${id}`, updatedProduct)
+        axios.put(`http://localhost:5000/product/${id}`, editedProduct)
             .then(response => {
-                // update products state
-                const updatedProducts = products.map(product => {
+                // edit products state
+                const editedProducts = products.map(product => {
                     if (product._id === id) {
-                        return {...product, ...updatedProduct};
+                        return {...product, ...editedProduct};
                     }
                     return product;
                 });
-                setProducts(updatedProducts);
+                setProducts(editedProducts);
                 setEditableProduct(null);
+                toast.success('Product has been updated!', {
+                    position: "bottom-center",
+                    autoClose: 3000,
+                    theme: "colored",
+                });
             })
             .catch(error => {
                 console.log(error);
+                toast.error('Error adding product!');
             });
     }
 
@@ -164,8 +170,8 @@ function ListProducts() {
                             {editableProduct === product._id ?
                                 <Button
                                     variant="success"
-                                    onClick={() => handleUpdateProduct(product._id)}
-                                    className={cx('button-update')}
+                                    onClick={() => handleEditProduct(product._id)}
+                                    className={cx('button-edit')}
                                 >
                                     <AiFillSave className={cx('icon-action')}/>
                                 </Button>
@@ -173,7 +179,7 @@ function ListProducts() {
                                 <Button
                                     variant="warning"
                                     onClick={() => setEditableProduct(product._id)}
-                                    className={cx('button-update')}
+                                    className={cx('button-edit')}
                                 >
                                     <HiPencilAlt className={cx('icon-action')}/>
                                 </Button>

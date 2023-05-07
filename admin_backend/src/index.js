@@ -20,9 +20,12 @@
 // Load express
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
-
 const cors = require('cors');
+
+const bodyParser = require('body-parser');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 // Allow cross-origin requests
 app.use(cors());
@@ -82,13 +85,13 @@ app.post('/product', async (req, res) => {
     }
 });
 
-// Update a product
+// Edit a product
 app.put('/product/:id', (req, res) => {
     const { name, quantity } = req.body;
     const productId = req.params.id;
 
     Product.findByIdAndUpdate(productId, { name, quantity })
-        .then(() => res.status(200).send('Product updated successfully'))
+        .then(() => res.status(200).send('Product edited successfully'))
         .catch((err) => res.status(500).send(err.message));
 });
 
@@ -131,6 +134,39 @@ app.delete('/product/:_id', (req, res) => {
     }).catch((err) => {
         console.error(err);
         res.status(500).send('Error deleting product');
+    });
+});
+
+const admin = {
+    id: 1,
+    email: "admin@example.com",
+    password: "$2b$10$yGQlIh/Xz8v3q0rUfcYTKOAHrRfNRhOL0h27i5/5yL1rn8z29xjKm" // hashed password: admin123
+};
+
+app.use(express.json());
+
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+
+    // Check if email and password are provided
+    if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    // Check if admin email is valid
+    if (email !== admin.email) {
+        return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Check if admin password is valid
+    bcrypt.compare(password, admin.password, (err, result) => {
+        if (err || !result) {
+            return res.status(401).json({ message: "Invalid email or password" });
+        }
+
+        // Generate and send JWT token
+        const token = jwt.sign({ id: admin.id }, 'admin123');
+        return res.json({ message: "Login successful", token });
     });
 });
 

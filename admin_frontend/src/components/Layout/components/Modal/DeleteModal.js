@@ -1,12 +1,18 @@
 import {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import {toast} from "react-toastify";
 
 function DeleteModal({show, handleClose, handleDelete}) {
 
     const handleConfirmDelete = () => {
         handleDelete();
         handleClose();
+        toast.error('Product deleted successfully!', {
+            position: "bottom-center",
+            autoClose: 3000,
+            theme: "colored",
+        });
     };
 
     return (
