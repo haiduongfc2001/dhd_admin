@@ -82,6 +82,17 @@ app.post('/product', async (req, res) => {
     }
 });
 
+// Update a product
+app.put('/product/:id', (req, res) => {
+    const { name, quantity } = req.body;
+    const productId = req.params.id;
+
+    Product.findByIdAndUpdate(productId, { name, quantity })
+        .then(() => res.status(200).send('Product updated successfully'))
+        .catch((err) => res.status(500).send(err.message));
+});
+
+
 // Get all products
 app.get('/products', (req, res) => {
     Product.find().then((products) => {

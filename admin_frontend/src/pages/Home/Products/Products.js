@@ -6,6 +6,9 @@ import {IoMdAddCircle} from 'react-icons/io';
 import {HiPencilAlt} from "react-icons/hi";
 import classNames from "classnames/bind"
 import styles from "./Product.module.scss"
+import {AiFillSave} from "react-icons/ai";
+import {toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const cx = classNames.bind(styles)
 
@@ -14,6 +17,9 @@ function ListProducts() {
 
     const [products, setProducts] = useState([]);
     const [newProduct, setNewProduct] = useState({});
+    const [editableProduct, setEditableProduct] = useState(null);
+    const nameRef = useRef(null);
+    const quantityRef = useRef(null);
 
     useEffect(() => {
         axios.get('http://localhost:5000/products')
@@ -48,41 +54,37 @@ function ListProducts() {
             .then((response) => {
                 setProducts((prevState) => [...prevState, response.data]);
                 setNewProduct({});
+                toast('Product added successfully!');
             })
             .catch((error) => {
                 console.log(error);
+                toast('Error adding product!');
             });
 
         productNameRef.current.focus();
     };
 
-    // const handleUpdateProduct = (id, newProduct, newQuantity) => {
-    //     setProducts(products.map((product) => {
-    //         if (product.id === id) {
-    //             return {...product, product: newProduct, quantity: newQuantity};
-    //         }
-    //         return product;
-    //     }));
-    // };
-
-    const handleUpdateProduct = (productId, updatedProduct) => {
-        axios
-            .put(`http://localhost:5000/products/${productId}`, updatedProduct)
-            .then((response) => {
-                console.log(response.data);
-                // Update the products state variable with the updated product
-                setProducts(
-                    products.map((product) =>
-                        product._id === response.data._id ? response.data : product
-                    )
-                );
+    const handleUpdateProduct = (id) => {
+        const updatedProduct = {
+            name: nameRef.current.value,
+            quantity: quantityRef.current.value
+        }
+        axios.put(`http://localhost:5000/product/${id}`, updatedProduct)
+            .then(response => {
+                // update products state
+                const updatedProducts = products.map(product => {
+                    if (product._id === id) {
+                        return {...product, ...updatedProduct};
+                    }
+                    return product;
+                });
+                setProducts(updatedProducts);
+                setEditableProduct(null);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
-    };
-
-
+    }
 
     const handleDeleteProduct = (id) => {
         axios.delete(`http://localhost:5000/product/${id}`)
@@ -109,16 +111,57 @@ function ListProducts() {
                 {products.map((product) => (
                     <tr key={product._id}>
                         <td style={{textAlign: "center"}}>{product._id}</td>
-                        <td>{product.name}</td>
-                        <td>{product.quantity}</td>
+                        {/*<td>{product.name}</td>*/}
+                        {/*<td>{product.quantity}</td>*/}
+
                         <td>
-                            <Button
-                                variant="warning"
-                                onClick={() => handleUpdateProduct(product._id)}
-                                className={cx('button-update')}
-                            >
-                                <HiPencilAlt className={cx('icon-action')}/>
-                            </Button>
+                            {editableProduct === product._id ?
+                                <Form.Control
+                                    ref={nameRef}
+                                    type="text"
+                                    defaultValue={product.name}
+                                />
+                                :
+                                <span>{product.name}</span>
+                            }
+                        </td>
+                        <td>
+                            {editableProduct === product._id ?
+                                <Form.Control
+                                    ref={quantityRef}
+                                    type="text"
+                                    defaultValue={product.quantity}
+                                />
+                                :
+                                <span>{product.quantity}</span>
+                            }
+                        </td>
+
+                        <td>
+                            {/*<Button*/}
+                            {/*    variant="warning"*/}
+                            {/*    onClick={() => handleUpdateProduct(product._id)}*/}
+                            {/*    className={cx('button-update')}*/}
+                            {/*>*/}
+                            {/*    <HiPencilAlt className={cx('icon-action')}/>*/}
+                            {/*</Button>*/}
+                            {editableProduct === product._id ?
+                                <Button
+                                    variant="success"
+                                    onClick={() => handleUpdateProduct(product._id)}
+                                    className={cx('button-update')}
+                                >
+                                    <AiFillSave className={cx('icon-action')}/>
+                                </Button>
+                                :
+                                <Button
+                                    variant="warning"
+                                    onClick={() => setEditableProduct(product._id)}
+                                    className={cx('button-update')}
+                                >
+                                    <HiPencilAlt className={cx('icon-action')}/>
+                                </Button>
+                            }
                             <Button
                                 variant="danger"
                                 onClick={() => handleDeleteProduct(product._id)}
@@ -131,7 +174,7 @@ function ListProducts() {
                 ))}
                 </tbody>
             </Table>
-            <Form inline className={cx('form-product')}>
+            <Form inline="true" className={cx('form-product')}>
                 <Form.Control
                     ref={productNameRef}
                     name="name"
@@ -156,6 +199,7 @@ function ListProducts() {
                 <Button variant="primary" onClick={handleAddProduct}>
                     <IoMdAddCircle className={cx('icon-action')}/>
                 </Button>
+                <ToastContainer />
             </Form>
         </>
     );

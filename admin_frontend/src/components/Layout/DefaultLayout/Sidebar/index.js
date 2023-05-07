@@ -8,33 +8,24 @@ import {BsFillCartCheckFill} from "react-icons/bs";
 
 const cx = classNames.bind(styles)
 const Sidebar = () => {
+    const buttons = [
+        {icon: <AiOutlineShoppingCart className={cx('icon-sidebar')}/>, text: "Products"},
+        {icon: <FaUserAlt className={cx('icon-sidebar')}/>, text: "Users"},
+        {icon: <BsFillCartCheckFill className={cx('icon-sidebar')}/>, text: "Orders"},
+        {icon: <FaUserPlus className={cx('icon-sidebar')}/>, text: "Register"}
+    ];
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
-                <Button className={cx('sidebar-menu-users', 'selected')}>
-                    <FaUserAlt className={cx('icon-users')}/>
-                    <span className={cx('sidebar-users')}>
-                        Users
-                    </span>
-                </Button>
-                <Button className={cx('sidebar-menu-products')}>
-                    <AiOutlineShoppingCart className={cx('icon-products')}/>
-                    <span className={cx('sidebar-products')}>
-                        Products
-                    </span>
-                </Button>
-                <Button className={cx('sidebar-menu-orders')}>
-                    <BsFillCartCheckFill className={cx('icon-orders')}/>
-                    <span className={cx('sidebar-orders')}>
-                        Orders
-                    </span>
-                </Button>
-                <Button className={cx('sidebar-menu-register')}>
-                    <FaUserPlus className={cx('icon-register')}/>
-                    <span className={cx('sidebar-register')}>
-                        Register
-                    </span>
-                </Button>
+                {buttons.map((button, index) => (
+                    <Button key={index} className={cx('sidebar-menu')}>
+                        {button.icon}
+                        <span className={cx('sidebar-category')}>
+                            {button.text}
+                        </span>
+                    </Button>
+                ))}
             </div>
         </div>
     );

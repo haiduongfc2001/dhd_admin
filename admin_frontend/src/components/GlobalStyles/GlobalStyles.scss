@@ -33,12 +33,12 @@
 }
 
 html {
-  font-size: 62.5%
+  font-size: 62.5%;
 }
 
 body {
   font-family: 'Roboto', sans-serif;
-  font-size: 1.6rem;
+  font-size: var(--default-font-size);
   line-height: 1.5;
   text-rendering: optimizeSpeed;
   color: var(--text-color);

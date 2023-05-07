@@ -18,18 +18,11 @@
   border: none;
 }
 
-//.sidebar-menu-users.selected,
-.sidebar-users,
-.sidebar-products,
-.sidebar-orders,
-.sidebar-register {
+.sidebar-category {
   font-size: var(--sidebar-font-size);
 }
 
-.icon-users,
-.icon-products,
-.icon-orders,
-.icon-register {
+.icon-sidebar {
   font-size: var(--sidebar-font-size);
   margin-right: 16px;
 }
