@@ -1,16 +1,17 @@
 import {useEffect, useRef, useState} from "react";
+import {toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import {Table, Form, Button} from 'react-bootstrap';
 import {BsTrash} from 'react-icons/bs';
 import {IoMdAddCircle} from 'react-icons/io';
 import {HiPencilAlt} from "react-icons/hi";
-import classNames from "classnames/bind"
-import styles from "./Product.module.scss"
+import {GiCancel} from "react-icons/gi";
 import {AiFillSave} from "react-icons/ai";
-import {toast, ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import DeleteModal from "~/components/Layout/components/Modal/DeleteModal";
 
+import classNames from "classnames/bind"
+import styles from "./Product.module.scss"
 const cx = classNames.bind(styles)
 
 
@@ -168,13 +169,22 @@ function ListProducts() {
 
                         <td>
                             {editableProduct === product._id ?
-                                <Button
-                                    variant="success"
-                                    onClick={() => handleEditProduct(product._id)}
-                                    className={cx('button-edit')}
-                                >
-                                    <AiFillSave className={cx('icon-action')}/>
-                                </Button>
+                                <div>
+                                    <Button
+                                        variant="success"
+                                        onClick={() => handleEditProduct(product._id)}
+                                        className={cx('button-edit')}
+                                    >
+                                        <AiFillSave className={cx('icon-action')}/>
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => handleEditProduct(product._id)}
+                                        className={cx('button-edit')}
+                                    >
+                                        <GiCancel className={cx('icon-action')}/>
+                                    </Button>
+                                </div>
                                 :
                                 <Button
                                     variant="warning"
@@ -196,14 +206,6 @@ function ListProducts() {
                 ))}
                 </tbody>
             </Table>
-
-            {/*{productIdToDelete && (*/}
-            {/*    <DeleteModal*/}
-            {/*        handleDeleteProduct={handleDeleteProduct}*/}
-            {/*        productId={productIdToDelete}*/}
-            {/*        handleClose={handleCloseDeleteModal}*/}
-            {/*    />*/}
-            {/*)}*/}
 
             <DeleteModal
                 show={showDeleteModal}
