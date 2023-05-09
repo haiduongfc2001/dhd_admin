@@ -138,68 +138,68 @@ app.delete('/product/:_id', (req, res) => {
     });
 });
 
-// const admin = {
-//     id: 1,
-//     email: "admin@example.com",
-//     password: "$2b$10$yGQlIh/Xz8v3q0rUfcYTKOAHrRfNRhOL0h27i5/5yL1rn8z29xjKm" // hashed password: admin123
-// };
-//
-// app.use(express.json());
-//
-// app.post('/admin/login', (req, res) => {
-//     const { email, password } = req.body;
-//
-//     // Check if email and password are provided
-//     if (!email || !password) {
-//         return res.status(400).json({ message: "Email and password are required" });
-//     }
-//
-//     // Log email and admin email for debugging
-//     console.log('Email:', email);
-//     console.log('Admin Password:', admin.password);
-//
-//     // Check if admin email is valid
-//     if (email !== admin.email) {
-//         return res.status(401).json({ message: "Invalid email or password" });
-//     }
-//
-//     // Check if admin password is valid
-//     bcrypt.compare(password, admin.password, (err, result) => {
-//         if (err || !result) {
-//             return res.status(401).json({ message: admin.password });
-//         }
-//
-//         // Generate and send JWT token
-//         const token = jwt.sign({ id: admin.id }, 'admin123');
-//         return res.json({ message: "Login successful", token });
-//     });
-// });
+const admin = {
+    id: 1,
+    email: "admin@example.com",
+    password: "$2b$10$yGQlIh/Xz8v3q0rUfcYTKOAHrRfNRhOL0h27i5/5yL1rn8z29xjKm" // hashed password: admin123
+};
+
+app.use(express.json());
+
+app.post('/admin/login', (req, res) => {
+    const { email, password } = req.body;
+
+    // Check if email and password are provided
+    if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    // Log email and admin email for debugging
+    console.log('Email:', email);
+    console.log('Admin Password:', admin.password);
+
+    // Check if admin email is valid
+    if (email !== admin.email) {
+        return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Check if admin password is valid
+    bcrypt.compare(password, admin.password, (err, result) => {
+        if (err || !result) {
+            return res.status(401).json({ message: admin.password });
+        }
+
+        // Generate and send JWT token
+        const token = jwt.sign({ id: admin.id }, 'admin123');
+        return res.json({ message: "Login successful", token });
+    });
+});
 
 // Middleware to parse request body
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Array of admin credentials
-const admins = [
-    { email: 'admin1@example.com', password: 'admin123' },
-    { email: 'admin2@example.com', password: 'password123' },
-];
-
-// Route for admin login
-app.post('/admin/signin', (req, res) => {
-    const { email, password } = req.body;
-
-    // Check if the email and password match any of the admin credentials
-    const isAdmin = admins.some(
-        admin => admin.email === email && admin.password === password
-    );
-
-    if (isAdmin) {
-        res.status(200).json({ message: 'Login successful' });
-    } else {
-        res.status(401).json({ message: 'Invalid email or password' });
-    }
-});
+// // Array of admin credentials
+// const admins = [
+//     { email: 'admin1@example.com', password: 'admin123' },
+//     { email: 'admin2@example.com', password: 'password123' },
+// ];
+//
+// // Route for admin login
+// app.post('/admin/signin', (req, res) => {
+//     const { email, password } = req.body;
+//
+//     // Check if the email and password match any of the admin credentials
+//     const isAdmin = admins.some(
+//         admin => admin.email === email && admin.password === password
+//     );
+//
+//     if (isAdmin) {
+//         res.status(200).json({ message: 'Login successful' });
+//     } else {
+//         res.status(401).json({ message: 'Invalid email or password' });
+//     }
+// });
 
 app.listen(5000, () => {
     console.log('Up to running! -- This is our Products service');
