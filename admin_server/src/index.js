@@ -138,25 +138,21 @@ app.delete('/product/:_id', (req, res) => {
     });
 });
 
+// Create a mock admin account
 const admin = {
     id: 1,
     email: "admin@example.com",
     password: "$2b$10$yGQlIh/Xz8v3q0rUfcYTKOAHrRfNRhOL0h27i5/5yL1rn8z29xjKm" // hashed password: admin123
 };
 
-app.use(express.json());
-
-app.post('/admin/login', (req, res) => {
+// Login route
+app.post("/login", (req, res) => {
     const { email, password } = req.body;
 
     // Check if email and password are provided
     if (!email || !password) {
         return res.status(400).json({ message: "Email and password are required" });
     }
-
-    // Log email and admin email for debugging
-    console.log('Email:', email);
-    console.log('Admin Password:', admin.password);
 
     // Check if admin email is valid
     if (email !== admin.email) {
@@ -166,11 +162,11 @@ app.post('/admin/login', (req, res) => {
     // Check if admin password is valid
     bcrypt.compare(password, admin.password, (err, result) => {
         if (err || !result) {
-            return res.status(401).json({ message: admin.password });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
         // Generate and send JWT token
-        const token = jwt.sign({ id: admin.id }, 'admin123');
+        const token = jwt.sign({ id: admin.id }, process.env.JWT_SECRET);
         return res.json({ message: "Login successful", token });
     });
 });
