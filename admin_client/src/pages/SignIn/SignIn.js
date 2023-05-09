@@ -120,7 +120,7 @@ function SignIn() {
                                     type='email'
                                     size='lg'
                                     autoFocus
-                                    autoComplete='off'
+                                    // autoComplete='off'
                                     value={email}
                                     onChange={(event) => setEmail(event.target.value)}
                                 />
@@ -152,72 +152,6 @@ function SignIn() {
                                 >
                                     Sign in
                                 </MDBBtn>
-
-                                {/*<MDBInput*/}
-                                {/*    wrapperClass='mb-4 mx-5 w-100'*/}
-                                {/*    labelClass='text-black'*/}
-                                {/*    label='Email address'*/}
-                                {/*    id='formControlLg'*/}
-                                {/*    type='email'*/}
-                                {/*    size="lg"*/}
-                                {/*/>*/}
-                                {/*<MDBInput*/}
-                                {/*    wrapperClass='mb-4 mx-5 w-100'*/}
-                                {/*    labelClass='text-black'*/}
-                                {/*    label='Password'*/}
-                                {/*    id='formControlLg'*/}
-                                {/*    type='password'*/}
-                                {/*    size="lg"*/}
-                                {/*/>*/}
-
-                                {/*<p className="small mb-3 pb-lg-2">*/}
-                                {/*    <a*/}
-                                {/*        className="text-black-50"*/}
-                                {/*        href="/signin"*/}
-                                {/*    >*/}
-                                {/*        Forgot password?*/}
-                                {/*    </a>*/}
-                                {/*</p>*/}
-                                {/*<MDBBtn*/}
-                                {/*    className='mx-2 px-5 text-black'*/}
-                                {/*    color='red'*/}
-                                {/*    size='lg'*/}
-                                {/*    style={{backgroundColor: "#a69c9c"}}*/}
-                                {/*>*/}
-                                {/*    Sign in*/}
-                                {/*</MDBBtn>*/}
-
-                                {/*//////*/}
-
-                                {/*<div className='d-flex flex-row mt-3 mb-5'>*/}
-                                {/*    <MDBBtn tag='a' color='none' className='m-3'*/}
-                                {/*            style={{ color: 'white', backgroundColor: "var(--primary)" }}*/}
-                                {/*    >*/}
-                                {/*        <MDBIcon fab icon='facebook-f' size="lg"/>*/}
-                                {/*    </MDBBtn>*/}
-
-                                {/*    <MDBBtn tag='a' color='none' className='m-3' style={{ color: 'white' }}>*/}
-                                {/*        <MDBIcon fab icon='twitter' size="lg"/>*/}
-                                {/*    </MDBBtn>*/}
-
-                                {/*    <MDBBtn tag='a' color='none' className='m-3' style={{ color: 'white' }}>*/}
-                                {/*        <MDBIcon fab icon='google' size="lg"/>*/}
-                                {/*    </MDBBtn>*/}
-                                {/*</div>*/}
-
-                                {/*<div>*/}
-                                {/*    <p className="mb-0 mt-2">*/}
-                                {/*        Don't have an account?*/}
-                                {/*        <a*/}
-                                {/*            href="/signin"*/}
-                                {/*            className="text-black-50 fw-bold"*/}
-                                {/*        >*/}
-                                {/*            <span className="m-lg-1">*/}
-                                {/*                Sign Up*/}
-                                {/*            </span>*/}
-                                {/*        </a>*/}
-                                {/*    </p>*/}
-                                {/*</div>*/}
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
