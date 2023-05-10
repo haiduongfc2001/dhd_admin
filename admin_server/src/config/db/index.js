@@ -1,11 +1,5 @@
-// Load mongoose
 const mongoose = require('mongoose');
 
-require('./ProductsModel');
-const {hashSync} = require("bcrypt");
-const Product = mongoose.model('Product')
-
-// Connect
 async function connect() {
     try {
         await mongoose.connect('mongodb://127.0.0.1:27017/admin_database', {
@@ -14,8 +8,9 @@ async function connect() {
         });
         console.log('Database connected - Products Service');
     } catch (error) {
-        console.log('Data not connected!!!');
+        console.error('Database connection error:', error);
+        process.exit(1); // Exit with failure
     }
 }
 
-module.exports = connect;
+module.exports = { connect }

@@ -70,3 +70,9 @@
 //         res.status(404).json({ message: err.message });
 //     }
 // });
+
+const Product = require('../models/ProductModel');
+
+class ProductController {
+
+}
