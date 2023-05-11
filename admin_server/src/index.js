@@ -153,23 +153,10 @@ app.post("/admin/signin", (req, res) => {
 });
 
 app.post('/admin/logout', (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-        const token = authHeader.split(' ')[1];
-        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-            if (err) {
-                return res.sendStatus(403);
-            }
-            // JWT token is valid, clear it from the client-side cookie
-            res.clearCookie('jwt');
-            // Send a response indicating successful logout
-            return res.status(200).json({ message: "Logout successful" });
-        });
-    } else {
-        // Authorization header is missing, return a 401 Unauthorized response
-        return res.sendStatus(401);
-    }
+    res.setHeader('Authorization', '');
+    res.json({ message: "Logout successful"});
 });
+
 
 
 route(app);
