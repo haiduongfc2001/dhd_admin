@@ -12,6 +12,7 @@ import DeleteModal from "~/components/Layout/components/Modal/DeleteModal";
 
 import classNames from "classnames/bind"
 import styles from "./Product.module.scss"
+
 const cx = classNames.bind(styles)
 
 
@@ -116,6 +117,13 @@ function ListProducts() {
             });
     }
 
+    const handleCancelEditProduct = (id) => {
+        // const originalProduct = products.find(product => product._id === id);
+        // nameRef.current.value = originalProduct.name;
+        // quantityRef.current.value = originalProduct.quantity;
+        setEditableProduct(null);
+    }
+
     const handleDeleteProduct = (id) => {
         axios.delete(`http://localhost:5000/product/${id}`)
             .then(response => {
@@ -179,7 +187,7 @@ function ListProducts() {
                                     </Button>
                                     <Button
                                         variant="secondary"
-                                        onClick={() => handleEditProduct(product._id)}
+                                        onClick={() => handleCancelEditProduct(product._id)}
                                         className={cx('button-edit')}
                                     >
                                         <GiCancel className={cx('icon-action')}/>
@@ -238,7 +246,7 @@ function ListProducts() {
                 <Button variant="primary" onClick={handleAddProduct}>
                     <IoMdAddCircle className={cx('icon-action')}/>
                 </Button>
-                <ToastContainer />
+                <ToastContainer/>
             </Form>
         </>
     );

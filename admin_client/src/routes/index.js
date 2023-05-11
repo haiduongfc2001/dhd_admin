@@ -8,9 +8,8 @@ import Test from "~/test";
 const publicRoutes = [
     { path: '/', component: Home },
     { path: '/following', component: Following },
-    // { path: '/upload', component: Upload, layout: null },
     { path: '/account', component: CreateDefaultAdmin },
-    { path: '/signin', component: SignIn, layout: null },
+    { path: '/admin/signin', component: SignIn, layout: null },
     { path: '/test', component: Test, layout: null },
 ]
 

@@ -1,14 +1,18 @@
-import {useEffect, useState} from "react";
-import axios from 'axios';
-import {Table, Button} from 'react-bootstrap';
-import {BsTrash} from 'react-icons/bs';
+import {useEffect, useRef, useState} from "react";
 import 'react-toastify/dist/ReactToastify.css';
-import DeleteModal from "~/components/Layout/components/Modal/DeleteModal";
+import axios from 'axios';
+import {Table, Form, Button} from 'react-bootstrap';
+import {HiPencilAlt} from "react-icons/hi";
+import {GiCancel} from "react-icons/gi";
+import {AiFillSave} from "react-icons/ai";
 
 
 function ListProducts() {
 
     const [products, setProducts] = useState([]);
+    const [editableProduct, setEditableProduct] = useState(null);
+    const nameRef = useRef(null);
+    const quantityRef = useRef(null);
 
     useEffect(() => {
         axios.get('http://localhost:5000/products')
@@ -20,15 +24,30 @@ function ListProducts() {
             });
     }, []);
 
-    const handleDeleteProduct = (id) => {
-        axios.delete(`http://localhost:5000/product/${id}`)
+    const handleEditProduct = (id) => {
+        const editedProduct = {
+            name: nameRef.current.value,
+            quantity: quantityRef.current.value
+        }
+        axios.put(`http://localhost:5000/product/${id}`, editedProduct)
             .then(response => {
-                setProducts(products.filter((product) => product._id !== id));
+                const editedProducts = products.map(product => {
+                    if (product._id === id) {
+                        return {...product, ...editedProduct};
+                    }
+                    return product;
+                });
+                setProducts(editedProducts);
+                setEditableProduct(null);
             })
             .catch(error => {
                 console.log(error);
             });
-    };
+    }
+
+    const handleCancelEditProduct = () => {
+        //
+    }
 
     return (
         <>
@@ -45,12 +64,50 @@ function ListProducts() {
                 {products.map((product) => (
                     <tr key={product._id}>
                         <td>{product._id}</td>
-                        <td>{product.name}</td>
-                        <td>{product.quantity}</td>
                         <td>
-                            <Button>
-                                <BsTrash/>
-                            </Button>
+                            {editableProduct === product._id ?
+                                <Form.Control
+                                    ref={nameRef}
+                                    type="text"
+                                    defaultValue={product.name}
+                                />
+                                :
+                                <span>{product.name}</span>
+                            }
+                        </td>
+                        <td>
+                            {editableProduct === product._id ?
+                                <Form.Control
+                                    ref={quantityRef}
+                                    type="text"
+                                    defaultValue={product.quantity}
+                                />
+                                :
+                                <span>{product.quantity}</span>
+                            }
+                        </td>
+
+                        <td>
+                            {editableProduct === product._id ?
+                                <div>
+                                    <Button
+                                        onClick={() => handleEditProduct(product._id)}
+                                    >
+                                        <AiFillSave/>
+                                    </Button>
+                                    <Button
+                                        onClick={() => handleCancelEditProduct(product._id)}
+                                    >
+                                        <GiCancel/>
+                                    </Button>
+                                </div>
+                                :
+                                <Button
+                                    onClick={() => setEditableProduct(product._id)}
+                                >
+                                    <HiPencilAlt/>
+                                </Button>
+                            }
                         </td>
                     </tr>
                 ))}
