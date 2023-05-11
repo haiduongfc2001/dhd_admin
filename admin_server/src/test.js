@@ -19,6 +19,8 @@ app.use(morgan('combined'));
 const mongoose = require('mongoose');
 
 require('./Product');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const Product = mongoose.model('Product')
 
 // Connect
@@ -57,6 +59,38 @@ app.delete('/product/:_id', (req, res) => {
         }
     });
 });
+
+app.post("/admin/signin", (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+    }
+    if (email !== admin.email) {
+        return res.status(401).json({ message: "Invalid email or password" });
+    }
+    bcrypt.compare(password, admin.password, (err, result) => {
+        if (err) {
+            throw err;
+        }
+        console.log(bcrypt.hashSync(password, 10));
+        if (result) {
+            const token = "Bearer " + jwt.sign({ id: admin.id }, process.env.JWT_SECRET, {
+                expiresIn: "1d",
+            })
+            return res
+                .status(200)
+                .header("Authorization", token)
+                .json({ message: "Login successful"});
+        } else {
+            return  res.status(401).json({ message: "Invalid email or password" });
+        }
+    });
+
+});
+
+app.post('/admin/logout', (req, res) => {
+    //
+})
 
 
 

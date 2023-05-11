@@ -7,11 +7,37 @@ import {FiLogOut} from "react-icons/fi";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleXmark, faMagnifyingGlass, faSpinner} from "@fortawesome/free-solid-svg-icons";
 import {useState} from "react";
+import axios from "axios";
 
 const cx = classNames.bind(styles)
 
-function Header() {
+function Header(props) {
     const [searchResult, setSearchResult] = useState([]);
+
+    const handleLogout = async (event) => {
+        // try {
+        //     await axios.post('http://localhost:5000/admin/logout');
+        //     // Redirect the user to the login page after successful logout
+        //     window.location.href = 'http://localhost:3000/admin/signin';
+        //
+        //     if (response.status === 200) {
+        //         window.location.href = 'http://localhost:3000/';
+        //     }
+        // } catch (err) {
+        //     console.log(err);
+        // }
+
+        event.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:5000/admin/logout');
+
+            if (response.status === 200) {
+                window.location.href = 'http://localhost:3000/admin/signin';
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <header className={cx('wrapper')}>
@@ -48,7 +74,7 @@ function Header() {
                 </Tippy>
                 <div className={cx('')}>
                     <BiBell className={cx('icon-bell')}/>
-                    <div>
+                    <div onClick={handleLogout} style={{cursor: 'pointer'}}>
                         <FiLogOut className={cx('icon-logout')}/>
                         <span>Logout</span>
                     </div>

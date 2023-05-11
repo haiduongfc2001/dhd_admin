@@ -1,0 +1,17 @@
+[
+  {
+    "_id": "645628e6f26ec6dc5f9429ca",
+    "name": "Redmi Note 7",
+    "quantity": 9876
+  },
+  {
+    "_id": "645bc9a68411eec42e017f4f",
+    "name": "Iphone 14",
+    "quantity": 1111
+  },
+  {
+    "_id": "645bc9f78411eec42e017f50",
+    "name": "Iphone 11",
+    "quantity": 222
+  }
+]

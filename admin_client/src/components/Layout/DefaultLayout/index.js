@@ -2,6 +2,7 @@ import classNames from "classnames/bind"
 import styles from "./DefaultLayout.module.scss"
 import Sidebar from "./Sidebar";
 import Header from "~/components/Layout/components/Header";
+import {Col, Container, Row} from "react-bootstrap";
 
 const cx = classNames.bind(styles)
 
@@ -16,6 +17,22 @@ function DefaultLayout({ children }) {
                 </div>
             </div>
         </div>
+
+        // <Container className={cx('wrapper')} style={{padding: 0, margin: 0, width: '100vw', height: '100vh'}}>
+        //     <Row>
+        //         <Col sm={12}>
+        //             <Header />
+        //         </Col>
+        //     </Row>
+        //     <Row className={cx('container')}>
+        //         <Col sm={3}>
+        //             <Sidebar/>
+        //         </Col>
+        //         <Col className={cx('content')} sm={12}>
+        //             {children}
+        //         </Col>
+        //     </Row>
+        // </Container>
     )
 }
 
