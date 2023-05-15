@@ -10,6 +10,8 @@ import {
     MDBInput,
 }
     from 'mdb-react-ui-kit';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import usePasswordToggle from "~/hooks/usePasswordToggle";
 import classNames from "classnames/bind";
 import styles from "./SignIn.module.scss";
 import logoDHD from "~/assets/images/logo_dhdadmin.png";
@@ -20,6 +22,8 @@ function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+
+    const [PasswordInputType, ToggleIcon, toggleVisibility] = usePasswordToggle()
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -73,11 +77,21 @@ function SignIn() {
                                     labelClass='text-black'
                                     label='Password'
                                     id='formControlLg'
-                                    type='password'
+                                    // type='password'
+                                    type={PasswordInputType}
                                     size='lg'
                                     value={password}
                                     onChange={(event) => setPassword(event.target.value)}
-                                />
+                                >
+                                    {password && (
+                                        <span
+                                            className={cx('password-toogle-icon')}
+                                            onClick={toggleVisibility}
+                                        >
+                                            {ToggleIcon}
+                                        </span>
+                                    )}
+                                </MDBInput>
 
                                 {error && <p className='text-danger'>{error}</p>}
 
@@ -91,7 +105,7 @@ function SignIn() {
                                     className='mx-2 px-5 text-black'
                                     color='red'
                                     size='lg'
-                                    style={{ backgroundColor: '#a69c9c' }}
+                                    style={{ backgroundColor: '#a69c9c', fontWeight: 'bold' }}
                                     onClick={handleSubmit}
                                 >
                                     Sign in
