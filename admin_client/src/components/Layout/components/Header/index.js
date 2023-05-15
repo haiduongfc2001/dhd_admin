@@ -9,6 +9,7 @@ import {faCircleXmark, faMagnifyingGlass, faSpinner} from "@fortawesome/free-sol
 import {useState} from "react";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
+import DigitClock from "~/components/Layout/components/DigitClock/DigitClock";
 
 const cx = classNames.bind(styles)
 
@@ -59,7 +60,10 @@ function Header(props) {
                         </button>
                     </div>
                 </Tippy>
+
+
                 <div className={cx('')}>
+                    <DigitClock />
                     <BiBell className={cx('icon-bell')}/>
                     <div className={'ms-3'}>
                         <Button
