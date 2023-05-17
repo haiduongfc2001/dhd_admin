@@ -7,14 +7,13 @@ import Modal from "react-bootstrap/Modal";
 
 function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
     const [show, setShow] = useState(false);
+    const productNameRef = useRef(null)
 
     const handleShow = () => setShow(true);
     const handleClose = () => {
         setShow(false);
-
+        setNewProduct({});
     }
-
-    const productNameRef = useRef(null)
 
     const handleAddProduct = () => {
         axios
@@ -58,39 +57,53 @@ function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
     return (
         <>
             <Button
+                size="lg"
+                variant="primary"
+                className={"mb-4"}
                 onClick={handleShow}
             >
-                <IoMdAddCircle/>
+                <IoMdAddCircle className={cx('icon-action')}/>
             </Button>
 
             <Modal
                 show={show}
+                backdrop={"static"}
+                centered
                 onHide={handleClose}
             >
                 <Modal.Header closeButton>
                     <ModalTitle>Add Product</ModalTitle>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form inline="true" className={cx('form-product')}>
                         <Form.Control
                             ref={productNameRef}
+                            name="name"
                             type="text"
+                            placeholder="Product name"
                             value={newProduct.name || ""}
                             onChange={handleInputChange}
+                            className="mr-sm-2 mb-2"
+                            size="lg"
+                            style={{minHeight: "40px"}}
                         />
                         <Form.Control
                             name="quantity"
                             type="number"
+                            placeholder="Quantity"
                             value={newProduct.quantity || ''}
                             onChange={handleInputChange}
+                            className="mr-sm-2 mb-2"
+                            size="lg"
+                            style={{minHeight: "40px"}}
                         />
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={handleClose}>
+                    <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button onClick={handleAddProduct}>
+                    <Button variant="primary" onClick={handleAddProduct}>
                         Add Product
                     </Button>
                 </Modal.Footer>

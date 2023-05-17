@@ -10,7 +10,6 @@ import {
     MDBInput,
 }
     from 'mdb-react-ui-kit';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import usePasswordToggle from "~/hooks/usePasswordToggle";
 import classNames from "classnames/bind";
 import styles from "./SignIn.module.scss";
@@ -77,7 +76,6 @@ function SignIn() {
                                     labelClass='text-black'
                                     label='Password'
                                     id='formControlLg'
-                                    // type='password'
                                     type={PasswordInputType}
                                     size='lg'
                                     value={password}
@@ -105,7 +103,7 @@ function SignIn() {
                                     className='mx-2 px-5 text-black'
                                     color='red'
                                     size='lg'
-                                    style={{ backgroundColor: '#a69c9c', fontWeight: 'bold' }}
+                                    style={{ backgroundColor: '#a69c9c', fontWeight: '600' }}
                                     onClick={handleSubmit}
                                 >
                                     Sign in

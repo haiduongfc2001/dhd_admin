@@ -10,39 +10,39 @@ import {useState} from "react";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import DigitClock from "~/components/Layout/components/DigitClock/DigitClock";
+import {NavLink} from "react-router-dom";
 
 const cx = classNames.bind(styles)
 
 function Header(props) {
     const [searchResult, setSearchResult] = useState([]);
 
-    const handleLogout = () => {
-        axios.post('http://localhost:5000/admin/logout')
-            .then(response => {
-                // Redirect the user to the login page after successfully logging out
-                window.location.href = "/admin/signin";
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    const handleLogout = async () => {
+        try {
+            await axios.post('http://localhost:5000/admin/logout');
+            window.location.href = '/admin/signin'; // Redirect to the signin page
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
-                <img
-                    src={logoDHD}
-                    alt="logo dhd"
-                    className={cx('logoadmin')}
-                />
+                <NavLink to='/'>
+                    <img
+                        src={logoDHD}
+                        alt="logo dhd"
+                        className={cx('logoadmin')}
+                    />
+                </NavLink>
                 <Tippy
                     visible={searchResult.length > 0}
                     render={attrs => (
                         <div className={cx('search-results')} tabIndex={-1} {...attrs}>
                             Kết quả
                         </div>
-                    )
-                    }
+                    )}
                 >
                     <div className={cx('search')}>
                         <input

@@ -108,7 +108,7 @@ app.delete('/product/:_id', (req, res) => {
 // Create a mock admin account
 const admin = {
     id: 1,
-    email: "admin@example.com",
+    email: "admin@gmail.com",
     password: "$2b$10$JDj8276zry8i3YKRvIV3GOKLaBJFlnv/bdkwMsw1S.i1Slkhv.Jrm" // hashed password: admin123
 };
 

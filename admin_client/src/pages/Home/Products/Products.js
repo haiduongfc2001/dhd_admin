@@ -4,11 +4,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import {Table, Form, Button} from 'react-bootstrap';
 import {BsTrash} from 'react-icons/bs';
-import {IoMdAddCircle} from 'react-icons/io';
 import {HiPencilAlt} from "react-icons/hi";
 import {GiCancel} from "react-icons/gi";
 import {AiFillSave} from "react-icons/ai";
 import DeleteModal from "~/components/Layout/components/Modal/DeleteModal";
+import AddProduct from "./AddProduct"
 
 import classNames from "classnames/bind"
 import styles from "./Product.module.scss"
@@ -47,48 +47,6 @@ function ListProducts() {
             });
     }, []);
 
-
-    const productNameRef = useRef(null);
-
-    function validateInput(value) {
-        const regex = /^[1-9]\d*$/; // Only allow positive integers not starting with 0
-        return regex.test(value);
-    }
-
-    function handleInputChange(e) {
-        const {name, value} = e.target;
-        if (name === 'quantity' && !validateInput(value)) {
-            return; // Do not update state if input is invalid
-        }
-        setNewProduct(prevState => ({...prevState, [name]: value}));
-    }
-
-
-    const handleAddProduct = () => {
-        axios
-            .post("http://localhost:5000/product", newProduct)
-            .then((response) => {
-                setProducts((prevState) => [...prevState, response.data]);
-                setNewProduct({});
-                toast.success('Product added successfully!', {
-                    position: "bottom-center",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-                toast.error('Error adding product!');
-            });
-
-        productNameRef.current.focus();
-    };
-
     const handleEditProduct = (id) => {
         const editedProduct = {
             name: nameRef.current.value,
@@ -117,7 +75,7 @@ function ListProducts() {
             });
     }
 
-    const handleCancelEditProduct = (id) => {
+    const handleCancelEditProduct = () => {
         // const originalProduct = products.find(product => product._id === id);
         // nameRef.current.value = originalProduct.name;
         // quantityRef.current.value = originalProduct.quantity;
@@ -136,6 +94,14 @@ function ListProducts() {
 
     return (
         <>
+            <AddProduct
+                cx={cx}
+                styles={styles}
+                newProduct={newProduct}
+                setProducts={setProducts}
+                setNewProduct={setNewProduct}
+            />
+
             <Table striped bordered hover>
                 <thead>
                 <tr className={cx('table-product-category')}>
@@ -151,7 +117,6 @@ function ListProducts() {
                         <td style={{textAlign: "center"}}>{product._id}</td>
                         {/*<td>{product.name}</td>*/}
                         {/*<td>{product.quantity}</td>*/}
-
                         <td>
                             {editableProduct === product._id ?
                                 <Form.Control
@@ -221,33 +186,7 @@ function ListProducts() {
                 handleDelete={() => handleDeleteProduct(productIdToDelete)}
             />
 
-            <Form inline="true" className={cx('form-product')}>
-                <Form.Control
-                    ref={productNameRef}
-                    name="name"
-                    type="text"
-                    placeholder="Product name"
-                    value={newProduct.name || ""}
-                    onChange={handleInputChange}
-                    className="mr-sm-2 mb-2"
-                    size="lg"
-                    style={{minHeight: "40px"}}
-                />
-                <Form.Control
-                    name="quantity"
-                    type="number"
-                    placeholder="Quantity"
-                    value={newProduct.quantity || ''}
-                    onChange={handleInputChange}
-                    className="mr-sm-2 mb-2"
-                    size="lg"
-                    style={{minHeight: "40px"}}
-                />
-                <Button variant="primary" onClick={handleAddProduct}>
-                    <IoMdAddCircle className={cx('icon-action')}/>
-                </Button>
-                <ToastContainer/>
-            </Form>
+            <ToastContainer/>
         </>
     );
 }
