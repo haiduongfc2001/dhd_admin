@@ -1,3 +1,28 @@
+const Product = require("../models/ProductModel");
+
+// Thêm sản phẩm
+const AddProduct = async (req, res) => {
+
+    try {
+
+        const product = new Product ({
+            name: req.body.name,
+            quantity: req.body.quantity,
+        });
+
+        const result = await product.save();
+        res.json(result);
+
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
+module.exports = {
+    AddProduct,
+}
+
+
 // const express = require('express');
 // const mongoose = require('mongoose');
 // const Product = require('./models/ProductModel');
@@ -71,8 +96,8 @@
 //     }
 // });
 
-const Product = require('../models/ProductModel');
-
-class ProductController {
-
-}
+// const Product = require('../models/ProductModel');
+//
+// class ProductController {
+//
+// }

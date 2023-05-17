@@ -1,5 +1,5 @@
-function route(app) {
-    // app.use('/admin', admin);
-}
-
-module.exports = route;
+// function route(app) {
+//     // app.use('/admin', admin);
+// }
+//
+// module.exports = route;
