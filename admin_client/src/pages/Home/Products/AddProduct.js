@@ -1,6 +1,6 @@
 import {useRef, useState} from "react";
 import {IoMdAddCircle} from "react-icons/io";
-import {Button, Form, ModalTitle} from "react-bootstrap";
+import {Button, FloatingLabel, Form, ModalTitle} from "react-bootstrap";
 import axios from "axios";
 import {toast} from "react-toastify";
 import Modal from "react-bootstrap/Modal";
@@ -76,27 +76,35 @@ function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form inline="true" className={cx('form-product')}>
-                        <Form.Control
-                            ref={productNameRef}
-                            name="name"
-                            type="text"
-                            placeholder="Product name"
-                            value={newProduct.name || ""}
-                            onChange={handleInputChange}
+                        <FloatingLabel
+                            label="Product Name"
                             className="mr-sm-2 mb-2"
-                            size="lg"
-                            style={{minHeight: "40px"}}
-                        />
-                        <Form.Control
-                            name="quantity"
-                            type="number"
-                            placeholder="Quantity"
-                            value={newProduct.quantity || ''}
-                            onChange={handleInputChange}
+                        >
+                            <Form.Control
+                                ref={productNameRef}
+                                name="name"
+                                type="text"
+                                placeholder="Product Name"
+                                value={newProduct.name || ""}
+                                onChange={handleInputChange}
+                                size="lg"
+                                style={{minHeight: "40px"}}
+                            />
+                        </FloatingLabel>
+                        <FloatingLabel
+                            label="Product Quantity"
                             className="mr-sm-2 mb-2"
-                            size="lg"
-                            style={{minHeight: "40px"}}
-                        />
+                        >
+                            <Form.Control
+                                name="quantity"
+                                type="number"
+                                placeholder="Prouduct Quantity"
+                                value={newProduct.quantity || ''}
+                                onChange={handleInputChange}
+                                size="lg"
+                                style={{minHeight: "40px"}}
+                            />
+                        </FloatingLabel>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
