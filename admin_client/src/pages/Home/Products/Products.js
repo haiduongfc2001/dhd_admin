@@ -7,35 +7,20 @@ import {BsTrash} from 'react-icons/bs';
 import {HiPencilAlt} from "react-icons/hi";
 import {GiCancel} from "react-icons/gi";
 import {AiFillSave} from "react-icons/ai";
-import DeleteModal from "~/components/Layout/components/Modal/DeleteModal";
 import AddProduct from "./AddProduct"
+import DeleteProduct from "./DeleteProduct";
 
 import classNames from "classnames/bind"
 import styles from "./Product.module.scss"
 
 const cx = classNames.bind(styles)
 
-
 function ListProducts() {
-
     const [products, setProducts] = useState([]);
     const [newProduct, setNewProduct] = useState({});
     const [editableProduct, setEditableProduct] = useState(null);
     const nameRef = useRef(null);
     const quantityRef = useRef(null);
-
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [productIdToDelete, setProductIdToDelete] = useState(null);
-
-    const handleCloseDeleteModal = () => {
-        setShowDeleteModal(false);
-        setProductIdToDelete(null);
-    };
-
-    const handleShowDeleteModal = (id) => {
-        setShowDeleteModal(true);
-        setProductIdToDelete(id);
-    };
 
     useEffect(() => {
         axios.get('http://localhost:5000/products')
@@ -81,16 +66,6 @@ function ListProducts() {
         // quantityRef.current.value = originalProduct.quantity;
         setEditableProduct(null);
     }
-
-    const handleDeleteProduct = (id) => {
-        axios.delete(`http://localhost:5000/product/${id}`)
-            .then(response => {
-                setProducts(products.filter((product) => product._id !== id));
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
 
     return (
         <>
@@ -167,24 +142,17 @@ function ListProducts() {
                                     <HiPencilAlt className={cx('icon-action')}/>
                                 </Button>
                             }
-                            <Button
-                                variant="danger"
-                                className={cx('button-delete')}
-                                onClick={() => handleShowDeleteModal(product._id)}
-                            >
-                                <BsTrash className={cx('icon-action')}/>
-                            </Button>
+                            <DeleteProduct
+                                cx={cx}
+                                product={product}
+                                products={products}
+                                setProducts={setProducts}
+                            />
                         </td>
                     </tr>
                 ))}
                 </tbody>
             </Table>
-
-            <DeleteModal
-                show={showDeleteModal}
-                handleClose={handleCloseDeleteModal}
-                handleDelete={() => handleDeleteProduct(productIdToDelete)}
-            />
 
             <ToastContainer/>
         </>
