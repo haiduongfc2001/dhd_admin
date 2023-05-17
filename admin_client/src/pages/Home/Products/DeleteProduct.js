@@ -1,7 +1,6 @@
 import axios from "axios";
 import {BsTrash} from "react-icons/bs";
 import {Button} from "react-bootstrap";
-import DeleteModal from "~/components/Layout/components/Modal/DeleteModal";
 import {toast} from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 import {useState} from "react";
