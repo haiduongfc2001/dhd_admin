@@ -7,8 +7,10 @@ const express = require('express');
 const app = express();
 
 const ProductRoute = require('./routes/ProductRoute')
+const UserRegisterRoute = require('./routes/UserRegisterRoute')
 
 app.use('/', ProductRoute)
+app.use('/', UserRegisterRoute)
 
 app.listen(5000, () => {
     console.log('Server is up and running...');
