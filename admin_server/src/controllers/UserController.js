@@ -1,7 +1,9 @@
 const User = require('../models/UserModel');
 const bcrypt = require('bcrypt');
 
-const securePassword = async(password) => {
+const nodemailer = require('nodemailer');
+
+const securePassword = async (password) => {
     try {
         const passwordHash = await bcrypt.hash(password, 10);
         return passwordHash;
@@ -10,7 +12,57 @@ const securePassword = async(password) => {
     }
 }
 
-const LoadRegister = async(req, res) => {
+// For send mail
+const sendVerifyMail = async (name, email, user_id) => {
+    try {
+
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: 'haiduongfc2001@gmail.com',
+                pass: 'Haiduong26122001'
+            }
+        });
+
+        // const MailOptions = {
+        //     from: 'haiduongfc2001@gmail.com',
+        //     to: email,
+        //     subject: 'For Verification Mail',
+        //     html: '<p>Hi ' +name+ ', please click here to <a href="http://127.0.0.1:3000/verify?id=' +user_id+ '"> Verify </a> your mail.</p>',
+        // }
+
+        // send mail with defined transport object
+        let MailOptions = await transporter.sendMail({
+            from: 'haiduongfc2001@gmail.com', // sender address
+            to: email, // list of receivers
+            subject: 'For Verification Mail',
+            html: '<p>Hi ' +name+ ', please click here to <a href="http://127.0.0.1:3000/verify?id=' +user_id+ '"> Verify </a> your mail.</p>',
+        });
+
+        console.log("Message sent: %s", MailOptions.messageId);
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(MailOptions));
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+
+        // transporter.sendMail(MailOptions, function (error, info) {
+        //     if (error) {
+        //         console.log(error);
+        //     } else {
+        //         console.log("Email has been sent:- " + info.response);
+        //     }
+        // })
+
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+const LoadRegister = async (req, res) => {
     try {
         res.render('registration');
     } catch (err) {
@@ -18,7 +70,7 @@ const LoadRegister = async(req, res) => {
     }
 }
 
-const AddUser = async(req, res) => {
+const AddUser = async (req, res) => {
     try {
         const spassword = await securePassword(req.body.password)
 
@@ -33,8 +85,9 @@ const AddUser = async(req, res) => {
 
         const userData = await user.save();
 
-        if(userData) {
-            res.render('registration', {message: 'Your registration has been successfully!'});
+        if (userData) {
+            sendVerifyMail(req.body.name, req.body.email, userData._id);
+            res.render('registration', {message: 'Your registration has been successfully! Please check your email!'});
         } else {
             res.render('registration', {message: 'Your registration has been failed!'});
         }
@@ -44,7 +97,20 @@ const AddUser = async(req, res) => {
     }
 }
 
+const VerifyMail = async (req, res) => {
+    try {
+
+        const updateInfo = await User.updateOne({_id: req.query.id}, {$set: {is_verified: 1}})
+        console.log(updateInfo);
+        res.render('email-verified')
+
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
 module.exports = {
     LoadRegister,
     AddUser,
+    VerifyMail,
 }

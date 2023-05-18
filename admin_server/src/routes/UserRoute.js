@@ -25,6 +25,8 @@ const upload = multer({storage: storage})
 
 user_route.get('/register', UserController.LoadRegister);
 
-user_route.post('/register', upload.single('image'),UserController.AddUser);
+user_route.post('/register', upload.single('image'), UserController.AddUser);
+
+user_route.get('/verify', UserController.VerifyMail)
 
 module.exports = user_route;
