@@ -2,11 +2,13 @@ const User = require('../models/UserModel');
 const bcrypt = require('bcrypt');
 
 const nodemailer = require('nodemailer');
+require('dotenv/config'); // Add this line to load environment variables
+const MailConfig = require('../config/MailConfig');
+const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
 
 const securePassword = async (password) => {
     try {
-        const passwordHash = await bcrypt.hash(password, 10);
-        return passwordHash;
+        return await bcrypt.hash(password, 10);
     } catch (err) {
         console.log(err.message);
     }
@@ -15,50 +17,50 @@ const securePassword = async (password) => {
 // For send mail
 const sendVerifyMail = async (name, email, user_id) => {
     try {
-
         const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
+            host: HOST,
+            port: PORT,
+            secure: false, // upgrade later with STARTTLS
             requireTLS: true,
             auth: {
-                user: 'haiduongfc2001@gmail.com',
-                pass: 'Haiduong26122001'
+                user: USERNAME, // Use environment variable for email username
+                pass: PASSWORD, // Use environment variable for email password
+            },
+        });
+
+        const MailOptions = {
+            from: USERNAME, // Use the same email username as the sender
+            to: email,
+            subject: 'For Verification Mail',
+            text: "Plaintext version of the message",
+            html: '<p>Hi ' +name+ ', please click here to <a href="http://127.0.0.1:3000/verify?id=' +user_id+ '"> Verify </a> your mail.</p>',
+        }
+
+        transporter.sendMail(MailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email has been sent: ' + info.response);
             }
         });
 
-        // const MailOptions = {
-        //     from: 'haiduongfc2001@gmail.com',
-        //     to: email,
+        // // send mail with defined transport object
+        // let MailOptions = await transporter.sendMail({
+        //     from: process.env.EMAIL_USERNAME, // Use the same email username as the sender
+        //     to: email, // list of receivers
         //     subject: 'For Verification Mail',
         //     html: '<p>Hi ' +name+ ', please click here to <a href="http://127.0.0.1:3000/verify?id=' +user_id+ '"> Verify </a> your mail.</p>',
-        // }
+        // });
+        //
+        // console.log("Message sent: %s", MailOptions.messageId);
+        // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+        //
+        // // Preview only available when sending through an Ethereal account
+        // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(MailOptions));
+        // // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 
-        // send mail with defined transport object
-        let MailOptions = await transporter.sendMail({
-            from: 'haiduongfc2001@gmail.com', // sender address
-            to: email, // list of receivers
-            subject: 'For Verification Mail',
-            html: '<p>Hi ' +name+ ', please click here to <a href="http://127.0.0.1:3000/verify?id=' +user_id+ '"> Verify </a> your mail.</p>',
-        });
-
-        console.log("Message sent: %s", MailOptions.messageId);
-        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-        // Preview only available when sending through an Ethereal account
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(MailOptions));
-        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-
-        // transporter.sendMail(MailOptions, function (error, info) {
-        //     if (error) {
-        //         console.log(error);
-        //     } else {
-        //         console.log("Email has been sent:- " + info.response);
-        //     }
-        // })
-
-    } catch (err) {
-        console.log(err.message);
+    } catch (error) {
+        console.log(error.message);
     }
 }
 
@@ -86,7 +88,7 @@ const AddUser = async (req, res) => {
         const userData = await user.save();
 
         if (userData) {
-            sendVerifyMail(req.body.name, req.body.email, userData._id);
+            await sendVerifyMail(req.body.name, req.body.email, userData._id);
             res.render('registration', {message: 'Your registration has been successfully! Please check your email!'});
         } else {
             res.render('registration', {message: 'Your registration has been failed!'});
@@ -99,15 +101,13 @@ const AddUser = async (req, res) => {
 
 const VerifyMail = async (req, res) => {
     try {
-
-        const updateInfo = await User.updateOne({_id: req.query.id}, {$set: {is_verified: 1}})
+        const updateInfo = await User.updateOne({ _id: req.query.id }, { $set: { is_verified: 1 } });
         console.log(updateInfo);
-        res.render('email-verified')
-
+        res.render('email-verified');
     } catch (err) {
         console.log(err.message);
     }
-}
+};
 
 module.exports = {
     LoadRegister,
