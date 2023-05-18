@@ -6,14 +6,17 @@ mongoose.connect('mongodb://127.0.0.1:27017/admin_database')
 const express = require('express');
 const app = express();
 
-const ProductRoute = require('./routes/ProductRoute')
-const UserRegisterRoute = require('./routes/UserRegisterRoute')
+const ProductRoute = require('./routes/ProductRoute');
+const UserRegisterRoute = require('./routes/UserRegisterRoute');
+const UserRoute = require('./routes/UserRoute');
 
-app.use('/', ProductRoute)
-app.use('/', UserRegisterRoute)
+// For user route
+// app.use('/', ProductRoute);
+// app.use('/', UserRegisterRoute);
+app.use('/', UserRoute)
 
 app.listen(5000, () => {
-    console.log('Server is up and running...');
+    console.log('Server is running...');
 });
 
 
