@@ -42,6 +42,8 @@ user_route.post('/login', UserController.VerifyLogin);
 
 user_route.get('/home', auth.isLogin, UserController.LoadHome);
 
+user_route.get('/logout', auth.isLogin, UserController.UserLogout);
+
 // axios
 user_route.get('/users', UserController.AllUsers);
 

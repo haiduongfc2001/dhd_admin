@@ -158,6 +158,15 @@ const LoadHome = async (req, res) => {
     }
 }
 
+const UserLogout = async (req, res) => {
+    try {
+        req.session.destroy()
+        res.redirect('/');
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
 module.exports = {
     LoadRegister,
     AddUser,
@@ -165,5 +174,6 @@ module.exports = {
     AllUsers,
     LoginLoad,
     VerifyLogin,
-    LoadHome
+    LoadHome,
+    UserLogout
 }
