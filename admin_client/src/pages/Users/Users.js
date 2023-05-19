@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import {MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody} from 'mdb-react-ui-kit';
 import axios from "axios";
 import {Button, Form, Table} from "react-bootstrap";
 import {AiFillSave} from "react-icons/ai";
@@ -9,6 +9,7 @@ import DeleteProduct from "~/pages/Home/Products/DeleteProduct";
 
 import classNames from "classnames/bind";
 import styles from "./Users.module.scss";
+
 const cx = classNames.bind(styles);
 
 export default function Users() {
@@ -29,6 +30,7 @@ export default function Users() {
         <Table striped bordered hover>
             <thead>
             <tr className={cx('table-product-category')}>
+                <th>Avatar</th>
                 <th>UserID</th>
                 <th>UserName</th>
                 <th>Email</th>
@@ -37,6 +39,12 @@ export default function Users() {
             <tbody>
             {users.map((user) => (
                 <tr key={user._id}>
+                    <td>
+                        <img
+                            src={user.image}
+                            alt="User Avatar"
+                        />
+                    </td>
                     <td style={{textAlign: "center"}}>{user._id}</td>
                     <td>{user.name}</td>
                     <td>{user.email}</td>
@@ -44,7 +52,7 @@ export default function Users() {
             ))}
             </tbody>
         </Table>
-        
+
         // <MDBTable align='middle'>
         //     <MDBTableHead>
         //         <tr>
