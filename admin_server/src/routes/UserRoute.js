@@ -1,5 +1,11 @@
 const express = require("express");
 const user_route = express();
+const session = require("express-session");
+
+const SessionSecret = require('../config/SessionSecret')
+user_route.use(session({secret: SessionSecret.SESSION_SECRET}));
+
+const auth = require('../middleware/auth')
 
 const UserController = require("../controllers/UserController");
 const path = require("path");
@@ -23,12 +29,20 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage: storage})
 
-user_route.get('/register', UserController.LoadRegister);
+user_route.get('/register', auth.isLogout, UserController.LoadRegister);
 
 user_route.post('/register', upload.single('image'), UserController.AddUser);
 
 user_route.get('/verify', UserController.VerifyMail);
 
+user_route.get('/', auth.isLogout, UserController.LoginLoad);
+user_route.get('/login', auth.isLogout, UserController.LoginLoad);
+
+user_route.post('/login', UserController.VerifyLogin);
+
+user_route.get('/home', auth.isLogin, UserController.LoadHome);
+
+// axios
 user_route.get('/users', UserController.AllUsers);
 
 module.exports = user_route;

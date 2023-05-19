@@ -36,7 +36,7 @@ const sendVerifyMail = async (name, email, user_id) => {
             to: email,
             subject: 'For Verification Mail',
             text: "Plaintext version of the message",
-            html: '<p>Hi ' +name+ ', please click here to <a href="http://127.0.0.1:5000/verify?id=' +user_id+ '"> Verify </a> your mail.</p>',
+            html: '<p>Hi ' + name + ', please click here to <a href="http://127.0.0.1:5000/verify?id=' + user_id + '"> Verify </a> your mail.</p>',
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -113,9 +113,57 @@ const AllUsers = async (req, res) => {
     }
 }
 
+// Login user method
+const LoginLoad = async (req, res) => {
+    try {
+        res.render('login');
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const VerifyLogin = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const password = req.body.password;
+
+        const userData = await User.findOne({email: email});
+
+        if (userData) {
+            const passwordMatch = await bcrypt.compare(password, userData.password);
+            if (passwordMatch) {
+                if (userData.is_verified === 0) {
+                    res.render('login', {message: 'Please verify your mail!'});
+                } else {
+                    req.session.user_id = userData._id;
+                    res.redirect('/home');
+                }
+            } else {
+                res.render('login', {message: 'Email and passsword is incorrect'});
+            }
+        } else {
+            res.render('login', {message: 'Email and passsword is incorrect'});
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const LoadHome = async (req, res) => {
+    try {
+        res.render('home')
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
 module.exports = {
     LoadRegister,
     AddUser,
     VerifyMail,
-    AllUsers
+    AllUsers,
+    LoginLoad,
+    VerifyLogin,
+    LoadHome
 }
