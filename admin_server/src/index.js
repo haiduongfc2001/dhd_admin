@@ -11,8 +11,8 @@ const UserRegisterRoute = require('./routes/UserRegisterRoute');
 const UserRoute = require('./routes/UserRoute');
 
 // For user route
-// app.use('/', ProductRoute);
-// app.use('/', UserRegisterRoute);
+app.use('/', ProductRoute);
+app.use('/', UserRegisterRoute);
 app.use('/', UserRoute)
 
 app.listen(5000, () => {
