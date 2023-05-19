@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config(); // Add this line to load environment variables
 const MailConfig = require('../config/MailConfig');
 const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
+const Product = require("../models/ProductModel");
 
 const securePassword = async (password) => {
     try {
@@ -103,8 +104,18 @@ const VerifyMail = async (req, res) => {
     }
 };
 
+const AllUsers = async (req, res) => {
+    try {
+        const users = await User.find()
+        res.json(users);
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
 module.exports = {
     LoadRegister,
     AddUser,
     VerifyMail,
+    AllUsers
 }

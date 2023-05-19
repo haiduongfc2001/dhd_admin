@@ -1,11 +1,35 @@
 const Product = require("../models/ProductModel");
 
+// Tất cả sản phẩm
+const AllProducts = async (req, res) => {
+    try {
+        const products = await Product.find()
+        res.json(products);
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
+// Tìm sản phẩm theo id
+const FindProductById = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params._id);
+
+        if (product) {
+            res.json(product);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 // Thêm sản phẩm
 const AddProduct = async (req, res) => {
-
     try {
 
-        const product = new Product ({
+        const product = new Product({
             name: req.body.name,
             quantity: req.body.quantity,
         });
@@ -18,86 +42,59 @@ const AddProduct = async (req, res) => {
     }
 }
 
-module.exports = {
-    AddProduct,
-}
+// Sửa thông tin sản phẩm
+const EditProduct = async (req, res) => {
+    try {
+        const { name, quantity } = req.body;
+        const productId = req.params._id;
 
+        const updatedProduct = await Product.findByIdAndUpdate(productId, { name, quantity }, { new: true });
 
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const Product = require('./models/ProductModel');
+        if (!updatedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
 
-// const app = express();
-// app.use(express.json());
+        res.status(200).json(updatedProduct);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
-// // Connect to MongoDB
-// mongoose.connect('mongodb://localhost:27017', { useNewUrlParser: true });
+// Xóa sản phẩm
+const DeleteProduct = async (req, res) => {
+    try {
+        const deleteproduct = await Product.findOneAndRemove({_id: req.params._id});
 
-// // Get all products
-// app.get('/products', async (req, res) => {
-//     try {
-//         const products = await Product.find();
-//         res.json(products);
-//     } catch (err) {
-//         res.status(500).json({ message: err.message });
-//     }
-// })
+        if (deleteproduct) {
+            res.send(`Product ${req.params._id} deleted successfully!`);
+        } else {
+            res.send(`Product ${req.params._id} not found!`);
+        }
 
-// // Get a specific product by ID
-// app.get('/products/:id', async (req, res) => {
-//     try {
-//         const product = await Product.findOne({ id: req.params.id });
-//         if (!product) throw new Error('Product not found');
-//         res.json(product);
-//     } catch (err) {
-//         res.status(404).json({ message: err.message });
-//     }
-// })
-
-// // Create a new product
-// app.post('/products', async (req, res) => {
-//     const product = new Product({
-//         id: req.body.id,
-//         name: req.body.id,
-//         quantity: req.body.quantity
-//     });
-
-//     try {
-//         const newProduct = await product.save();
-//         res.status(201).json(newProduct);
-//     } catch (err) {
-//         res.status(404).json({ message: err.message });
-//     }
-// });
-
-// // Update a product
-// app.patch('/products/:id', async (req, res) => {
-//     try {
-//         const product = await Product.findOneAndUpdate(
-//             { id: req.params.id },
-//             { $set: req.body },
-//             { new: true },
-//         );
-//         if (!product) throw new Error('Product not found');
-//         request.json(product);
-//     } catch (err) {
-//         res.status(404).json({ message: err.message })
-//     }
-// });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
 
 // // Delete a product
-// app.delete('/products/:id', async (req, res) => {
-//     try {
-//         const product = await Product.findOneAndDelete({ id: req.params.id });
-//         if (!product) throw new Error('Product not found');
-//         res.json(product);
-//     } catch (err) {
-//         res.status(404).json({ message: err.message });
-//     }
+// app.delete('/product/:_id', (req, res) => {
+//     Product.findOneAndRemove({_id: req.params._id}).then((product) => {
+//         if (product) {
+//             res.send(`Product ${req.params._id} deleted successfully!`);
+//         } else {
+//             res.send(`Product ${req.params._id} not found!`);
+//         }
+//     }).catch((err) => {
+//         console.error(err);
+//         res.status(500).send('Error deleting product');
+//     });
 // });
 
-// const Product = require('../models/ProductModel');
-//
-// class ProductController {
-//
-// }
+
+module.exports = {
+    AddProduct,
+    AllProducts,
+    FindProductById,
+    EditProduct,
+    DeleteProduct,
+}

@@ -20,8 +20,8 @@ const Sidebar = () => {
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
                 {buttons.map((button, index) => (
-                    <NavLink to={button.link}>
-                        <MDBBtn key={index} className={cx('sidebar-menu')}>
+                    <NavLink to={button.link} key={index}>
+                        <MDBBtn className={cx('sidebar-menu')}>
                             {button.icon}
                             <span className={cx('sidebar-category')}>
                             {button.text}

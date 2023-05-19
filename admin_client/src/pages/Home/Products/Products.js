@@ -56,7 +56,7 @@ function ListProducts() {
             })
             .catch(error => {
                 console.log(error);
-                toast.error('Error adding product!');
+                toast.error('Error edit product!');
             });
     }
 

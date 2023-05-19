@@ -27,6 +27,8 @@ user_route.get('/register', UserController.LoadRegister);
 
 user_route.post('/register', upload.single('image'), UserController.AddUser);
 
-user_route.get('/verify', UserController.VerifyMail)
+user_route.get('/verify', UserController.VerifyMail);
+
+user_route.get('/users', UserController.AllUsers);
 
 module.exports = user_route;

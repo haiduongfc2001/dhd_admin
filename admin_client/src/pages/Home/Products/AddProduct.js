@@ -16,8 +16,7 @@ function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
     }
 
     const handleAddProduct = () => {
-        axios
-            .post("http://localhost:5000/product", newProduct)
+        axios.post("http://localhost:5000/product", newProduct)
             .then((response) => {
                 setProducts((prevState) => [...prevState, response.data]);
                 setNewProduct({});
