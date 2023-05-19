@@ -20,18 +20,18 @@ const securePassword = async (password) => {
 const sendVerifyMail = async (name, email, user_id) => {
     try {
         const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
+            host: HOST,
+            port: PORT,
             secure: false, // upgrade later with STARTTLS
             requireTLS: true,
             auth: {
-                user: 'haiduongfc2001@gmail.com', // Use environment variable for email username
-                pass: 'kzkpkgerfwyannjt', // Use environment variable for email password
+                user: USERNAME, // Use environment variable for email username
+                pass: PASSWORD, // Use environment variable for email password
             },
         });
 
         const MailOptions = {
-            from: 'haiduongfc2001@gmail.com', // Use the same email username as the sender
+            from: USERNAME, // Use the same email username as the sender
             to: email,
             subject: 'For Verification Mail',
             text: "Plaintext version of the message",
@@ -46,12 +46,12 @@ const sendVerifyMail = async (name, email, user_id) => {
             }
         });
 
-        console.log("Message sent: %s", MailOptions.messageId);
-        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-        // Preview only available when sending through an Ethereal account
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(MailOptions));
-        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+        // console.log("Message sent: %s", MailOptions.messageId);
+        // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+        //
+        // // Preview only available when sending through an Ethereal account
+        // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(MailOptions));
+        // // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 
     } catch (error) {
         console.log(error.message);

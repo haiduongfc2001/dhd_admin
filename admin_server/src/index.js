@@ -6,6 +6,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/admin_database')
 const express = require('express');
 const app = express();
 
+require('dotenv').config()
+
 const ProductRoute = require('./routes/ProductRoute');
 const UserRegisterRoute = require('./routes/UserRegisterRoute');
 const UserRoute = require('./routes/UserRoute');
