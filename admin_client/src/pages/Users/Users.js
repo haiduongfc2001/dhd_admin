@@ -9,6 +9,7 @@ import DeleteProduct from "~/pages/Home/Products/DeleteProduct";
 
 import classNames from "classnames/bind";
 import styles from "./Users.module.scss";
+import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
 
 const cx = classNames.bind(styles);
 
@@ -27,31 +28,34 @@ export default function Users() {
     });
 
     return (
-        <Table striped bordered hover>
-            <thead>
-            <tr className={cx('table-product-category')}>
-                <th>Avatar</th>
-                <th>UserID</th>
-                <th>UserName</th>
-                <th>Email</th>
-            </tr>
-            </thead>
-            <tbody>
-            {users.map((user) => (
-                <tr key={user._id}>
-                    <td>
-                        <img
-                            src={user.image}
-                            alt="User Avatar"
-                        />
-                    </td>
-                    <td style={{textAlign: "center"}}>{user._id}</td>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
+        <>
+            <BreadcrumbExample/>
+            <Table striped bordered hover>
+                <thead>
+                <tr className={cx('table-product-category')}>
+                    <th>Avatar</th>
+                    <th>UserID</th>
+                    <th>UserName</th>
+                    <th>Email</th>
                 </tr>
-            ))}
-            </tbody>
-        </Table>
+                </thead>
+                <tbody>
+                {users.map((user) => (
+                    <tr key={user._id}>
+                        <td>
+                            <img
+                                src={user.image}
+                                alt="User Avatar"
+                            />
+                        </td>
+                        <td style={{textAlign: "center"}}>{user._id}</td>
+                        <td>{user.name}</td>
+                        <td>{user.email}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </Table>
+        </>
 
         // <MDBTable align='middle'>
         //     <MDBTableHead>

@@ -1,8 +1,8 @@
 .wrapper {
-  font-size: 1.8rem;
+  font-size: calc(var(--default-font-size) + 0.2rem);
 }
 
 //.breadcrumb {
-//  font-size: 1.8rem;
+//  font-size: calc(var(--default-font-size) + 0.2rem);
 //}
 

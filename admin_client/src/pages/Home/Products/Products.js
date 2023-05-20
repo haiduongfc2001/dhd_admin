@@ -12,6 +12,7 @@ import DeleteProduct from "./DeleteProduct";
 
 import classNames from "classnames/bind"
 import styles from "./Product.module.scss"
+import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
 
 const cx = classNames.bind(styles)
 
@@ -69,6 +70,7 @@ function ListProducts() {
 
     return (
         <>
+            <BreadcrumbExample />
             <AddProduct
                 cx={cx}
                 styles={styles}
