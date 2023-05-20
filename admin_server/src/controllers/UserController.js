@@ -270,6 +270,34 @@ const ResetPassword = async (req, res) => {
     }
 }
 
+// For verification send mail link
+const VerificationLoad = async (req, res) => {
+    try {
+
+        res.render('verification', {message: 'Verification'})
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const SendVerificationLink = async (req, res) => {
+    try {
+
+        const email = req.body.email;
+        const userData = await User.findOne({email: email});
+        if(userData) {
+            sendVerifyMail(userData.name, userData.email, userData._id);
+            res.render('verification', {message: 'Reset verification mail sent your mail id, please check!'})
+        } else {
+            res.render('verification', {message: 'This email is not exist'})
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 module.exports = {
     LoadRegister,
@@ -283,5 +311,7 @@ module.exports = {
     ForgetLoad,
     ForgetVerify,
     ForgetPasswordLoad,
-    ResetPassword
+    ResetPassword,
+    VerificationLoad,
+    SendVerificationLink
 }

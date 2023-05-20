@@ -50,6 +50,9 @@ user_route.post('/forget', UserController.ForgetVerify);
 user_route.get('/forget-password', auth.isLogout, UserController.ForgetPasswordLoad);
 user_route.post('/forget-password', UserController.ResetPassword);
 
+user_route.get('/verification', UserController.VerificationLoad);
+user_route.post('/verification', UserController.SendVerificationLink);
+
 // axios
 user_route.get('/users', UserController.AllUsers);
 
