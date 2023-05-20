@@ -44,6 +44,12 @@ user_route.get('/home', auth.isLogin, UserController.LoadHome);
 
 user_route.get('/logout', auth.isLogin, UserController.UserLogout);
 
+user_route.get('/forget', auth.isLogout, UserController.ForgetLoad);
+user_route.post('/forget', UserController.ForgetVerify);
+
+user_route.get('/forget-password', auth.isLogout, UserController.ForgetPasswordLoad);
+user_route.post('/forget-password', UserController.ResetPassword);
+
 // axios
 user_route.get('/users', UserController.AllUsers);
 
