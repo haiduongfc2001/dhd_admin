@@ -299,6 +299,64 @@ const SendVerificationLink = async (req, res) => {
     }
 }
 
+// User profile edit & update
+const EditLoad = async (req, res) => {
+    try {
+
+        const id = req.query.id;
+        const userData = await User.findById({_id: id});
+
+        if (userData) {
+            res.render('edit', {user: userData});
+        } else {
+            res.redirect('/home');
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+const UpdateProfile = async (req, res) => {
+    try {
+        let updateData = {
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+        };
+
+        if (req.file) {
+            updateData.image = req.file.filename;
+        }
+
+        const userData = await User.findByIdAndUpdate(
+            { _id: req.body.user_id },
+            { $set: updateData }
+        );
+
+        res.redirect('/home');
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+// const UpdateProfile = async (req, res) => {
+//     try {
+//
+//         if (req.file) {
+//             const userData = await User.findByIdAndUpdate({_id: req.body.user_id}, {$set: {name: req.body.name, email: req.body.email, phone: req.body.phone, image: req.file.filename}})
+//         } else {
+//             const userData = await User.findByIdAndUpdate({_id: req.body.user_id}, {$set: {name: req.body.name, email: req.body.email, phone: req.body.phone}})
+//         }
+//
+//         res.redirect('/home')
+//
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+
 
 module.exports = {
     LoadRegister,
@@ -314,5 +372,7 @@ module.exports = {
     ForgetPasswordLoad,
     ResetPassword,
     VerificationLoad,
-    SendVerificationLink
+    SendVerificationLink,
+    EditLoad,
+    UpdateProfile
 }

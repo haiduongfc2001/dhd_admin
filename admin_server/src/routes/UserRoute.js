@@ -58,6 +58,11 @@ user_route.post('/forget-password', UserController.ResetPassword);
 user_route.get('/verification', UserController.VerificationLoad);
 user_route.post('/verification', UserController.SendVerificationLink);
 
+user_route.get('/edit', auth.isLogin, UserController.EditLoad);
+// user_route.post('/edit', upload.single('image'), UserController.UpdateProfile);
+user_route.post('/edit', upload.single('image'), auth.isLogin, UserController.UpdateProfile);
+
+
 // axios
 user_route.get('/users', UserController.AllUsers);
 
