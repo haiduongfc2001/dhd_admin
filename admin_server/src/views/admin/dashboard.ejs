@@ -9,7 +9,58 @@
 </a>
 <br><br><br><br>
 
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Image</th>
+        <th>Verified</th>
+    </tr>
 
+    <%
+    if (users.length > 0) {
+    for (var i = 0; i < users.length; i++) {
+    %>
+        <tr>
+            <td><%= users[i].name %></td>
+            <td><%= users[i].email %></td>
+            <td><%= users[i].phone %></td>
+            <td>
+                <img
+                        src="/userImages/<%= users[i].image %>"
+                        alt="<%= users[i].image %>"
+                        style="width: 80px; height: 80px"
+                />
+            </td>
+            <td>
+                <%
+                if (users[i].is_verified === 1) {
+                %>
+                    Verified
+                <%
+                } else {
+                %>
+                    Not Verified
+                <%
+                }
+                %>
+            </td>
+        </tr>
+    <%
+    }
+    } else {
+    %>
+        <tr>
+            <td colspan="5">Users Not Found</td>
+        </tr>
+    <%
+    }
+    %>
+
+</table>
+
+<br><br>
 
 <a href="/admin/logout">
     <button>
