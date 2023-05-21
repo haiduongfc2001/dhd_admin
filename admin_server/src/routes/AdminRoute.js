@@ -14,13 +14,17 @@ const path = require("path");
 admin_route.set('view engine', 'ejs');
 admin_route.set('views', path.join(__dirname, '../views/admin'));
 
-const AdminController = require('../controllers/AdminController')
+const AdminAuth = require('../middleware/AdminAuth')
 
-admin_route.get('/', AdminController.LoadLogin);
+const AdminController = require('../controllers/AdminController');
+
+admin_route.get('/', AdminAuth.isLogout, AdminController.LoadLogin);
 
 admin_route.post('/', AdminController.VerifyLogin);
 
-admin_route.get('/home', AdminController.LoadDashboard);
+admin_route.get('/home', AdminAuth.isLogin, AdminController.LoadDashboard);
+
+admin_route.get('/logout', AdminAuth.isLogin, AdminController.Logout);
 
 admin_route.get('*', (req, res) => {
     res.redirect('/admin');

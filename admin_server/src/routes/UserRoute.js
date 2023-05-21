@@ -5,7 +5,7 @@ const session = require("express-session");
 const SessionSecret = require('../config/SessionSecret');
 user_route.use(session({secret: SessionSecret.SESSION_SECRET}));
 
-const auth = require('../middleware/auth');
+const Auth = require('../middleware/Auth');
 
 const UserController = require("../controllers/UserController");
 
@@ -34,33 +34,33 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage: storage})
 
-user_route.get('/register', auth.isLogout, UserController.LoadRegister);
+user_route.get('/register', Auth.isLogout, UserController.LoadRegister);
 
 user_route.post('/register', upload.single('image'), UserController.AddUser);
 
 user_route.get('/verify', UserController.VerifyMail);
 
-user_route.get('/', auth.isLogout, UserController.LoginLoad);
-user_route.get('/login', auth.isLogout, UserController.LoginLoad);
+user_route.get('/', Auth.isLogout, UserController.LoginLoad);
+user_route.get('/login', Auth.isLogout, UserController.LoginLoad);
 
 user_route.post('/login', UserController.VerifyLogin);
 
-user_route.get('/home', auth.isLogin, UserController.LoadHome);
+user_route.get('/home', Auth.isLogin, UserController.LoadHome);
 
-user_route.get('/logout', auth.isLogin, UserController.UserLogout);
+user_route.get('/logout', Auth.isLogin, UserController.UserLogout);
 
-user_route.get('/forget', auth.isLogout, UserController.ForgetLoad);
+user_route.get('/forget', Auth.isLogout, UserController.ForgetLoad);
 user_route.post('/forget', UserController.ForgetVerify);
 
-user_route.get('/forget-password', auth.isLogout, UserController.ForgetPasswordLoad);
+user_route.get('/forget-password', Auth.isLogout, UserController.ForgetPasswordLoad);
 user_route.post('/forget-password', UserController.ResetPassword);
 
 user_route.get('/verification', UserController.VerificationLoad);
 user_route.post('/verification', UserController.SendVerificationLink);
 
-user_route.get('/edit', auth.isLogin, UserController.EditLoad);
+user_route.get('/edit', Auth.isLogin, UserController.EditLoad);
 // user_route.post('/edit', upload.single('image'), UserController.UpdateProfile);
-user_route.post('/edit', upload.single('image'), auth.isLogin, UserController.UpdateProfile);
+user_route.post('/edit', upload.single('image'), Auth.isLogin, UserController.UpdateProfile);
 
 
 // axios

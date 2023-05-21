@@ -41,7 +41,16 @@ const VerifyLogin = async (req, res) => {
 
 const LoadDashboard = async (req, res) => {
     try {
-        res.render('home')
+        res.render('home');
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const Logout = async (req, res) => {
+    try {
+        req.session.destroy();
+        res.redirect('/admin')
     } catch (error) {
         console.log(error.message);
     }
@@ -50,5 +59,7 @@ const LoadDashboard = async (req, res) => {
 module.exports = {
     LoadLogin,
     VerifyLogin,
-    LoadDashboard
+    LoadDashboard,
+    Logout,
+
 }
