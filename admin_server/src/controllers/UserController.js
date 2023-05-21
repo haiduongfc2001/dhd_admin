@@ -5,9 +5,7 @@ const nodemailer = require('nodemailer');
 const randomstring = require('randomstring');
 
 require('dotenv').config(); // Add this line to load environment variables
-const MailConfig = require('../config/MailConfig');
 const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
-const Product = require("../models/ProductModel");
 
 const securePassword = async (password) => {
     try {
