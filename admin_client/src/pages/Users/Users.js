@@ -1,11 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody} from 'mdb-react-ui-kit';
+import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import {Button, Form, Table} from "react-bootstrap";
-import {AiFillSave} from "react-icons/ai";
-import {GiCancel} from "react-icons/gi";
-import {HiPencilAlt} from "react-icons/hi";
+
+import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import { Button, Form, Table } from "react-bootstrap";
+import { AiFillSave } from "react-icons/ai";
+import { GiCancel } from "react-icons/gi";
+import { HiPencilAlt } from "react-icons/hi";
 import DeleteProduct from "~/pages/Home/Products/DeleteProduct";
+
+// import { Table } from "react-bootstrap";
 
 import classNames from "classnames/bind";
 import styles from "./Users.module.scss";
@@ -16,6 +19,7 @@ const cx = classNames.bind(styles);
 export default function Users() {
 
     const [users, setUsers] = useState([]);
+    const tableArray = ['User', 'UserID', 'Phone', 'Status', 'Actions'];
 
     useEffect(() => {
         axios.get('http://localhost:5000/users')
@@ -27,141 +31,103 @@ export default function Users() {
             })
     });
 
+
     return (
         <>
-            <BreadcrumbExample/>
-            <Table striped bordered hover>
-                <thead>
-                <tr className={cx('table-product-category')}>
-                    <th>Avatar</th>
-                    <th>UserID</th>
-                    <th>UserName</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                {users.map((user) => (
-                    <tr key={user._id}>
-                        <td>
-                            <img
-                                src={user.image}
-                                alt="User Avatar"
-                            />
-                        </td>
-                        <td style={{textAlign: "center"}}>{user._id}</td>
-                        <td>{user.name}</td>
-                        <td>{user.email}</td>
-                    </tr>
-                ))}
-                </tbody>
-            </Table>
-        </>
+            <BreadcrumbExample />
 
-        // <MDBTable align='middle'>
-        //     <MDBTableHead>
-        //         <tr>
-        //             <th scope='col'>Name</th>
-        //             <th scope='col'>Title</th>
-        //             <th scope='col'>Status</th>
-        //             <th scope='col'>Position</th>
-        //             <th scope='col'>Actions</th>
-        //         </tr>
-        //     </MDBTableHead>
-        //     <MDBTableBody>
-        //         <tr>
-        //             <td>
-        //                 <div className='d-flex align-items-center'>
-        //                     <img
-        //                         src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-        //                         alt=''
-        //                         style={{ width: '45px', height: '45px' }}
-        //                         className='rounded-circle'
-        //                     />
-        //                     <div className='ms-3'>
-        //                         <p className='fw-bold mb-1'>John Doe</p>
-        //                         <p className='text-muted mb-0'>john.doe@gmail.com</p>
-        //                     </div>
-        //                 </div>
-        //             </td>
-        //             <td>
-        //                 <p className='fw-normal mb-1'>Software engineer</p>
-        //                 <p className='text-muted mb-0'>IT department</p>
-        //             </td>
-        //             <td>
-        //                 <MDBBadge color='success' pill>
-        //                     Active
-        //                 </MDBBadge>
-        //             </td>
-        //             <td>Senior</td>
-        //             <td>
-        //                 <MDBBtn color='link' rounded size='lg'>
-        //                     Edit
-        //                 </MDBBtn>
-        //             </td>
-        //         </tr>
-        //         <tr>
-        //             <td>
-        //                 <div className='d-flex align-items-center'>
-        //                     <img
-        //                         src='https://mdbootstrap.com/img/new/avatars/6.jpg'
-        //                         alt=''
-        //                         style={{ width: '45px', height: '45px' }}
-        //                         className='rounded-circle'
-        //                     />
-        //                     <div className='ms-3'>
-        //                         <p className='fw-bold mb-1'>Alex Ray</p>
-        //                         <p className='text-muted mb-0'>alex.ray@gmail.com</p>
-        //                     </div>
-        //                 </div>
-        //             </td>
-        //             <td>
-        //                 <p className='fw-normal mb-1'>Consultant</p>
-        //                 <p className='text-muted mb-0'>Finance</p>
-        //             </td>
-        //             <td>
-        //                 <MDBBadge color='primary' pill>
-        //                     Onboarding
-        //                 </MDBBadge>
-        //             </td>
-        //             <td>Junior</td>
-        //             <td>
-        //                 <MDBBtn color='link' rounded size='lg'>
-        //                     Edit
-        //                 </MDBBtn>
-        //             </td>
-        //         </tr>
-        //         <tr>
-        //             <td>
-        //                 <div className='d-flex align-items-center'>
-        //                     <img
-        //                         src='https://mdbootstrap.com/img/new/avatars/7.jpg'
-        //                         alt=''
-        //                         style={{ width: '45px', height: '45px' }}
-        //                         className='rounded-circle'
-        //                     />
-        //                     <div className='ms-3'>
-        //                         <p className='fw-bold mb-1'>Kate Hunington</p>
-        //                         <p className='text-muted mb-0'>kate.hunington@gmail.com</p>
-        //                     </div>
-        //                 </div>
-        //             </td>
-        //             <td>
-        //                 <p className='fw-normal mb-1'>Designer</p>
-        //                 <p className='text-muted mb-0'>UI/UX</p>
-        //             </td>
-        //             <td>
-        //                 <MDBBadge color='warning' pill>
-        //                     Awaiting
-        //                 </MDBBadge>
-        //             </td>
-        //             <td>Senior</td>
-        //             <td>
-        //                 <MDBBtn color='link' rounded size='lg'>
-        //                     Edit
-        //                 </MDBBtn>
-        //             </td>   
-        //         </tr>
-        //     </MDBTableBody>
-        // </MDBTable>
+            <MDBTable align='middle'>
+                <MDBTableHead>
+                    <tr className={cx('table-product-category')}>
+                        {tableArray.map((table, index) => (
+                            <th key={index} scope='col'>{table}</th>
+                        ))}
+                    </tr>
+                </MDBTableHead>
+                <MDBTableBody>
+                    {users.map((user) => (
+                        <tr key={user._id}>
+                            <td>
+                                <div className='d-flex align-items-center'>
+                                    <img
+                                        src={`http://localhost:5000/userImages/${user.image}`}
+                                        alt="{user.name}"
+                                        style={{ width: '45px', height: '45px' }}
+                                        className='rounded-circle'
+                                    />
+                                    <div className='ms-3'>
+                                        <p className='fw-bold mb-1'>{user.name}</p>
+                                        <p className='text-muted mb-0'>{user.email}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{user._id}</td>
+                            <td>{user.phone}</td>
+                            <td>
+                                <MDBBadge
+                                    style={{ fontSize: "var(--default-font-size)" }}
+
+                                    color={user.is_admin === 1 && user.is_verified === 1 ? 'success'
+                                        : user.is_verified === 0 ? 'danger'
+                                            : 'info'}
+                                    pill
+                                >
+                                    {user.is_admin === 1 && user.is_verified === 1 ? 'Admin'
+                                        : user.is_admin === 0 && user.is_verified === 1 ? 'User'
+                                            : 'Not Verified'
+                                    }
+                                </MDBBadge>
+
+                            </td>
+                            <td>
+                                <button
+                                    type="button"
+                                    className="btn btn-success"
+                                    style={{ fontSize: "var(--default-font-size-button)" }}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    style={{ fontSize: "var(--default-font-size-button)" }}
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </MDBTableBody>
+            </MDBTable>
+        </>
     );
 }
+
+
+// <Table striped bordered hover>
+//                 <thead>
+//                     <tr className={cx('table-product-category')}>
+//                         <th scope='col' style={{ width: '55px' }}>Avatar</th>
+//                         <th scope='col'>UserID</th>
+//                         <th scope='col'>UserName</th>
+//                         <th scope='col'>Email</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//                     {users.map((user) => (
+//                         <tr key={user._id}>
+//                             <td style={{ width: '55px' }}>
+//                                 <img
+//                                     src={`http://localhost:5000/userImages/${user.image}`}
+//                                     alt="{user.name}"
+//                                     style={{ width: '45px', height: '45px' }}
+//                                     className='rounded-circle'
+//                                 />
+//                             </td>
+//                             <td style={{ textAlign: "center" }}>{user._id}</td>
+//                             <td>{user.name}</td>
+//                             <td>{user.email}</td>
+//                         </tr>
+//                     ))}
+//                 </tbody>
+//             </Table>

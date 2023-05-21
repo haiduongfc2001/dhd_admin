@@ -20,6 +20,7 @@
   --default-margin: 20px;
 
   --default-font-size: 1.6rem;
+  --default-font-size-button: 1.2rem;
 
   // Default padding
   --default-padding: 20px;
@@ -56,7 +57,9 @@ body {
   //background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
 }
 
-button, input, [tabindex] {
+button,
+input,
+[tabindex] {
   outline: none;
   border: none;
 }
@@ -65,4 +68,3 @@ a[href] {
   color: var(--text-color);
   text-decoration: none;
 }
-

@@ -1,11 +1,11 @@
-//.button-update,
-//.button-delete {
-//  margin: 0 20px;
-//  align-items: center;
-//  justify-content: center;
-//}
+// //.button-update,
+// //.button-delete {
+// //  margin: 0 20px;
+// //  align-items: center;
+// //  justify-content: center;
+// //}
 
-td Button {
+td button {
   margin: 0 5px;
 }
 
@@ -14,16 +14,21 @@ td Button {
 }
 
 td {
-  font-size: var(--default-font-size)
+  font-size: var(--default-font-size);
 }
-
-
 
 .form-product input {
   caret-color: var(--primary);
 }
 
-.table-product-category th:nth-child(1),
+.table-product-category th:first-child {
+  width: 300px;
+}
+
 .table-product-category th:nth-child(2) {
-  width: var(--default-width-table);
+  width: 250px;
+}
+
+.table-product-category th {
+  font-size: var(--default-font-size)
 }
