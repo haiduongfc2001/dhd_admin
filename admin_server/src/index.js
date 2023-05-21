@@ -9,6 +9,7 @@ require('dotenv').config();
 const ProductRoute = require('./routes/ProductRoute');
 const UserRegisterRoute = require('./routes/UserRegisterRoute');
 const UserRoute = require('./routes/UserRoute');
+const AdminRoute = require('./routes/AdminRoute');
 
 // Connect to db
 db.connect();
@@ -20,6 +21,7 @@ app.use(cors());
 app.use('/', ProductRoute);
 app.use('/', UserRegisterRoute);
 app.use('/', UserRoute);
+app.use('/admin', AdminRoute);
 
 app.listen(5000, () => {
     console.log('Server is running...');

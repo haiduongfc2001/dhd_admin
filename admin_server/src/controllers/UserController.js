@@ -350,7 +350,7 @@ const UpdateProfile = async (req, res) => {
 //             const userData = await User.findByIdAndUpdate({_id: req.body.user_id}, {$set: {name: req.body.name, email: req.body.email, phone: req.body.phone}})
 //         }
 //
-//         res.redirect('/home')
+//         res.redirect('/home.ejs')
 //
 //     } catch (error) {
 //         console.log(error.message);

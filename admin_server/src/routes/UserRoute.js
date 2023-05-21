@@ -1,15 +1,15 @@
 const express = require("express");
 const user_route = express();
-const session = require("express-session");
 
-const SessionSecret = require('../config/SessionSecret')
+const session = require("express-session");
+const SessionSecret = require('../config/SessionSecret');
 user_route.use(session({secret: SessionSecret.SESSION_SECRET}));
 
-const auth = require('../middleware/auth')
+const auth = require('../middleware/auth');
 
 const UserController = require("../controllers/UserController");
-const path = require("path");
 
+const path = require("path");
 user_route.set('view engine', 'ejs');
 user_route.set('views', path.join(__dirname, '../views/users'));
 
