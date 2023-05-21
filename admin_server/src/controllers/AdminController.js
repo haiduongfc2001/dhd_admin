@@ -87,7 +87,8 @@ const VerifyLogin = async (req, res) => {
 
 const LoadDashboard = async (req, res) => {
     try {
-        res.render('home');
+        const userData = await User.findById({_id: req.session.user_id})
+        res.render('home', {admin: userData});
     } catch (error) {
         console.log(error.message);
     }
@@ -165,6 +166,14 @@ const ResetPassword = async (req, res) => {
     }
 }
 
+const AdminDashboard = async (req, res) => {
+    try {
+        res.render('dashboard')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     LoadLogin,
     VerifyLogin,
@@ -173,5 +182,6 @@ module.exports = {
     ForgetLoad,
     ForgetVerify,
     ForgetPasswordLoad,
-    ResetPassword
+    ResetPassword,
+    AdminDashboard
 }

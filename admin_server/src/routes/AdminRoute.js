@@ -15,8 +15,9 @@ admin_route.set('view engine', 'ejs');
 admin_route.set('views', path.join(__dirname, '../views/admin'));
 
 const AdminAuth = require('../middleware/AdminAuth')
-
 const AdminController = require('../controllers/AdminController');
+
+admin_route.use('/userImages', express.static('src/public/userImages'));
 
 admin_route.get('/', AdminAuth.isLogout, AdminController.LoadLogin);
 
@@ -31,6 +32,8 @@ admin_route.post('/forget', AdminController.ForgetVerify);
 
 admin_route.get('/forget-password', AdminAuth.isLogout, AdminController.ForgetPasswordLoad);
 admin_route.post('/forget-password', AdminController.ResetPassword);
+
+admin_route.get('/dashboard', AdminAuth.isLogin, AdminController.AdminDashboard);
 
 admin_route.get('*', (req, res) => {
     res.redirect('/admin');
