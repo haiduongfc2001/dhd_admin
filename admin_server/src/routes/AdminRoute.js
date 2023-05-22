@@ -57,6 +57,7 @@ admin_route.post('/new-user', upload.single('image'),AdminController.AddUser);
 admin_route.get('/edit-user', AdminAuth.isLogin, AdminController.EditUserLoad);
 admin_route.post('/edit-user', AdminController.UpdateUser);
 
+admin_route.get('/delete-user', AdminAuth.isLogin, AdminController.DeleteUser);
 admin_route.get('*', (req, res) => {
     res.redirect('/admin');
 })

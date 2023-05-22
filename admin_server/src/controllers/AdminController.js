@@ -66,9 +66,9 @@ const addUserMail = async (name, email, password, user_id) => {
             subject: 'Admin add you and verify your email',
             html: '<p>Hi ' + name + ', please click here to <a href="http://127.0.0.1:5000/verify?id=' + user_id + '"> Verify </a> your mail.</p>' +
                 '<br><br>' +
-                '<b>Email: + email +</b>' +
+                '<b>Email: '+ email +'</b>' +
                 '<br>' +
-                '<b>Password: + password +</b>',
+                '<b>Password: '+ password +'</b>',
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -78,13 +78,6 @@ const addUserMail = async (name, email, password, user_id) => {
                 console.log('Email has been sent: ' + info.response);
             }
         });
-
-        // console.log("Message sent: %s", MailOptions.messageId);
-        // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-        //
-        // // Preview only available when sending through an Ethereal account
-        // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(MailOptions));
-        // // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 
     } catch (error) {
         console.log(error.message);
@@ -290,6 +283,20 @@ const UpdateUser = async (req, res) => {
     }
 }
 
+
+// Delete User
+const DeleteUser = async (req, res) => {
+    try {
+
+        const id = req.query.id;
+        await User.deleteOne({_id: id});
+        res.redirect('/admin/dashboard');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     LoadLogin,
     VerifyLogin,
@@ -303,5 +310,6 @@ module.exports = {
     NewUserLoad,
     AddUser,
     EditUserLoad,
-    UpdateUser
+    UpdateUser,
+    DeleteUser
 }
