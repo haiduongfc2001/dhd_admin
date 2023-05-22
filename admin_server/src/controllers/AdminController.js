@@ -46,6 +46,51 @@ const sendResetPasswordMail = async (name, email, token) => {
     }
 };
 
+// For send mail
+const addUserMail = async (name, email, password, user_id) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: HOST,
+            port: PORT,
+            secure: false, // upgrade later with STARTTLS
+            requireTLS: true,
+            auth: {
+                user: USERNAME, // Use environment variable for email username
+                pass: PASSWORD, // Use environment variable for email password
+            },
+        });
+
+        const MailOptions = {
+            from: USERNAME, // Use the same email username as the sender
+            to: email,
+            subject: 'Admin add you and verify your email',
+            html: '<p>Hi ' + name + ', please click here to <a href="http://127.0.0.1:5000/verify?id=' + user_id + '"> Verify </a> your mail.</p>' +
+                '<br><br>' +
+                '<b>Email: + email +</b>' +
+                '<br>' +
+                '<b>Password: + password +</b>',
+        }
+
+        transporter.sendMail(MailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email has been sent: ' + info.response);
+            }
+        });
+
+        // console.log("Message sent: %s", MailOptions.messageId);
+        // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+        //
+        // // Preview only available when sending through an Ethereal account
+        // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(MailOptions));
+        // // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 
 const LoadLogin = async (req, res) => {
     try {
@@ -175,6 +220,48 @@ const AdminDashboard = async (req, res) => {
     }
 }
 
+const NewUserLoad = async (req, res) => {
+    try {
+        res.render('new-user');
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const AddUser = async (req, res) => {
+    try {
+
+        const name = req.body.name;
+        const email = req.body.email;
+        const phone = req.body.phone;
+        const image = req.file.filename;
+        const password = randomstring.generate(8);
+
+        const spassword = await securePassword(password);
+
+        const user = new User({
+            name: name,
+            email: email,
+            phone: phone,
+            image: image,
+            password: spassword,
+            is_admin: 0,
+        })
+
+        const userData = await user.save();
+
+        if (userData) {
+            await addUserMail(name, email, password, userData._id);
+            res.redirect('/admin/dashboard');
+        } else {
+            res.render('new-user', {message: 'Something went wrong!'})
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     LoadLogin,
     VerifyLogin,
@@ -184,5 +271,8 @@ module.exports = {
     ForgetVerify,
     ForgetPasswordLoad,
     ResetPassword,
-    AdminDashboard
+    AdminDashboard,
+    NewUserLoad,
+    AddUser,
+
 }

@@ -32,7 +32,7 @@ const storage = multer.diskStorage({
         cb(null, name);
     }
 })
-const upload = multer({storage: storage})
+const upload = multer({storage: storage});
 
 user_route.get('/register', Auth.isLogout, UserController.LoadRegister);
 
@@ -59,8 +59,7 @@ user_route.get('/verification', UserController.VerificationLoad);
 user_route.post('/verification', UserController.SendVerificationLink);
 
 user_route.get('/edit', Auth.isLogin, UserController.EditLoad);
-// user_route.post('/edit', upload.single('image'), UserController.UpdateProfile);
-user_route.post('/edit', upload.single('image'), Auth.isLogin, UserController.UpdateProfile);
+user_route.post('/edit', upload.single('image'), UserController.UpdateProfile);
 
 
 // axios
