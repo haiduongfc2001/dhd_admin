@@ -1,10 +1,11 @@
 const User = require('../models/UserModel');
 const bcrypt = require('bcrypt');
 const randomstring = require('randomstring');
+const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken");
 
 require('dotenv').config(); // Add this line to load environment variables
 const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
-const nodemailer = require("nodemailer");
 
 const securePassword = async (password) => {
     try {
@@ -66,9 +67,9 @@ const addUserMail = async (name, email, password, user_id) => {
             subject: 'Admin add you and verify your email',
             html: '<p>Hi ' + name + ', please click here to <a href="http://127.0.0.1:5000/verify?id=' + user_id + '"> Verify </a> your mail.</p>' +
                 '<br><br>' +
-                '<b>Email: '+ email +'</b>' +
+                '<b>Email: ' + email + '</b>' +
                 '<br>' +
-                '<b>Password: '+ password +'</b>',
+                '<b>Password: ' + password + '</b>',
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -195,7 +196,12 @@ const ResetPassword = async (req, res) => {
         const user_id = req.body.user_id;
 
         const secure_password = await securePassword(password);
-        const updatedData = await User.findByIdAndUpdate({_id: user_id}, {$set: {password: secure_password, token: ''}});
+        const updatedData = await User.findByIdAndUpdate({_id: user_id}, {
+            $set: {
+                password: secure_password,
+                token: ''
+            }
+        });
 
         res.redirect('/admin');
 
@@ -274,7 +280,14 @@ const EditUserLoad = async (req, res) => {
 const UpdateUser = async (req, res) => {
     try {
 
-        const userData = await User.findByIdAndUpdate({_id: req.body.id}, {$set: {name: req.body.name, email: req.body.email, phone: req.body.phone, is_verified: req.body.verify}})
+        const userData = await User.findByIdAndUpdate({_id: req.body.id}, {
+            $set: {
+                name: req.body.name,
+                email: req.body.email,
+                phone: req.body.phone,
+                is_verified: req.body.verify
+            }
+        })
 
         res.redirect('/admin/dashboard');
 
@@ -297,6 +310,74 @@ const DeleteUser = async (req, res) => {
     }
 }
 
+//  JSON - Connect to Client
+const AllAdmins = async (req, res) => {
+    try {
+        const users = await User.find({is_admin: 1})
+        res.json(users);
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
+const AdminLogin = async (req, res) => {
+    try {
+
+        const {email, password} = req.body;
+
+        // Find admin by email
+        const admin = await User.findOne({email});
+
+        // If admin doesn't exist, return an error
+        if (!admin) {
+            return res.status(401).json({message: 'Invalid credentials'});
+        }
+
+        // Compare the provided password with the hashed password stored in the database
+        const passwordMatch = await bcrypt.compare(password, admin.password);
+
+        // If passwords don't match, return an error
+        if (!passwordMatch) {
+            return res.status(401).json({message: 'Invalid credentials'});
+        }
+
+        // Create a JWT token
+        const token = jwt.sign({email: admin.email}, process.env.JWT_SECRET);
+
+        // Return the token
+        res.json({token});
+
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({message: 'Internal Server Error'});
+    }
+}
+
+const AdminLogout = async (req, res) => {
+    // req.session.destroy((err) => {
+    //     if (err) {
+    //         console.error('Logout failed:', err);
+    //         res.status(500).json({ message: 'Logout failed' });
+    //     } else {
+    //         res.json({ message: 'Logged out successfully' });
+    //     }
+    // });
+
+    const {token} = req.body;
+
+    // Verify the token
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({message: 'Invalid token'});
+        }
+
+        // Perform any necessary logout logic (e.g., removing tokens from the database, etc.)
+
+        // Return a success message
+        res.status(200).json({message: 'Logged out successfully'});
+    });
+};
+
 module.exports = {
     LoadLogin,
     VerifyLogin,
@@ -311,5 +392,10 @@ module.exports = {
     AddUser,
     EditUserLoad,
     UpdateUser,
-    DeleteUser
+    DeleteUser,
+// JSON - Connect to Client
+    AllAdmins,
+    AdminLogin,
+    AdminLogout,
+
 }

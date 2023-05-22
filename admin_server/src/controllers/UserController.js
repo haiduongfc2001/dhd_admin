@@ -135,15 +135,6 @@ const VerifyMail = async (req, res) => {
     }
 };
 
-const AllUsers = async (req, res) => {
-    try {
-        const users = await User.find()
-        res.json(users);
-    } catch (error) {
-        res.send(error.message);
-    }
-}
-
 // Login user method
 const LoginLoad = async (req, res) => {
     try {
@@ -356,6 +347,17 @@ const UpdateProfile = async (req, res) => {
 // }
 
 
+// JSON - Connect to Client
+const AllUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
+
 module.exports = {
     LoadRegister,
     AddUser,
@@ -372,5 +374,5 @@ module.exports = {
     VerificationLoad,
     SendVerificationLink,
     EditLoad,
-    UpdateProfile
+    UpdateProfile,
 }

@@ -16,7 +16,6 @@ admin_route.set('views', path.join(__dirname, '../views/admin'));
 
 const multer = require("multer");
 
-// user_route.use(express.static('public'));
 admin_route.use('/userImages', express.static('src/public/userImages'));
 
 const storage = multer.diskStorage({
@@ -32,11 +31,11 @@ const upload = multer({storage: storage});
 
 const AdminAuth = require('../middleware/AdminAuth')
 const AdminController = require('../controllers/AdminController');
-
-admin_route.use('/userImages', express.static('src/public/userImages'));
+const UserController = require("../controllers/UserController");
+const User = require("../models/UserModel");
+const bcrypt = require("bcrypt");
 
 admin_route.get('/', AdminAuth.isLogout, AdminController.LoadLogin);
-
 admin_route.post('/', AdminController.VerifyLogin);
 
 admin_route.get('/home', AdminAuth.isLogin, AdminController.LoadDashboard);
@@ -58,8 +57,68 @@ admin_route.get('/edit-user', AdminAuth.isLogin, AdminController.EditUserLoad);
 admin_route.post('/edit-user', AdminController.UpdateUser);
 
 admin_route.get('/delete-user', AdminAuth.isLogin, AdminController.DeleteUser);
-admin_route.get('*', (req, res) => {
-    res.redirect('/admin');
-})
+
+// admin_route.get('*', (req, res) => {
+//     res.redirect('/admin');
+// });
+
+// axios
+admin_route.get('/admins', AdminController.AllAdmins);
+admin_route.post('/login', AdminController.AdminLogin);
+admin_route.post('/logout', AdminController.AdminLogout);
 
 module.exports = admin_route;
+
+
+// const VerifyLogin = async (req, res) => {
+//     try {
+//         const email = req.body.email;
+//         const password = req.body.password;
+//
+//         const userData = await User.findOne({email: email});
+//
+//         if (userData) {
+//             const passwordMatch = await bcrypt.compare(password, userData.password);
+//             if (passwordMatch) {
+//                 if (userData.is_admin === 0) {
+//                     res.render('login', {message: 'Email and password is incorrect'});
+//                 } else {
+//                     req.session.user_id = userData._id;
+//                     res.redirect('/admin/home');
+//                 }
+//             } else {
+//                 res.render('login', {message: 'Email and password is incorrect'});
+//             }
+//
+//         } else {
+//             res.render('login', {message: 'Email and password is incorrect'})
+//         }
+//
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

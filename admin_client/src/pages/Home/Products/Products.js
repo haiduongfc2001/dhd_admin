@@ -81,7 +81,7 @@ function ListProducts() {
 
             <Table striped bordered hover>
                 <thead>
-                <tr className={cx('table-product-category')}>
+                <tr  style={{backgroundColor: 'antiquewhite'}} className={cx('table-product-category')}>
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Quantity</th>

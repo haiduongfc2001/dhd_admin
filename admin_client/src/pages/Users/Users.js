@@ -13,13 +13,24 @@ import DeleteProduct from "~/pages/Home/Products/DeleteProduct";
 import classNames from "classnames/bind";
 import styles from "./Users.module.scss";
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
-
 const cx = classNames.bind(styles);
 
 export default function Users() {
 
     const [users, setUsers] = useState([]);
     const tableArray = ['User', 'UserID', 'Phone', 'Status', 'Actions'];
+    const actionArray = [
+        {
+            type: 'button',
+            className: 'btn btn-success',
+            name: 'Edit',
+        },
+        {
+            type: 'button',
+            className: 'btn btn-danger',
+            name: 'Delete',
+        },
+    ];
 
     useEffect(() => {
         axios.get('http://localhost:5000/users')
@@ -37,7 +48,7 @@ export default function Users() {
             <BreadcrumbExample />
 
             <MDBTable align='middle'>
-                <MDBTableHead>
+                <MDBTableHead style={{backgroundColor: 'antiquewhite'}}>
                     <tr className={cx('table-product-category')}>
                         {tableArray.map((table, index) => (
                             <th key={index} scope='col'>{table}</th>
@@ -80,20 +91,16 @@ export default function Users() {
 
                             </td>
                             <td>
-                                <button
-                                    type="button"
-                                    className="btn btn-success"
-                                    style={{ fontSize: "var(--default-font-size-button)" }}
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-danger"
-                                    style={{ fontSize: "var(--default-font-size-button)" }}
-                                >
-                                    Delete
-                                </button>
+                                {actionArray.map((action, index) => (
+                                    <button
+                                        type={action.type}
+                                        className={action.className}
+                                        style={{ fontSize: "var(--default-font-size-button)" }}
+                                        disabled={user.is_admin === 1 && user.is_verified === 1}
+                                    >
+                                        {action.name}
+                                    </button>
+                                ))}
                             </td>
                         </tr>
                     ))}

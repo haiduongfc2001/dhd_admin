@@ -15,31 +15,63 @@ import classNames from "classnames/bind";
 import styles from "./SignIn.module.scss";
 import logoDHD from "~/assets/images/logo_dhdadmin.png";
 
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Row from 'react-bootstrap/Row';
+
+import {useHistory} from 'react-router-dom';
+import {createBrowserHistory} from 'history';
+
+const history = createBrowserHistory();
+
 const cx = classNames.bind(styles)
 
 function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
 
     const [PasswordInputType, ToggleIcon, toggleVisibility] = usePasswordToggle()
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleLogin = async (e) => {
+        e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:5000/admin/signin', {
+            const response = await axios.post('http://localhost:5000/admin/login', {
                 email,
                 password,
             });
 
-            if (response.status === 200) {
-                window.location.href = 'http://localhost:3000/';
-            }
+            // Save the token to local storage
+            localStorage.setItem('token', response.data.token);
+
+            // Redirect to '/'
+            window.location.href = 'http://localhost:3000/';
+
         } catch (error) {
-            setError('Invalid email or password');
+            console.error('Login failed:', error);
         }
     };
+
+    // return (
+    //     <div>
+    //         <h2>Login</h2>
+    //         <form onSubmit={handleLogin}>
+    //             <div>
+    //                 <label>Email:</label>
+    //                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+    //             </div>
+    //             <div>
+    //                 <label>Password:</label>
+    //                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+    //             </div>
+    //             <button type="submit">Login</button>
+    //         </form>
+    //     </div>
+    // );
 
     return (
         <div className={cx('wrapper')}>
@@ -53,7 +85,7 @@ function SignIn() {
                                 <img
                                     src={logoDHD}
                                     alt="logo dhd"
-                                    className={cx('logoadmin')}
+                                    className={cx('logo-admin')}
                                 />
                                 <p className="text-black-150 mt-3 mb-3">
                                     Please login with your admin account!
@@ -63,23 +95,26 @@ function SignIn() {
                                     wrapperClass='mb-4 mx-5 w-100'
                                     labelClass='text-black'
                                     label='Email address'
-                                    id='formControlLg'
+                                    // id='formControlLg'
                                     type='email'
                                     size='lg'
+                                    style={{maxWidth: '250px'}}
                                     autoFocus
                                     // autoComplete='off'
                                     value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
+                                    required
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <MDBInput
                                     wrapperClass='mb-4 mx-5 w-100'
                                     labelClass='text-black'
                                     label='Password'
-                                    id='formControlLg'
+                                    // id='formControlLg'
                                     type={PasswordInputType}
                                     size='lg'
                                     value={password}
-                                    onChange={(event) => setPassword(event.target.value)}
+                                    required
+                                    onChange={(e) => setPassword(e.target.value)}
                                 >
                                     {password && (
                                         <span
@@ -94,7 +129,7 @@ function SignIn() {
                                 {error && <p className='text-danger'>{error}</p>}
 
                                 <p className='small mb-3 pb-lg-2'>
-                                    <a className='text-black-50' href='/signin'>
+                                    <a className='text-black-50' href='/admin/login'>
                                         Forgot password?
                                     </a>
                                 </p>
@@ -103,10 +138,10 @@ function SignIn() {
                                     className='mx-2 px-5 text-black'
                                     color='red'
                                     size='lg'
-                                    style={{ backgroundColor: '#a69c9c', fontWeight: '600' }}
-                                    onClick={handleSubmit}
+                                    style={{backgroundColor: '#a69c9c', fontWeight: '600'}}
+                                    onClick={handleLogin}
                                 >
-                                    Sign in
+                                    Login
                                 </MDBBtn>
                             </MDBCardBody>
                         </MDBCard>

@@ -17,14 +17,42 @@ const cx = classNames.bind(styles)
 function Header(props) {
     const [searchResult, setSearchResult] = useState([]);
 
+    // const handleLogout = async () => {
+    //     // try {
+    //     //     await axios.post('http://localhost:5000/admin/logout');
+    //     //     window.location.href = '/admin/login'; // Redirect to the login page
+    //     // } catch (error) {
+    //     //     console.error('Logout failed:', error);
+    //     // }
+    //
+    //     const token = localStorage.getItem('token');
+    //
+    //     try {
+    //         await axios.post('http://localhost:5000/admin/logout', { token });
+    //
+    //         // Remove the token from local storage
+    //         // localStorage.removeItem('token');
+    //
+    //         // Redirect to '/admin/login'
+    //         window.location.href = '/admin/login';
+    //     } catch (error) {
+    //         console.error('Logout failed:', error);
+    //     }
+    // }
+
     const handleLogout = async () => {
         try {
-            await axios.post('http://localhost:5000/admin/logout');
-            window.location.href = '/admin/signin'; // Redirect to the signin page
+            const response = await axios.post("http://localhost:5000/admin/logout", {
+                token: localStorage.getItem("token"), // Assuming the token is stored in localStorage
+            });
+            if (response.status === 200) {
+                localStorage.removeItem("token"); // Clear the token from localStorage
+                window.location.href = "/admin/login"; // Redirect to the "/home" page
+            }
         } catch (error) {
-            console.log(error.message);
+            console.error("Logout failed:", error);
         }
-    }
+    };
 
     return (
         <header className={cx('wrapper')}>

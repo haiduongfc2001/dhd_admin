@@ -13,7 +13,7 @@ const publicRoutes = [
     { path: '/', component: Home },
     { path: '/following', component: Following },
     { path: '/account', component: CreateDefaultAdmin },
-    { path: '/admin/signin', component: SignIn, layout: null },
+    { path: '/admin/login', component: SignIn, layout: null },
     { path: '/test', component: Test, layout: null },
     { path: '/products', component: Products },
     { path: '/users', component: Users },

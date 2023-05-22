@@ -20,7 +20,6 @@ user_route.use(bodyParser.urlencoded({ extended: true }));
 
 const multer = require("multer");
 
-// user_route.use(express.static('public'));
 user_route.use('/userImages', express.static('src/public/userImages'));
 
 const storage = multer.diskStorage({
@@ -35,14 +34,13 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 user_route.get('/register', Auth.isLogout, UserController.LoadRegister);
-
 user_route.post('/register', upload.single('image'), UserController.AddUser);
 
 user_route.get('/verify', UserController.VerifyMail);
 
 user_route.get('/', Auth.isLogout, UserController.LoginLoad);
-user_route.get('/login', Auth.isLogout, UserController.LoginLoad);
 
+user_route.get('/login', Auth.isLogout, UserController.LoginLoad);
 user_route.post('/login', UserController.VerifyLogin);
 
 user_route.get('/home', Auth.isLogin, UserController.LoadHome);
