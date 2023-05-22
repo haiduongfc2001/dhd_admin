@@ -54,6 +54,9 @@ admin_route.get('/dashboard', AdminAuth.isLogin, AdminController.AdminDashboard)
 admin_route.get('/new-user', AdminAuth.isLogin, AdminController.NewUserLoad);
 admin_route.post('/new-user', upload.single('image'),AdminController.AddUser);
 
+admin_route.get('/edit-user', AdminAuth.isLogin, AdminController.EditUserLoad);
+admin_route.post('/edit-user', AdminController.UpdateUser);
+
 admin_route.get('*', (req, res) => {
     res.redirect('/admin');
 })

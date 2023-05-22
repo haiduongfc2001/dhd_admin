@@ -262,6 +262,34 @@ const AddUser = async (req, res) => {
     }
 }
 
+// edit user functionality
+const EditUserLoad = async (req, res) => {
+    try {
+        const id = req.query.id;
+        const userData = await User.findById({_id: id});
+
+        if (userData) {
+            res.render('edit-user', {user: userData});
+        } else {
+            res.redirect('/admin/dashboard');
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const UpdateUser = async (req, res) => {
+    try {
+
+        const userData = await User.findByIdAndUpdate({_id: req.body.id}, {$set: {name: req.body.name, email: req.body.email, phone: req.body.phone, is_verified: req.body.verify}})
+
+        res.redirect('/admin/dashboard');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     LoadLogin,
     VerifyLogin,
@@ -274,5 +302,6 @@ module.exports = {
     AdminDashboard,
     NewUserLoad,
     AddUser,
-
+    EditUserLoad,
+    UpdateUser
 }

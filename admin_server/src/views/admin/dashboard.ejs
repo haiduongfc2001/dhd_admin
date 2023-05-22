@@ -23,6 +23,7 @@
         <th>Mobile</th>
         <th>Image</th>
         <th>Verified</th>
+        <th>Actions</th>
     </tr>
 
     <%
@@ -52,6 +53,13 @@
                 <%
                 }
                 %>
+            </td>
+            <td>
+                <a href="/admin/edit-user?id=<%= users[i]._id %>">
+                    <button>
+                        Edit
+                    </button>
+                </a>
             </td>
         </tr>
     <%
