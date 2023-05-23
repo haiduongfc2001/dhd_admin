@@ -1,20 +1,53 @@
-import {useState} from "react";
-import axios from "axios";
-import Button from "react-bootstrap/Button";
+import React, { useEffect, useState } from 'react';
 
-function Header() {
+import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import api from "~/api/api";
 
-    const handleLogout = async () => {
-        //
-    }
+export default function Users() {
+
+    const [users, setUsers] = useState([]);
+    const tableArray = ['User', 'UserID', 'Phone', 'Status', 'Actions'];
+
+    useEffect(() => {
+        api.get('/users')
+            .then((response) => {
+                setUsers(response.data)
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    });
+
 
     return (
-        <Button
-            onClick={handleLogout}
-        >
-            Logout
-        </Button>
-    )
+        <>
+            <MDBTable>
+                <MDBTableHead>
+                    <tr>
+                        {tableArray.map((table, index) => (
+                            <th key={index}>{table}</th>
+                        ))}
+                    </tr>
+                </MDBTableHead>
+                <MDBTableBody>
+                    {users.map((user) => (
+                        <tr key={user._id}>
+                            <td>
+                                <div>
+                                    <img
+                                        src={`/userImages/${user.image}`}
+                                        alt="{user.name}"
+                                    />
+                                    <div>
+                                        <p>{user.name}</p>
+                                        <p>{user.email}</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </MDBTableBody>
+            </MDBTable>
+        </>
+    );
 }
-
-export default Header;

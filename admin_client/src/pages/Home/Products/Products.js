@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import api from '~/api/api'
 import {Table, Form, Button} from 'react-bootstrap';
 import {BsTrash} from 'react-icons/bs';
 import {HiPencilAlt} from "react-icons/hi";
@@ -24,7 +24,7 @@ function ListProducts() {
     const quantityRef = useRef(null);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/products')
+        api.get('/products')
             .then(response => {
                 setProducts(response.data);
             })
@@ -38,7 +38,7 @@ function ListProducts() {
             name: nameRef.current.value,
             quantity: quantityRef.current.value
         }
-        axios.put(`http://localhost:5000/product/${id}`, editedProduct)
+        api.put(`/product/${id}`, editedProduct)
             .then(response => {
                 // edit products state
                 const editedProducts = products.map(product => {

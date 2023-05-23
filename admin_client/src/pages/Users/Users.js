@@ -13,6 +13,8 @@ import DeleteProduct from "~/pages/Home/Products/DeleteProduct";
 import classNames from "classnames/bind";
 import styles from "./Users.module.scss";
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
+import api from "~/api/api";
+import instance from "~/api/api";
 const cx = classNames.bind(styles);
 
 export default function Users() {
@@ -33,7 +35,7 @@ export default function Users() {
     ];
 
     useEffect(() => {
-        axios.get('http://localhost:5000/users')
+        api.get('/users')
             .then((response) => {
                 setUsers(response.data)
             })
@@ -61,7 +63,7 @@ export default function Users() {
                             <td>
                                 <div className='d-flex align-items-center'>
                                     <img
-                                        src={`http://localhost:5000/userImages/${user.image}`}
+                                        src={`${api.defaults.baseURL}/userImages/${user.image}`}
                                         alt="{user.name}"
                                         style={{ width: '45px', height: '45px' }}
                                         className='rounded-circle'

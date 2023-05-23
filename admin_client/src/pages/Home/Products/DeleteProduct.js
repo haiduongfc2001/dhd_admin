@@ -4,6 +4,7 @@ import {Button} from "react-bootstrap";
 import {toast} from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 import {useState} from "react";
+import api from "~/api/api";
 
 
 const DeleteProduct = ({cx, product, products, setProducts}) => {
@@ -21,7 +22,7 @@ const DeleteProduct = ({cx, product, products, setProducts}) => {
     };
 
     const handleDeleteProduct = (id) => {
-        axios.delete(`http://localhost:5000/product/${id}`)
+        api.delete(`/product/${id}`)
             .then(response => {
                 setProducts(products.filter((product) => product._id !== id));
             })
