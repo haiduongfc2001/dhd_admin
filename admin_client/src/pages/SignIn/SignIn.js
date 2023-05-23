@@ -23,6 +23,7 @@ import Row from 'react-bootstrap/Row';
 
 import {useHistory} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
+import api from "~/api/api";
 
 const history = createBrowserHistory();
 
@@ -40,13 +41,15 @@ function SignIn() {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:5000/admin/login', {
+            const response = await api.post('/admin/login', {
                 email,
                 password,
             });
 
+            const token = response.data.token;
+
             // Save the token to local storage
-            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('token', token);
 
             // Redirect to '/'
             window.location.href = 'http://localhost:3000/';
@@ -100,7 +103,7 @@ function SignIn() {
                                     size='lg'
                                     style={{maxWidth: '250px'}}
                                     autoFocus
-                                    // autoComplete='off'
+                                    autoComplete='off'
                                     value={email}
                                     required
                                     onChange={(e) => setEmail(e.target.value)}

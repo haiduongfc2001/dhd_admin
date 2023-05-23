@@ -321,16 +321,16 @@ const AllAdmins = async (req, res) => {
 }
 
 const AdminLogin = async (req, res) => {
+    const {email, password} = req.body;
+
     try {
 
-        const {email, password} = req.body;
-
-        // Find admin by email
+        // // Tìm kiếm admin dựa trên email
         const admin = await User.findOne({email});
 
         // If admin doesn't exist, return an error
         if (!admin) {
-            return res.status(401).json({message: 'Invalid credentials'});
+            return res.status(401).json({ message: 'Invalid email or password' });
         }
 
         // Compare the provided password with the hashed password stored in the database
@@ -338,18 +338,20 @@ const AdminLogin = async (req, res) => {
 
         // If passwords don't match, return an error
         if (!passwordMatch) {
-            return res.status(401).json({message: 'Invalid credentials'});
+            return res.status(401).json({ message: 'Invalid email or password' });
         }
 
         // Create a JWT token
-        const token = jwt.sign({email: admin.email}, process.env.JWT_SECRET);
+        const token = jwt.sign({ adminId: admin._id }, process.env.JWT_SECRET );
 
-        // Return the token
-        res.json({token});
+        // Lưu thông tin người dùng trong session
+        req.session.adminId = admin._id;
+
+        res.json({ token });
 
     } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).json({message: 'Internal Server Error'});
+        console.error('Login error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 }
 

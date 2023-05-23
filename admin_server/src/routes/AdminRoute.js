@@ -34,6 +34,13 @@ const AdminController = require('../controllers/AdminController');
 const UserController = require("../controllers/UserController");
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
+const {authAdmin} = require("../middleware/AdminAuth");
+
+admin_route.use(session({
+    secret: 'secret_key',
+    resave: false,
+    saveUninitialized: false,
+}));
 
 admin_route.get('/', AdminAuth.isLogout, AdminController.LoadLogin);
 admin_route.post('/', AdminController.VerifyLogin);
@@ -62,9 +69,14 @@ admin_route.get('/delete-user', AdminAuth.isLogin, AdminController.DeleteUser);
 //     res.redirect('/admin');
 // });
 
+// ----------------------------------------------------------------
 // axios
 admin_route.get('/admins', AdminController.AllAdmins);
 admin_route.post('/login', AdminController.AdminLogin);
+admin_route.get('/login/dashboard', authAdmin, (req, res) => {
+    res.json({ message: 'Welcome to the admin dashboard' });
+});
+
 admin_route.post('/logout', AdminController.AdminLogout);
 
 module.exports = admin_route;

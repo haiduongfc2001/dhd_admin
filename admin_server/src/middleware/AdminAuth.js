@@ -26,7 +26,21 @@ const isLogout = async (req, res, next) => {
     }
 }
 
+const authAdmin = async (req, res, next) => {
+    try {
+
+        if (!req.session.adminId) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        next();
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     isLogin,
-    isLogout
+    isLogout,
+    authAdmin
 }
