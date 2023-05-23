@@ -1,12 +1,18 @@
-import {Fragment} from "react";
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import {Fragment, useContext} from "react";
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom'
 import DefaultLayout from '~/components/Layout/DefaultLayout'
-import {publicRoutes} from "~/routes";
 import "~/components/GlobalStyles/GlobalStyles.scss"
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import {publicRoutes, privateRoutes} from '~/routes';
+import PrivateRoute from '~/routes/PrivateRoute';
+import {AuthContext} from "~/context/AuthContext";
+import SignIn from "~/pages/SignIn/SignIn"; // Import the PrivateRoute component
+
 function App() {
+    const {isLoggedIn} = useContext(AuthContext);
+
     return (
         <Router>
             <div className="App">
@@ -20,12 +26,34 @@ function App() {
                                 path={route.path}
                                 element={
                                     <Layout>
-                                        <Page/>
+                                        <Page />
                                     </Layout>
                                 }
                             />
                         );
                     })}
+                    {privateRoutes.map((route, index) => {
+                        const Layout = route.layout === null ? Fragment : DefaultLayout;
+                        const Page = route.component;
+                        return (
+                            <Route
+                                key={index}
+                                path={route.path}
+                                element={
+                                    isLoggedIn === true ? (
+                                        <Layout>
+                                            <Page />
+                                        </Layout>
+                                    ) : (
+                                        <Navigate to="/admin/login" replace />
+                                    )
+                                }
+                            />
+                        );
+                    })}
+                    
+                    {/* Catch-all route for unknown routes */}
+                    <Route path="*" element={<Navigate to="/not-found" />} />
                 </Routes>
             </div>
         </Router>

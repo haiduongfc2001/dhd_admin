@@ -73,7 +73,7 @@ admin_route.get('/delete-user', AdminAuth.isLogin, AdminController.DeleteUser);
 // axios
 admin_route.get('/admins', AdminController.AllAdmins);
 admin_route.post('/login', AdminController.AdminLogin);
-admin_route.get('/login/dashboard', authAdmin, (req, res) => {
+admin_route.get('/dashboard', authAdmin, (req, res) => {
     res.json({ message: 'Welcome to the admin dashboard' });
 });
 

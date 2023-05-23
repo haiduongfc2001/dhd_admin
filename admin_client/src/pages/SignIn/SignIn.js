@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {
     MDBBtn,
@@ -21,43 +21,83 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 
-import {useHistory} from 'react-router-dom';
+import {useHistory, useNavigate} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import api from "~/api/api";
+import { AuthContext } from '~/context/AuthContext';
 
 const history = createBrowserHistory();
 
 const cx = classNames.bind(styles)
 
+
 function SignIn() {
+    const { setIsLoggedIn } = useContext(AuthContext);
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
+    const [errMsg, setErrMsg] = useState('');
+    const [success, setSuccess] = useState(false);
+    const errRef = useRef();
 
-    const [PasswordInputType, ToggleIcon, toggleVisibility] = usePasswordToggle()
+    const navigate = useNavigate();
+
+    const [PasswordInputType, ToggleIcon, toggleVisibility] = usePasswordToggle();
+
+    useEffect(() => {
+        setErrMsg('');
+    }, [email, password]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
         try {
             const response = await api.post('/admin/login', {
-                email,
-                password,
-            });
+                    email,
+                    password
+                }
+            );
+            // console.log(JSON.stringify(response?.data));
 
             const token = response.data.token;
 
             // Save the token to local storage
             localStorage.setItem('token', token);
 
-            // Redirect to '/'
-            window.location.href = 'http://localhost:3000/';
+            setIsLoggedIn(true);
+            setEmail('');
+            setPassword('');
+            setSuccess(true);
+            // Redirect to the desired page after successful login
+            // You can replace the URL below with the appropriate route
+            // window.location.href = 'http://localhost:3000/';
+            navigate('/');
 
-        } catch (error) {
-            console.error('Login failed:', error);
+        } catch (err) {
+            if (!err?.response) {
+                setErrMsg('No Server Response');
+            } else if (err.response?.status === 400) {
+                setErrMsg('Email or Password incorrect!');
+            } else if (err.response?.status === 401) {
+                setErrMsg('Email or Password incorrect!');
+            } else {
+                setErrMsg('Login Failed');
+            }
+            errRef.current.focus();
         }
     };
+
+    useEffect(() => {
+        api.get('/admin/dashboard')
+            .then(response => {
+
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    })
 
     // return (
     //     <div>
@@ -128,6 +168,8 @@ function SignIn() {
                                         </span>
                                     )}
                                 </MDBInput>
+
+                                <p ref={errRef} className={errMsg ? "errmsg text-danger" : "offscreen"} aria-live="assertive">{errMsg}</p>
 
                                 {error && <p className='text-danger'>{error}</p>}
 
