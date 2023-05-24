@@ -138,8 +138,6 @@ function AddUser({cx, styles, setUsers}) {
                     {/*{successMessage && <p>{successMessage}</p>}*/}
 
                     <Form inline="true" className={cx('form-user')}>
-
-
                         {addUserForm.map((form, index) => (
                             <FloatingLabel
                                 key={index}

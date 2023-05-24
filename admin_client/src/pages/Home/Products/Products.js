@@ -23,6 +23,8 @@ function ListProducts() {
     const nameRef = useRef(null);
     const quantityRef = useRef(null);
 
+    const [errorMessage, setErrorMessage] = useState('');
+
     useEffect(() => {
         api.get('/products')
             .then(response => {

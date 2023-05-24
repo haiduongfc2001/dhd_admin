@@ -5,7 +5,10 @@ import {toast} from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 import api from "~/api/api";
 
-function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
+function AddProduct({
+                        cx, styles, newProduct,
+                        setNewProduct,setProducts,
+                    }) {
     const [show, setShow] = useState(false);
     const productNameRef = useRef(null)
 
@@ -16,6 +19,11 @@ function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
     }
 
     const handleAddProduct = () => {
+        if (!newProduct.name || !newProduct.quantity) {
+            toast.error("Please enter product name and quantity.");
+            return;
+        }
+
         api
             .post("/product", newProduct)
             .then((response) => {
@@ -41,18 +49,53 @@ function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
         productNameRef.current.focus();
     };
 
-    function handleInputChange(e) {
+    const handleInputChange = (e) => {
         const {name, value} = e.target;
-        if (name === 'quantity' && !validateInput(value)) {
-            return; // Do not update state if input is invalid
-        }
-        setNewProduct(prevState => ({...prevState, [name]: value}));
-    }
+        setNewProduct((prevState) => ({...prevState, [name]: value}));
+    };
 
-    function validateInput(value) {
-        const regex = /^[1-9]\d*$/; // Only allow positive integers not starting with 0
-        return regex.test(value);
-    }
+    // function handleInputChange(e) {
+    //     const {name, value} = e.target;
+    //     if (name === 'quantity' && !validateInput(value)) {
+    //         return; // Do not update state if input is invalid
+    //     }
+    //     setNewProduct(prevState => ({...prevState, [name]: value}));
+    // }
+    //
+    // function validateInput(value) {
+    //     const regex = /^[1-9]\d*$/; // Only allow positive integers not starting with 0
+    //     return regex.test(value);
+    // }
+
+    const addProductForm = [
+        {
+            label: (
+                <>
+                    Product Name{" "}
+                    <span style={{color: "red"}} dangerouslySetInnerHTML={{__html: "*"}}/>
+                </>
+            ),
+            type: "text",
+            name: "name",
+            placeholder: "Product Name",
+            value: newProduct.name || '',
+            onChange: handleInputChange,
+            ref: productNameRef,
+        },
+        {
+            label: (
+                <>
+                    Product Quantity{" "}
+                    <span style={{color: "red"}} dangerouslySetInnerHTML={{__html: "*"}}/>
+                </>
+            ),
+            type: "number",
+            name: "quantity",
+            placeholder: "Product Quantity",
+            value: newProduct.quantity || '',
+            onChange: handleInputChange,
+        },
+    ]
 
     return (
         <>
@@ -76,35 +119,25 @@ function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form inline="true" className={cx('form-product')}>
-                        <FloatingLabel
-                            label="Product Name"
-                            className="mr-sm-2 mb-2"
-                        >
-                            <Form.Control
-                                ref={productNameRef}
-                                name="name"
-                                type="text"
-                                placeholder="Product Name"
-                                value={newProduct.name || ""}
-                                onChange={handleInputChange}
-                                size="lg"
-                                style={{minHeight: "40px"}}
-                            />
-                        </FloatingLabel>
-                        <FloatingLabel
-                            label="Product Quantity"
-                            className="mr-sm-2 mb-2"
-                        >
-                            <Form.Control
-                                name="quantity"
-                                type="number"
-                                placeholder="Prouduct Quantity"
-                                value={newProduct.quantity || ''}
-                                onChange={handleInputChange}
-                                size="lg"
-                                style={{minHeight: "40px"}}
-                            />
-                        </FloatingLabel>
+                        {addProductForm.map((form, index) => (
+                            <FloatingLabel
+                                key={index}
+                                label={form.label}
+                                className="mr-sm-2 mb-2"
+                            >
+                                <Form.Control
+                                    ref={form.ref}
+                                    name={form.name}
+                                    type={form.type}
+                                    placeholder={form.placeholder}
+                                    value={form.value}
+                                    onChange={form.onChange}
+                                    size="lg"
+                                    style={{minHeight: "40px"}}
+                                    required
+                                />
+                            </FloatingLabel>
+                        ))}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -121,23 +154,3 @@ function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
 }
 
 export default AddProduct;
-
-// <form onSubmit={handleSubmit}>
-//     <div>
-//         <label htmlFor="name">Name</label>
-//         <input type="text" id="name" value={name} onChange={handleNameChange}/>
-//     </div>
-//     <div>
-//         <label htmlFor="email">Email</label>
-//         <input type="email" id="email" value={email} onChange={handleEmailChange}/>
-//     </div>
-//     <div>
-//         <label htmlFor="phone">Phone</label>
-//         <input type="text" id="phone" value={phone} onChange={handlePhoneChange}/>
-//     </div>
-//     <div>
-//         <label htmlFor="image">Image</label>
-//         <input type="file" id="image" onChange={handleImageChange}/>
-//     </div>
-//     <button type="submit">Add User</button>
-// </form>
