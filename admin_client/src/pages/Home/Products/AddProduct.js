@@ -1,7 +1,6 @@
 import {useRef, useState} from "react";
 import {IoMdAddCircle} from "react-icons/io";
 import {Button, FloatingLabel, Form, ModalTitle} from "react-bootstrap";
-import axios from "axios";
 import {toast} from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 import api from "~/api/api";
@@ -17,7 +16,8 @@ function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
     }
 
     const handleAddProduct = () => {
-        api.post("/product", newProduct)
+        api
+            .post("/product", newProduct)
             .then((response) => {
                 setProducts((prevState) => [...prevState, response.data]);
                 setNewProduct({});
