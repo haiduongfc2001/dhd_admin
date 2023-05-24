@@ -4,9 +4,12 @@ const randomstring = require('randomstring');
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 
+const fs = require("fs");
+
 require('dotenv').config(); // Add this line to load environment variables
 const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
 const Product = require("../models/ProductModel");
+const path = require("path");
 
 const securePassword = async (password) => {
     try {
@@ -419,6 +422,9 @@ const AdminDeleteUser = async (req, res) => {
         const deleteUser = await User.findOneAndRemove({_id: req.params._id});
 
         if (deleteUser) {
+            // Delete user's image file
+            const imagePath = path.join(__dirname, "../public/userImages", deleteUser.image);
+            fs.unlinkSync(imagePath);
             res.status(200).send(`User ${req.params._id} deleted successfully!`);
         } else {
             res.status(404).send(`User ${req.params._id} not found!`)

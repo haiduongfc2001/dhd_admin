@@ -79,46 +79,39 @@ function AddUser({cx, styles, setUsers}) {
         setErrorMessage('');
     };
 
-    // const handleAddUser = () => {
-    //     api
-    //         .post('/admin/add-user', newUser)
-    //         .then((response) => {
-    //             setUsers((prevState) => [...prevState, response.data]);
-    //             setShow(false);
-    //             setNewUser({
-    //                 name: "",
-    //                 email: "",
-    //                 phone: "",
-    //                 image: "",
-    //             });
-    //             toast.success('User added successfully!', {
-    //                 position: "bottom-center",
-    //                 autoClose: 3000,
-    //                 hideProgressBar: false,
-    //                 closeOnClick: true,
-    //                 pauseOnHover: true,
-    //                 draggable: true,
-    //                 progress: undefined,
-    //                 theme: "colored",
-    //             });
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //             toast.error('Error adding user!');
-    //         });
-    //
-    //     userNameRef.current.focus();
-    // };
-
-    const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setNewUser((prevState) => ({...prevState, [name]: value}));
-    };
-
-    function validateInput(value) {
-        const regex = /^[1-9]\d*$/; // Only allow positive integers not starting with 0
-        return regex.test(value);
-    }
+    const addUserForm = [
+        {
+            label: "User Name",
+            type: "text",
+            id: "name",
+            value: name,
+            placeholder: "User Name",
+            onChange: handleNameChange,
+            ref: userNameRef,
+        },
+        {
+            label: "User Email",
+            type: "email",
+            id: "email",
+            value: email,
+            placeholder: "User Email",
+            onChange: handleEmailChange,
+        },
+        {
+            label: "User Phone Number",
+            type: "number",
+            id: "phone",
+            value: phone,
+            placeholder: "User Phone Number",
+            onChange: handlePhoneChange,
+        },
+        {
+            label: "Avatar",
+            type: "file",
+            id: "image",
+            onChange: handleImageChange,
+        },
+    ]
 
     return (
         <>
@@ -142,68 +135,30 @@ function AddUser({cx, styles, setUsers}) {
                 </Modal.Header>
                 <Modal.Body>
                     {errorMessage && <p className={'text-danger'}>{errorMessage}</p>}
-                    {successMessage && <p>{successMessage}</p>}
+                    {/*{successMessage && <p>{successMessage}</p>}*/}
 
                     <Form inline="true" className={cx('form-user')}>
-                        <FloatingLabel
-                            label="User Name"
-                            className="mr-sm-2 mb-2"
-                        >
-                            <Form.Control
-                                ref={userNameRef}
-                                type="text"
-                                id="name"
-                                value={name}
-                                placeholder="User Name"
-                                onChange={handleNameChange}
-                                size="lg"
-                                style={{minHeight: "40px"}}
-                                required
-                            />
-                        </FloatingLabel>
-                        <FloatingLabel
-                            label="User Email"
-                            className="mr-sm-2 mb-2"
-                        >
-                            <Form.Control
-                                type="email"
-                                id="email"
-                                value={email}
-                                placeholder="User Email"
-                                onChange={handleEmailChange}
-                                size="lg"
-                                style={{minHeight: "40px"}}
-                                required
-                            />
-                        </FloatingLabel>
-                        <FloatingLabel
-                            label="User Phone Number"
-                            className="mr-sm-2 mb-2"
-                        >
-                            <Form.Control
-                                type="number"
-                                id="phone"
-                                value={phone}
-                                placeholder="User Phone Number"
-                                onChange={handlePhoneChange}
-                                size="lg"
-                                style={{minHeight: "40px"}}
-                                required
-                            />
-                        </FloatingLabel>
-                        <FloatingLabel
-                            label="Avatar"
-                            className="mr-sm-2 mb-2"
-                        >
-                            <Form.Control
-                                type="file"
-                                id="image"
-                                onChange={handleImageChange}
-                                size="lg"
-                                style={{minHeight: "40px"}}
-                                required
-                            />
-                        </FloatingLabel>
+
+
+                        {addUserForm.map((form, index) => (
+                            <FloatingLabel
+                                key={index}
+                                label={form.label}
+                                className="mr-sm-2 mb-2"
+                            >
+                                <Form.Control
+                                    ref={form.ref}
+                                    type={form.type}
+                                    id={form.id}
+                                    value={form.value}
+                                    placeholder={form.placeholder}
+                                    onChange={form.onChange}
+                                    size="lg"
+                                    style={{minHeight: "40px"}}
+                                    required
+                                />
+                            </FloatingLabel>
+                        ))}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
