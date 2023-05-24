@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 
-import { MDBBadge, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import {MDBBadge, MDBTable, MDBTableHead, MDBTableBody} from 'mdb-react-ui-kit';
 // import { Button, Form, Table } from "react-bootstrap";
 // import { AiFillSave } from "react-icons/ai";
 // import { GiCancel } from "react-icons/gi";
@@ -13,13 +13,15 @@ import styles from "./Users.module.scss";
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
 import api from "~/api/api";
 import AddUser from "~/pages/Users/AddUser";
+import DeleteUser from "~/pages/Users/DeleteUser";
+import {ToastContainer} from "react-toastify";
+
 const cx = classNames.bind(styles);
 
 export default function Users() {
 
     const [users, setUsers] = useState([]);
     const [newUser, setNewUser] = useState({});
-    const nameRef = useRef(null);
 
     const tableArray = ['User', 'UserID', 'Phone', 'Status', 'Actions'];
     const actionArray = [
@@ -28,10 +30,16 @@ export default function Users() {
             className: 'btn btn-success',
             name: 'Edit',
         },
+        // {
+        //     type: 'button',
+        //     className: 'btn btn-danger',
+        //     name: 'Delete',
+        // },
         {
-            type: 'button',
-            className: 'btn btn-danger',
-            name: 'Delete',
+            type: 'component',
+            component: (user) => (
+                <DeleteUser cx={cx} user={user} users={users} setUsers={setUsers}/>
+            ),
         },
     ];
 
@@ -48,14 +56,14 @@ export default function Users() {
 
     return (
         <>
-            <BreadcrumbExample />
+            <BreadcrumbExample/>
 
             <AddUser
                 cx={cx}
                 styles={styles}
-                newUser={newUser}
+                // newUser={newUser}
+                // setNewUser={setNewUser}
                 setUsers={setUsers}
-                setNewUser={setNewUser}
             />
 
             <MDBTable align='middle'>
@@ -74,7 +82,7 @@ export default function Users() {
                                     <img
                                         src={`${api.defaults.baseURL}/userImages/${user.image}`}
                                         alt="{user.name}"
-                                        style={{ width: '45px', height: '45px' }}
+                                        style={{width: '45px', height: '45px'}}
                                         className='rounded-circle'
                                     />
                                     <div className='ms-3'>
@@ -87,7 +95,7 @@ export default function Users() {
                             <td>{user.phone}</td>
                             <td>
                                 <MDBBadge
-                                    style={{ fontSize: "var(--default-font-size)" }}
+                                    style={{fontSize: "var(--default-font-size)"}}
 
                                     color={user.is_admin === 1 && user.is_verified === 1 ? 'success'
                                         : user.is_verified === 0 ? 'danger'
@@ -103,21 +111,31 @@ export default function Users() {
                             </td>
                             <td>
                                 {actionArray.map((action, index) => (
-                                    <button
-                                        type={action.type}
-                                        key={index}
-                                        className={action.className}
-                                        style={{ fontSize: "var(--default-font-size-button)" }}
-                                        disabled={user.is_admin === 1 && user.is_verified === 1}
-                                    >
-                                        {action.name}
-                                    </button>
+                                    <React.Fragment key={index}>
+                                        {action.type === 'button' ? (
+                                            <button
+                                                type={action.type}
+                                                key={index}
+                                                className={action.className}
+                                                style={{fontSize: "var(--default-font-size-button)"}}
+                                                disabled={user.is_admin === 1 && user.is_verified === 1}
+                                            >
+                                                {action.name}
+                                            </button>
+                                        ) : (
+                                            action.component(user)
+                                        )
+                                        }
+                                    </React.Fragment>
+
+
                                 ))}
                             </td>
                         </tr>
                     ))}
                 </MDBTableBody>
             </MDBTable>
+            <ToastContainer />
         </>
     );
 }

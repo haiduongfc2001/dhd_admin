@@ -8,12 +8,7 @@ import api from "~/api/api";
 function AddUser({cx, styles, setUsers}) {
     const [show, setShow] = useState(false);
     const userNameRef = useRef(null);
-    const [newUser, setNewUser] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        image: "",
-    });
+    const [newUser, setNewUser] = useState({});
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -38,7 +33,7 @@ function AddUser({cx, styles, setUsers}) {
         setImage(e.target.files[0]);
     };
 
-    const handleSubmit = async (e) => {
+    const handleAddUser = async (e) => {
         e.preventDefault();
 
         const formData = new FormData();
@@ -50,13 +45,25 @@ function AddUser({cx, styles, setUsers}) {
         try {
             const response = await api.post('/admin/add-user', formData);
             setSuccessMessage(response.data.message);
-            setName('');
+            // setNewUser({});
+            setShow(false);setName('');
             setEmail('');
             setPhone('');
             setImage(null);
             setErrorMessage('');
+            toast.success('User added successfully!', {
+                position: "bottom-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
         } catch (error) {
-            setErrorMessage('Failed to add user');
+            // setErrorMessage('Failed to add user');
+            toast.error('Error adding user!');
             console.error(error);
         }
     };
@@ -64,48 +71,48 @@ function AddUser({cx, styles, setUsers}) {
     const handleShow = () => setShow(true);
     const handleClose = () => {
         setShow(false);
-        setNewUser({
-            name: "",
-            email: "",
-            phone: "",
-            image: "",
-        });
+        // setNewUser({});
+        setName('');
+        setEmail('');
+        setPhone('');
+        setImage(null);
+        setErrorMessage('');
     };
 
-    const handleAddUser = () => {
-        api
-            .post('/admin/add-user', newUser)
-            .then((response) => {
-                setUsers((prevState) => [...prevState, response.data]);
-                setShow(false);
-                setNewUser({
-                    name: "",
-                    email: "",
-                    phone: "",
-                    image: "",
-                });
-                toast.success('User added successfully!', {
-                    position: "bottom-center",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-                toast.error('Error adding user!');
-            });
-
-        userNameRef.current.focus();
-    };
+    // const handleAddUser = () => {
+    //     api
+    //         .post('/admin/add-user', newUser)
+    //         .then((response) => {
+    //             setUsers((prevState) => [...prevState, response.data]);
+    //             setShow(false);
+    //             setNewUser({
+    //                 name: "",
+    //                 email: "",
+    //                 phone: "",
+    //                 image: "",
+    //             });
+    //             toast.success('User added successfully!', {
+    //                 position: "bottom-center",
+    //                 autoClose: 3000,
+    //                 hideProgressBar: false,
+    //                 closeOnClick: true,
+    //                 pauseOnHover: true,
+    //                 draggable: true,
+    //                 progress: undefined,
+    //                 theme: "colored",
+    //             });
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //             toast.error('Error adding user!');
+    //         });
+    //
+    //     userNameRef.current.focus();
+    // };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewUser((prevState) => ({ ...prevState, [name]: value }));
+        const {name, value} = e.target;
+        setNewUser((prevState) => ({...prevState, [name]: value}));
     };
 
     function validateInput(value) {
@@ -137,95 +144,73 @@ function AddUser({cx, styles, setUsers}) {
                     {errorMessage && <p className={'text-danger'}>{errorMessage}</p>}
                     {successMessage && <p>{successMessage}</p>}
 
-                    <form onSubmit={handleSubmit}>
-                        <div>
-                            <label htmlFor="name">Name</label>
-                            <input type="text" id="name" value={name} onChange={handleNameChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="email">Email</label>
-                            <input type="email" id="email" value={email} onChange={handleEmailChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="phone">Phone</label>
-                            <input type="text" id="phone" value={phone} onChange={handlePhoneChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="image">Image</label>
-                            <input type="file" id="image" onChange={handleImageChange} />
-                        </div>
-                        <button type="submit">Add User</button>
-                    </form>
-
-                    {/*<Form inline="true" className={cx('form-user')}>*/}
-                    {/*    <FloatingLabel*/}
-                    {/*        label="User Name"*/}
-                    {/*        className="mr-sm-2 mb-2"*/}
-                    {/*    >*/}
-                    {/*        <Form.Control*/}
-                    {/*            ref={userNameRef}*/}
-                    {/*            name="name"*/}
-                    {/*            type="text"*/}
-                    {/*            placeholder="User Name"*/}
-                    {/*            value={newUser.name}*/}
-                    {/*            onChange={handleInputChange}*/}
-                    {/*            size="lg"*/}
-                    {/*            style={{minHeight: "40px"}}*/}
-                    {/*        />*/}
-                    {/*    </FloatingLabel>*/}
-                    {/*    <FloatingLabel*/}
-                    {/*        label="User Email"*/}
-                    {/*        className="mr-sm-2 mb-2"*/}
-                    {/*    >*/}
-                    {/*        <Form.Control*/}
-                    {/*            name="email"*/}
-                    {/*            type="email"*/}
-                    {/*            placeholder="User Email"*/}
-                    {/*            value={newUser.email}*/}
-                    {/*            onChange={handleInputChange}*/}
-                    {/*            size="lg"*/}
-                    {/*            style={{minHeight: "40px"}}*/}
-                    {/*        />*/}
-                    {/*    </FloatingLabel>*/}
-                    {/*    <FloatingLabel*/}
-                    {/*        label="User Phone Number"*/}
-                    {/*        className="mr-sm-2 mb-2"*/}
-                    {/*    >*/}
-                    {/*        <Form.Control*/}
-                    {/*            name="phone"*/}
-                    {/*            type="number"*/}
-                    {/*            placeholder="Prouduct Quantity"*/}
-                    {/*            value={newUser.phone}*/}
-                    {/*            onChange={handleInputChange}*/}
-                    {/*            size="lg"*/}
-                    {/*            style={{minHeight: "40px"}}*/}
-                    {/*        />*/}
-                    {/*    </FloatingLabel>*/}
-                    {/*    <FloatingLabel*/}
-                    {/*        label="User Image"*/}
-                    {/*        className="mr-sm-2 mb-2"*/}
-                    {/*    >*/}
-                    {/*        <Form.Control*/}
-                    {/*            name="image"*/}
-                    {/*            type="file"*/}
-                    {/*            onChange={(e) => {*/}
-                    {/*                const file = e.target.files[0];*/}
-                    {/*                setNewUser((prevState) => ({*/}
-                    {/*                    ...prevState,*/}
-                    {/*                    image: file,*/}
-                    {/*                }));*/}
-                    {/*            }}*/}
-                    {/*            size="lg"*/}
-                    {/*            style={{minHeight: "40px"}}*/}
-                    {/*        />*/}
-                    {/*    </FloatingLabel>*/}
-                    {/*</Form>*/}
+                    <Form inline="true" className={cx('form-user')}>
+                        <FloatingLabel
+                            label="User Name"
+                            className="mr-sm-2 mb-2"
+                        >
+                            <Form.Control
+                                ref={userNameRef}
+                                type="text"
+                                id="name"
+                                value={name}
+                                placeholder="User Name"
+                                onChange={handleNameChange}
+                                size="lg"
+                                style={{minHeight: "40px"}}
+                                required
+                            />
+                        </FloatingLabel>
+                        <FloatingLabel
+                            label="User Email"
+                            className="mr-sm-2 mb-2"
+                        >
+                            <Form.Control
+                                type="email"
+                                id="email"
+                                value={email}
+                                placeholder="User Email"
+                                onChange={handleEmailChange}
+                                size="lg"
+                                style={{minHeight: "40px"}}
+                                required
+                            />
+                        </FloatingLabel>
+                        <FloatingLabel
+                            label="User Phone Number"
+                            className="mr-sm-2 mb-2"
+                        >
+                            <Form.Control
+                                type="number"
+                                id="phone"
+                                value={phone}
+                                placeholder="User Phone Number"
+                                onChange={handlePhoneChange}
+                                size="lg"
+                                style={{minHeight: "40px"}}
+                                required
+                            />
+                        </FloatingLabel>
+                        <FloatingLabel
+                            label="Avatar"
+                            className="mr-sm-2 mb-2"
+                        >
+                            <Form.Control
+                                type="file"
+                                id="image"
+                                onChange={handleImageChange}
+                                size="lg"
+                                style={{minHeight: "40px"}}
+                                required
+                            />
+                        </FloatingLabel>
+                    </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleAddUser}>
+                    <Button type="submit" variant="primary" onClick={handleAddUser}>
                         Add User
                     </Button>
                 </Modal.Footer>
@@ -235,3 +220,24 @@ function AddUser({cx, styles, setUsers}) {
 }
 
 export default AddUser;
+
+
+// <form onSubmit={handleSubmit}>
+//     <div>
+//         <label htmlFor="name">Name</label>
+//         <input type="text" id="name" value={name} onChange={handleNameChange}/>
+//     </div>
+//     <div>
+//         <label htmlFor="email">Email</label>
+//         <input type="email" id="email" value={email} onChange={handleEmailChange}/>
+//     </div>
+//     <div>
+//         <label htmlFor="phone">Phone</label>
+//         <input type="text" id="phone" value={phone} onChange={handlePhoneChange}/>
+//     </div>
+//     <div>
+//         <label htmlFor="image">Image</label>
+//         <input type="file" id="image" onChange={handleImageChange}/>
+//     </div>
+//     <button type="submit">Add User</button>
+// </form>

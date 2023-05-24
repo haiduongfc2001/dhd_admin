@@ -121,3 +121,23 @@ function AddProduct({cx, styles, newProduct, setNewProduct, setProducts}) {
 }
 
 export default AddProduct;
+
+// <form onSubmit={handleSubmit}>
+//     <div>
+//         <label htmlFor="name">Name</label>
+//         <input type="text" id="name" value={name} onChange={handleNameChange}/>
+//     </div>
+//     <div>
+//         <label htmlFor="email">Email</label>
+//         <input type="email" id="email" value={email} onChange={handleEmailChange}/>
+//     </div>
+//     <div>
+//         <label htmlFor="phone">Phone</label>
+//         <input type="text" id="phone" value={phone} onChange={handlePhoneChange}/>
+//     </div>
+//     <div>
+//         <label htmlFor="image">Image</label>
+//         <input type="file" id="image" onChange={handleImageChange}/>
+//     </div>
+//     <button type="submit">Add User</button>
+// </form>
