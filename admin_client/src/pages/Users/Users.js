@@ -38,7 +38,12 @@ export default function Users() {
         {
             type: 'component',
             component: (user) => (
-                <DeleteUser cx={cx} user={user} users={users} setUsers={setUsers}/>
+                <DeleteUser
+                    cx={cx}
+                    user={user}
+                    users={users}
+                    setUsers={setUsers}
+                />
             ),
         },
     ];
@@ -127,15 +132,13 @@ export default function Users() {
                                         )
                                         }
                                     </React.Fragment>
-
-
                                 ))}
                             </td>
                         </tr>
                     ))}
                 </MDBTableBody>
             </MDBTable>
-            <ToastContainer />
+            <ToastContainer/>
         </>
     );
 }

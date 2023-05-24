@@ -1,18 +1,16 @@
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import api from '~/api/api'
-import {Table, Form, Button} from 'react-bootstrap';
-import {BsTrash} from 'react-icons/bs';
-import {HiPencilAlt} from "react-icons/hi";
-import {GiCancel} from "react-icons/gi";
-import {AiFillSave} from "react-icons/ai";
+import {Table} from 'react-bootstrap';
 import AddProduct from "./AddProduct"
 import DeleteProduct from "./DeleteProduct";
 
 import classNames from "classnames/bind"
 import styles from "./Product.module.scss"
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
+import EditProduct from "~/pages/Home/Products/EditProduct";
+import DeleteUser from "~/pages/Users/DeleteUser";
 
 const cx = classNames.bind(styles)
 
@@ -63,16 +61,36 @@ function ListProducts() {
             });
     }
 
-    const handleCancelEditProduct = () => {
-        // const originalProduct = products.find(product => product._id === id);
-        // nameRef.current.value = originalProduct.name;
-        // quantityRef.current.value = originalProduct.quantity;
-        setEditableProduct(null);
-    }
+    const actionArray = [
+        {
+            type: 'component',
+            component: (product) => (
+                <EditProduct
+                    cx={cx}
+                    styles={styles}
+                    product={product}
+                    products={products}
+                    setProducts={setProducts}
+                />
+            ),
+        },
+        {
+            type: 'component',
+            component: (product) => (
+                <DeleteProduct
+                    cx={cx}
+                    styles={styles}
+                    product={product}
+                    products={products}
+                    setProducts={setProducts}
+                />
+            ),
+        },
+    ]
 
     return (
         <>
-            <BreadcrumbExample />
+            <BreadcrumbExample/>
             <AddProduct
                 cx={cx}
                 styles={styles}
@@ -83,7 +101,7 @@ function ListProducts() {
 
             <Table striped bordered hover>
                 <thead>
-                <tr  style={{backgroundColor: 'antiquewhite'}} className={cx('table-product-category')}>
+                <tr style={{backgroundColor: 'antiquewhite'}} className={cx('table-product-category')}>
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Quantity</th>
@@ -94,64 +112,14 @@ function ListProducts() {
                 {products.map((product) => (
                     <tr key={product._id}>
                         <td style={{textAlign: "center"}}>{product._id}</td>
-                        {/*<td>{product.name}</td>*/}
-                        {/*<td>{product.quantity}</td>*/}
+                        <td>{product.name}</td>
+                        <td>{product.quantity}</td>
                         <td>
-                            {editableProduct === product._id ?
-                                <Form.Control
-                                    ref={nameRef}
-                                    type="text"
-                                    defaultValue={product.name}
-                                />
-                                :
-                                <span>{product.name}</span>
-                            }
-                        </td>
-                        <td>
-                            {editableProduct === product._id ?
-                                <Form.Control
-                                    ref={quantityRef}
-                                    type="text"
-                                    defaultValue={product.quantity}
-                                />
-                                :
-                                <span>{product.quantity}</span>
-                            }
-                        </td>
-
-                        <td>
-                            {editableProduct === product._id ?
-                                <div>
-                                    <Button
-                                        variant="success"
-                                        onClick={() => handleEditProduct(product._id)}
-                                        className={cx('button-edit')}
-                                    >
-                                        <AiFillSave className={cx('icon-action')}/>
-                                    </Button>
-                                    <Button
-                                        variant="secondary"
-                                        onClick={() => handleCancelEditProduct(product._id)}
-                                        className={cx('button-edit')}
-                                    >
-                                        <GiCancel className={cx('icon-action')}/>
-                                    </Button>
-                                </div>
-                                :
-                                <Button
-                                    variant="warning"
-                                    onClick={() => setEditableProduct(product._id)}
-                                    className={cx('button-edit')}
-                                >
-                                    <HiPencilAlt className={cx('icon-action')}/>
-                                </Button>
-                            }
-                            <DeleteProduct
-                                cx={cx}
-                                product={product}
-                                products={products}
-                                setProducts={setProducts}
-                            />
+                            {actionArray.map((action, index) => (
+                                <React.Fragment key={index}>
+                                    {action.component(product)}
+                                </React.Fragment>
+                            ))}
                         </td>
                     </tr>
                 ))}
@@ -164,3 +132,4 @@ function ListProducts() {
 }
 
 export default ListProducts;
+

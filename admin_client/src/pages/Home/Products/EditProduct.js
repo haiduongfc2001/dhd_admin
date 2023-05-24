@@ -1,51 +1,64 @@
-import {Button, FloatingLabel, Modal, Form, ModalTitle} from "react-bootstrap";
-import {useRef, useState} from "react";
+import { Button, FloatingLabel, Modal, Form, ModalTitle } from "react-bootstrap";
+import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 import api from "~/api/api";
-import {HiPencilAlt} from "react-icons/hi";
+import { HiPencilAlt } from "react-icons/hi";
 
-const UpdateProduct = ({cx, styles, products, setProducts}) => {
+const UpdateProduct = ({ cx, styles, product, products, setProducts }) => {
     const [show, setShow] = useState(false);
     const productNameRef = useRef(null);
 
-    const [editProduct, setEditProduct] = useState({});
+    const [editProduct, setEditProduct] = useState({
+        _id: product._id,
+        name: product.name,
+        quantity: product.quantity
+    });
 
-    const handleShow = (product) => {
-        setEditProduct(product);
+    const handleShow = () => {
         setShow(true);
     };
 
     const handleClose = () => {
         setShow(false);
-        setEditProduct({});
     };
 
-    const handleEditProduct = (id) => {
+    const handleEditProduct = async () => {
         if (!editProduct.name || !editProduct.quantity) {
+            toast.error("Please enter product name and quantity.");
             return;
         }
 
-        api
-            .put(`/product/${id}`, editProduct)
-            .then((response) => {
-                const updatedProducts = products.map((product) => {
-                    if (product._id === id) {
-                        return {...product, ...editProduct};
-                    }
-                    return product;
-                });
-                setProducts(updatedProducts);
-                setEditProduct({});
-            })
-            .catch((error) => {
-                console.log(error);
+        try {
+            const response = await api.put(`/product/${editProduct._id}`, editProduct);
+            const updatedProducts = products.map((p) => {
+                if (p._id === editProduct._id) {
+                    return { ...p, ...editProduct };
+                }
+                return p;
             });
+            setProducts(updatedProducts);
+            handleClose();
+            toast.success(`Product ${editProduct.name} has been updated!`, {
+                position: "bottom-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        } catch (error) {
+            console.log(error);
+            toast.error("An error occurred while updating the product.");
+        }
 
         productNameRef.current.focus();
     };
 
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setEditProduct((prevState) => ({...prevState, [name]: value}));
+        const { name, value } = e.target;
+        setEditProduct((prevState) => ({ ...prevState, [name]: value }));
     };
 
     const editProductForm = [
@@ -53,7 +66,7 @@ const UpdateProduct = ({cx, styles, products, setProducts}) => {
             label: (
                 <>
                     Product Name{" "}
-                    <span style={{color: "red"}} dangerouslySetInnerHTML={{__html: "*"}}/>
+                    <span style={{ color: "red" }} dangerouslySetInnerHTML={{ __html: "*" }} />
                 </>
             ),
             type: "text",
@@ -67,7 +80,7 @@ const UpdateProduct = ({cx, styles, products, setProducts}) => {
             label: (
                 <>
                     Product Quantity{" "}
-                    <span style={{color: "red"}} dangerouslySetInnerHTML={{__html: "*"}}/>
+                    <span style={{ color: "red" }} dangerouslySetInnerHTML={{ __html: "*" }} />
                 </>
             ),
             type: "number",
@@ -86,10 +99,10 @@ const UpdateProduct = ({cx, styles, products, setProducts}) => {
                 className="mb-4"
                 onClick={handleShow}
             >
-                <HiPencilAlt/>
+                <HiPencilAlt className={cx("icon-action")} />
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} backdrop="static" centered onHide={handleClose}>
                 <Modal.Header closeButton>
                     <ModalTitle>Edit Product</ModalTitle>
                 </Modal.Header>
@@ -111,10 +124,10 @@ const UpdateProduct = ({cx, styles, products, setProducts}) => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={handleClose}>
+                    <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button onClick={() => handleEditProduct(editProduct._id)}>
+                    <Button variant="success" onClick={handleEditProduct}>
                         Save
                     </Button>
                 </Modal.Footer>

@@ -65,9 +65,9 @@ const EditProduct = async (req, res) => {
 // Xóa sản phẩm
 const DeleteProduct = async (req, res) => {
     try {
-        const deleteproduct = await Product.findOneAndRemove({_id: req.params._id});
+        const deleteProduct = await Product.findOneAndRemove({_id: req.params._id});
 
-        if (deleteproduct) {
+        if (deleteProduct) {
             res.send(`Product ${req.params._id} deleted successfully!`);
         } else {
             res.send(`Product ${req.params._id} not found!`);
