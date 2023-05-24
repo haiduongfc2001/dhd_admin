@@ -18,7 +18,6 @@ td {
 }
 
 
-
 .form-product input {
   caret-color: var(--primary);
 }
@@ -26,4 +25,8 @@ td {
 .table-product-category th:nth-child(1),
 .table-product-category th:nth-child(3) {
   width: var(--default-width-table);
+}
+
+.table-product-category th {
+  font-size: var(--default-font-size)
 }

@@ -7,47 +7,25 @@ import {FiLogOut} from "react-icons/fi";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleXmark, faMagnifyingGlass, faSpinner} from "@fortawesome/free-solid-svg-icons";
 import {useState} from "react";
-import axios from "axios";
 import Button from "react-bootstrap/Button";
 import DigitClock from "~/components/Layout/components/DigitClock/DigitClock";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
+import api from "~/api/api";
 
 const cx = classNames.bind(styles)
 
 function Header(props) {
     const [searchResult, setSearchResult] = useState([]);
-
-    // const handleLogout = async () => {
-    //     // try {
-    //     //     await axios.post('http://localhost:5000/admin/logout');
-    //     //     window.location.href = '/admin/login'; // Redirect to the login page
-    //     // } catch (error) {
-    //     //     console.error('Logout failed:', error);
-    //     // }
-    //
-    //     const token = localStorage.getItem('token');
-    //
-    //     try {
-    //         await axios.post('http://localhost:5000/admin/logout', { token });
-    //
-    //         // Remove the token from local storage
-    //         // localStorage.removeItem('token');
-    //
-    //         // Redirect to '/admin/login'
-    //         window.location.href = '/admin/login';
-    //     } catch (error) {
-    //         console.error('Logout failed:', error);
-    //     }
-    // }
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
-            const response = await axios.post("http://localhost:5000/admin/logout", {
+            const response = await api.post("/admin/logout", {
                 token: localStorage.getItem("token"), // Assuming the token is stored in localStorage
             });
             if (response.status === 200) {
                 localStorage.removeItem("token"); // Clear the token from localStorage
-                window.location.href = "/admin/login"; // Redirect to the "/home" page
+                navigate('/admin/login');
             }
         } catch (error) {
             console.error("Logout failed:", error);

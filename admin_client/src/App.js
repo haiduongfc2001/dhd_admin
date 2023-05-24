@@ -1,4 +1,4 @@
-import {Fragment, useContext} from "react";
+import {Fragment, useContext, useEffect} from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom'
 import DefaultLayout from '~/components/Layout/DefaultLayout'
 import "~/components/GlobalStyles/GlobalStyles.scss"
@@ -6,12 +6,17 @@ import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import {publicRoutes, privateRoutes} from '~/routes';
-import PrivateRoute from '~/routes/PrivateRoute';
 import {AuthContext} from "~/context/AuthContext";
-import SignIn from "~/pages/SignIn/SignIn"; // Import the PrivateRoute component
 
 function App() {
-    const {isLoggedIn} = useContext(AuthContext);
+    const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLoggedIn(true);
+        }
+    }, []);
 
     return (
         <Router>
@@ -51,7 +56,7 @@ function App() {
                             />
                         );
                     })}
-                    
+
                     {/* Catch-all route for unknown routes */}
                     <Route path="*" element={<Navigate to="/not-found" />} />
                 </Routes>

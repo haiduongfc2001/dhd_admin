@@ -10,17 +10,8 @@ import Register from "~/pages/Register/Register";
 import NotFound from "~/components/NotFound/NotFound";
 
 export const publicRoutes = [
-    // { path: '/', component: Home },
-    // { path: '/account', component: CreateDefaultAdmin },
-    // { path: '/admin/login', component: SignIn, layout: null },
-    // { path: '/test', component: Test, layout: null },
-    // { path: '/products', component: Products },
-    // { path: '/users', component: Users },
-    // { path: '/orders', component: Orders },
-    // { path: '/register', component: Register },
-
     { path: '/admin/login', component: SignIn, layout: null },
-    { path: '/test', component: Test, layout: null },
+    // { path: '/test', component: Test, layout: null },
     { path: '/not-found', component: NotFound, layout: null },
 ]
 

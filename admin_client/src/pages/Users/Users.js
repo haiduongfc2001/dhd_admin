@@ -14,7 +14,6 @@ import classNames from "classnames/bind";
 import styles from "./Users.module.scss";
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
 import api from "~/api/api";
-import instance from "~/api/api";
 const cx = classNames.bind(styles);
 
 export default function Users() {

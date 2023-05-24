@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import axios from 'axios';
 import {
     MDBBtn,
     MDBContainer,
@@ -15,16 +14,17 @@ import classNames from "classnames/bind";
 import styles from "./SignIn.module.scss";
 import logoDHD from "~/assets/images/logo_dhdadmin.png";
 
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
+// import Button from 'react-bootstrap/Button';
+// import Col from 'react-bootstrap/Col';
+// import Form from 'react-bootstrap/Form';
+// import InputGroup from 'react-bootstrap/InputGroup';
+// import Row from 'react-bootstrap/Row';
 
-import {useHistory, useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import api from "~/api/api";
 import { AuthContext } from '~/context/AuthContext';
+import {toast} from "react-toastify";
 
 const history = createBrowserHistory();
 
@@ -33,6 +33,8 @@ const cx = classNames.bind(styles)
 
 function SignIn() {
     const { setIsLoggedIn } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -42,13 +44,20 @@ function SignIn() {
     const [success, setSuccess] = useState(false);
     const errRef = useRef();
 
-    const navigate = useNavigate();
-
     const [PasswordInputType, ToggleIcon, toggleVisibility] = usePasswordToggle();
 
     useEffect(() => {
         setErrMsg('');
     }, [email, password]);
+
+    useEffect(() => {
+        setErrMsg('');
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLoggedIn(true);
+            navigate('/');
+        }
+    }, [setIsLoggedIn, navigate]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -67,13 +76,23 @@ function SignIn() {
             localStorage.setItem('token', token);
 
             setIsLoggedIn(true);
-            setEmail('');
-            setPassword('');
-            setSuccess(true);
+            // setEmail('');
+            // setPassword('');
+            // setSuccess(true);
             // Redirect to the desired page after successful login
             // You can replace the URL below with the appropriate route
             // window.location.href = 'http://localhost:3000/';
             navigate('/');
+            toast.success('Logged in successfully!', {
+                position: "bottom-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            })
 
         } catch (err) {
             if (!err?.response) {
@@ -86,18 +105,19 @@ function SignIn() {
                 setErrMsg('Login Failed');
             }
             errRef.current.focus();
+            toast.error('Login failed!');
         }
     };
 
-    useEffect(() => {
-        api.get('/admin/dashboard')
-            .then(response => {
-
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-    })
+    // useEffect(() => {
+    //     api.get('/admin/dashboard')
+    //         .then(response => {
+    //
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         })
+    // })
 
     // return (
     //     <div>
