@@ -1,117 +1,54 @@
-// import {useRef, useState} from "react";
-// import {IoMdAddCircle} from "react-icons/io";
-// import {Button, FloatingLabel, Form, ModalTitle} from "react-bootstrap";
-// import Modal from "react-bootstrap/Modal";
-// import api from "~/api/api";
+// import React, {useState} from 'react';
 //
-// function AddUser({newUser, setNewUser, setUsers}) {
-//     const [show, setShow] = useState(false);
-//     const userNameRef = useRef(null)
+// import {MDBTable, MDBTableBody } from 'mdb-react-ui-kit';
 //
-//     const handleShow = () => setShow(true);
-//     const handleClose = () => {
-//         setShow(false);
-//         setNewUser({});
-//     }
+// import classNames from "classnames/bind";
+// import styles from "./Users.module.scss";
+// import DeleteUser from "~/pages/Users/DeleteUser";
+// const cx = classNames.bind(styles);
 //
-//     const handleAddUser = () => {
-//         api.post("/add-user", newUser)
-//             .then((response) => {
-//                 setUsers((prevState) => [...prevState, response.data]);
-//                 setNewUser({});
-//                 setShow(false);
-//             })
-//             .catch((error) => {
-//                 console.log(error);
-//             });
+// export default function Users() {
 //
-//         userNameRef.current.focus();
-//     };
+//     const [users, setUsers] = useState([]);
 //
-//     function handleInputChange(e) {
-//         const {name, value} = e.target;
-//         if (name === 'quantity' && !validateInput(value)) {
-//             return; //
-//         }
-//         setNewUser(prevState => ({...prevState, [name]: value}));
-//     }
+//     const actionArray = [
+//         {
+//             type: 'button',
+//             className: 'btn btn-success',
+//             name: 'Edit',
+//         },
+//         {
+//             type: 'button',
+//             className: 'btn btn-danger',
+//             name: 'Add',
+//         },
+//     ];
 //
-//     function validateInput(value) {
-//         const regex = /^[1-9]\d*$/; // Only allow positive integers not starting with 0
-//         return regex.test(value);
-//     }
 //
 //     return (
 //         <>
-//             <Button
-//                 size="lg"
-//                 variant="primary"
-//                 className={"mb-4"}
-//                 onClick={handleShow}
-//             >
-//                 <IoMdAddCircle/>
-//             </Button>
+//             <MDBTable>
+//                 <MDBTableBody>
+//                     {users.map((user) => (
+//                         <tr key={user._id}>
+//                             <td>
+//                                 {actionArray.map((action, index) => (
+//                                     <button
+//                                         type={action.type}
+//                                         key={index}
+//                                         className={action.className}
+//                                         disabled={user.is_admin === 1 && user.is_verified === 1}
+//                                     >
+//                                         {action.name}
+//                                     </button>
+//                                 ))}
 //
-//             <Modal
-//                 show={show}
-//                 backdrop={"static"}
-//                 centered
-//                 onHide={handleClose}
-//             >
-//                 <Modal.Header closeButton>
-//                     <ModalTitle>Add User</ModalTitle>
-//                 </Modal.Header>
-//                 <Modal.Body>
-//                     <Form>
-//                         <FloatingLabel label="User Name">
-//                             <Form.Control
-//                                 ref={userNameRef}
-//                                 name="name"
-//                                 type="text"
-//                                 placeholder="User Name"
-//                                 value={newUser.name || ""}
-//                                 onChange={handleInputChange}
-//                             />
-//                         </FloatingLabel>
-//                         <FloatingLabel label="User Quantity">
-//                             <Form.Control
-//                                 name="email"
-//                                 type="email"
-//                                 placeholder="User Email"
-//                                 value={newUser.email || ''}
-//                                 onChange={handleInputChange}
-//                             />
-//                         </FloatingLabel>
-//                         <FloatingLabel label="User Phone Number">
-//                             <Form.Control
-//                                 name="phone"
-//                                 type="number"
-//                                 placeholder="Prouduct Quantity"
-//                                 value={newUser.phone || ''}
-//                                 onChange={handleInputChange}
-//                             />
-//                         </FloatingLabel>
-//                         <FloatingLabel label="User Quantity">
-//                             <Form.Control
-//                                 name="image"
-//                                 type="file"
-//                                 value={newUser.image || ''}
-//                                 onChange={handleInputChange}
-//                             />
-//                         </FloatingLabel>
-//                     </Form>
-//                 </Modal.Body>
-//                 <Modal.Footer>
-//                     <Button onClick={handleClose}>
-//                         Close
-//                     </Button>
-//                     <Button onClick={handleAddUser}>
-//                         Add User
-//                     </Button>
-//                 </Modal.Footer>
-//             </Modal>
+//
+//                             </td>
+//                         </tr>
+//                     ))}
+//                 </MDBTableBody>
+//             </MDBTable>
 //         </>
-//     )
+//     );
 // }
-//
-// export default AddUser;

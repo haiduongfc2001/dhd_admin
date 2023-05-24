@@ -19,6 +19,7 @@ user_route.use(bodyParser.urlencoded({ extended: true }));
 
 
 const multer = require("multer");
+const AdminController = require("../controllers/AdminController");
 
 user_route.use('/userImages', express.static('src/public/userImages'));
 
@@ -62,5 +63,6 @@ user_route.post('/edit', upload.single('image'), UserController.UpdateProfile);
 
 // axios
 user_route.get('/users', UserController.AllUsers);
+user_route.delete('/user/:_id', AdminController.AdminDeleteUser);
 
 module.exports = user_route;

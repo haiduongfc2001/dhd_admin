@@ -1,4 +1,3 @@
-import axios from "axios";
 import {BsTrash} from "react-icons/bs";
 import {Button} from "react-bootstrap";
 import {toast} from "react-toastify";
@@ -22,7 +21,8 @@ const DeleteProduct = ({cx, product, products, setProducts}) => {
     };
 
     const handleDeleteProduct = (id) => {
-        api.delete(`/product/${id}`)
+        api
+            .delete(`/product/${id}`)
             .then(response => {
                 setProducts(products.filter((product) => product._id !== id));
             })
