@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import axios from "axios";
+import React, {useEffect, useRef, useState} from 'react';
 
-import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
-import { Button, Form, Table } from "react-bootstrap";
-import { AiFillSave } from "react-icons/ai";
-import { GiCancel } from "react-icons/gi";
-import { HiPencilAlt } from "react-icons/hi";
-import DeleteProduct from "~/pages/Home/Products/DeleteProduct";
+import { MDBBadge, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+// import { Button, Form, Table } from "react-bootstrap";
+// import { AiFillSave } from "react-icons/ai";
+// import { GiCancel } from "react-icons/gi";
+// import { HiPencilAlt } from "react-icons/hi";
 
 // import { Table } from "react-bootstrap";
 
@@ -14,11 +12,15 @@ import classNames from "classnames/bind";
 import styles from "./Users.module.scss";
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
 import api from "~/api/api";
+import AddUser from "~/pages/Users/AddUser";
 const cx = classNames.bind(styles);
 
 export default function Users() {
 
     const [users, setUsers] = useState([]);
+    const [newUser, setNewUser] = useState({});
+    const nameRef = useRef(null);
+
     const tableArray = ['User', 'UserID', 'Phone', 'Status', 'Actions'];
     const actionArray = [
         {
@@ -47,6 +49,14 @@ export default function Users() {
     return (
         <>
             <BreadcrumbExample />
+
+            <AddUser
+                cx={cx}
+                styles={styles}
+                newUser={newUser}
+                setUsers={setUsers}
+                setNewUser={setNewUser}
+            />
 
             <MDBTable align='middle'>
                 <MDBTableHead style={{backgroundColor: 'antiquewhite'}}>
@@ -95,6 +105,7 @@ export default function Users() {
                                 {actionArray.map((action, index) => (
                                     <button
                                         type={action.type}
+                                        key={index}
                                         className={action.className}
                                         style={{ fontSize: "var(--default-font-size-button)" }}
                                         disabled={user.is_admin === 1 && user.is_verified === 1}

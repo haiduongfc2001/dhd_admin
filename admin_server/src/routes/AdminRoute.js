@@ -42,28 +42,28 @@ admin_route.use(session({
     saveUninitialized: false,
 }));
 
-admin_route.get('/', AdminAuth.isLogout, AdminController.LoadLogin);
-admin_route.post('/', AdminController.VerifyLogin);
-
-admin_route.get('/home', AdminAuth.isLogin, AdminController.LoadDashboard);
-
-admin_route.get('/logout', AdminAuth.isLogin, AdminController.Logout);
-
-admin_route.get('/forget', AdminAuth.isLogout, AdminController.ForgetLoad);
-admin_route.post('/forget', AdminController.ForgetVerify);
-
-admin_route.get('/forget-password', AdminAuth.isLogout, AdminController.ForgetPasswordLoad);
-admin_route.post('/forget-password', AdminController.ResetPassword);
-
-admin_route.get('/dashboard', AdminAuth.isLogin, AdminController.AdminDashboard);
-
-admin_route.get('/new-user', AdminAuth.isLogin, AdminController.NewUserLoad);
-admin_route.post('/new-user', upload.single('image'),AdminController.AddUser);
-
-admin_route.get('/edit-user', AdminAuth.isLogin, AdminController.EditUserLoad);
-admin_route.post('/edit-user', AdminController.UpdateUser);
-
-admin_route.get('/delete-user', AdminAuth.isLogin, AdminController.DeleteUser);
+// admin_route.get('/', AdminAuth.isLogout, AdminController.LoadLogin);
+// admin_route.post('/', AdminController.VerifyLogin);
+//
+// admin_route.get('/home', AdminAuth.isLogin, AdminController.LoadDashboard);
+//
+// admin_route.get('/logout', AdminAuth.isLogin, AdminController.Logout);
+//
+// admin_route.get('/forget', AdminAuth.isLogout, AdminController.ForgetLoad);
+// admin_route.post('/forget', AdminController.ForgetVerify);
+//
+// admin_route.get('/forget-password', AdminAuth.isLogout, AdminController.ForgetPasswordLoad);
+// admin_route.post('/forget-password', AdminController.ResetPassword);
+//
+// admin_route.get('/dashboard', AdminAuth.isLogin, AdminController.AdminDashboard);
+//
+// admin_route.get('/new-user', AdminAuth.isLogin, AdminController.NewUserLoad);
+// admin_route.post('/new-user', upload.single('image'), AdminController.AddUser);
+//
+// admin_route.get('/edit-user', AdminAuth.isLogin, AdminController.EditUserLoad);
+// admin_route.post('/edit-user', AdminController.UpdateUser);
+//
+// admin_route.get('/delete-user', AdminAuth.isLogin, AdminController.DeleteUser);
 
 // admin_route.get('*', (req, res) => {
 //     res.redirect('/admin');
@@ -73,43 +73,12 @@ admin_route.get('/delete-user', AdminAuth.isLogin, AdminController.DeleteUser);
 // axios
 admin_route.get('/admins', AdminController.AllAdmins);
 admin_route.post('/login', AdminController.AdminLogin);
-admin_route.get('/dashboard', authAdmin, (req, res) => {
-    res.json({ message: 'Welcome to the admin dashboard' });
-});
+admin_route.post('/add-user', upload.single('image'), AdminController.AdminAddUser);
+admin_route.delete('/delete-user', AdminController.AdminDeleteUser);
 
 admin_route.post('/logout', AdminController.AdminLogout);
 
 module.exports = admin_route;
-
-
-// const VerifyLogin = async (req, res) => {
-//     try {
-//         const email = req.body.email;
-//         const password = req.body.password;
-//
-//         const userData = await User.findOne({email: email});
-//
-//         if (userData) {
-//             const passwordMatch = await bcrypt.compare(password, userData.password);
-//             if (passwordMatch) {
-//                 if (userData.is_admin === 0) {
-//                     res.render('login', {message: 'Email and password is incorrect'});
-//                 } else {
-//                     req.session.user_id = userData._id;
-//                     res.redirect('/admin/home');
-//                 }
-//             } else {
-//                 res.render('login', {message: 'Email and password is incorrect'});
-//             }
-//
-//         } else {
-//             res.render('login', {message: 'Email and password is incorrect'})
-//         }
-//
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
 
 
 

@@ -1,4 +1,6 @@
 const Product = require("../models/ProductModel");
+const randomstring = require("randomstring");
+const User = require("../models/UserModel");
 
 // Tất cả sản phẩm
 const AllProducts = async (req, res) => {

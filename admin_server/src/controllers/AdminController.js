@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 
 require('dotenv').config(); // Add this line to load environment variables
 const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
+const Product = require("../models/ProductModel");
 
 const securePassword = async (password) => {
     try {
@@ -331,7 +332,7 @@ const AdminLogin = async (req, res) => {
 
         // If admin doesn't exist, return an error
         if (!admin) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({message: 'Invalid email or password'});
         }
 
         // Compare the provided password with the hashed password stored in the database
@@ -339,20 +340,20 @@ const AdminLogin = async (req, res) => {
 
         // If passwords don't match, return an error
         if (!passwordMatch) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({message: 'Invalid email or password'});
         }
 
         // Create a JWT token
-        const token = jwt.sign({ adminId: admin._id }, process.env.JWT_SECRET );
+        const token = jwt.sign({adminId: admin._id}, process.env.JWT_SECRET);
 
         // Lưu thông tin người dùng trong session
         req.session.adminId = admin._id;
 
-        res.json({ token });
+        res.json({token});
 
     } catch (error) {
         console.error('Login error:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({message: 'Server error'});
     }
 }
 
@@ -381,6 +382,53 @@ const AdminLogout = async (req, res) => {
     });
 };
 
+const AdminAddUser = async (req, res) => {
+    try {
+        const name = req.body.name;
+        const email = req.body.email;
+        const phone = req.body.phone;
+        const image = req.file.filename;
+        const password = randomstring.generate(8);
+
+        const hashedPassword = await securePassword(password);
+
+        const user = new User({
+            name: name,
+            email: email,
+            phone: phone,
+            image: image,
+            password: hashedPassword,
+            is_admin: 0,
+        });
+
+        const userData = await user.save();
+
+        if (userData) {
+            await addUserMail(name, email, password, userData._id);
+            res.status(200).json({message: 'Add User Successfully!'})
+        }
+
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+}
+
+//  Xóa tài khoản người dùng
+const AdminDeleteUser = async (req, res) => {
+    try {
+        const deleteUser = await User.findOneAndRemove({_id: req.params._id});
+
+        if (deleteUser) {
+            res.status(200).send(`User ${req.params._id} deleted successfully!`);
+        } else {
+            res.status(404).send(`User ${req.params._id} not found!`)
+        }
+
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 module.exports = {
     LoadLogin,
     VerifyLogin,
@@ -400,5 +448,6 @@ module.exports = {
     AllAdmins,
     AdminLogin,
     AdminLogout,
-
+    AdminAddUser,
+    AdminDeleteUser
 }

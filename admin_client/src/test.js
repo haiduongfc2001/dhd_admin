@@ -1,76 +1,117 @@
-// import React, {useContext, useEffect, useRef, useState} from 'react';
-// import {
-//     MDBBtn,
-//     MDBContainer,
-//     MDBRow,
-//     MDBCol,
-//     MDBCard,
-//     MDBCardBody,
-//     MDBInput,
-// }
-//     from 'mdb-react-ui-kit';
-// import usePasswordToggle from "~/hooks/usePasswordToggle";
-// import classNames from "classnames/bind";
-// import styles from "./SignIn.module.scss";
-// import logoDHD from "~/assets/images/logo_dhdadmin.png";
-//
-// import {useNavigate} from 'react-router-dom';
-// import {createBrowserHistory} from 'history';
+// import {useRef, useState} from "react";
+// import {IoMdAddCircle} from "react-icons/io";
+// import {Button, FloatingLabel, Form, ModalTitle} from "react-bootstrap";
+// import Modal from "react-bootstrap/Modal";
 // import api from "~/api/api";
-// import {AuthContext} from '~/context/AuthContext';
-// import {toast} from "react-toastify";
-// import Home from "~/pages/Home";
 //
-// const history = createBrowserHistory();
+// function AddUser({newUser, setNewUser, setUsers}) {
+//     const [show, setShow] = useState(false);
+//     const userNameRef = useRef(null)
 //
-// const cx = classNames.bind(styles)
+//     const handleShow = () => setShow(true);
+//     const handleClose = () => {
+//         setShow(false);
+//         setNewUser({});
+//     }
 //
+//     const handleAddUser = () => {
+//         api.post("/add-user", newUser)
+//             .then((response) => {
+//                 setUsers((prevState) => [...prevState, response.data]);
+//                 setNewUser({});
+//                 setShow(false);
+//             })
+//             .catch((error) => {
+//                 console.log(error);
+//             });
 //
-// function SignIn() {
-//     const {setIsLoggedIn} = useContext(AuthContext);
-//     const navigate = useNavigate();
-//
-//     const [email, setEmail] = useState('');
-//     const [password, setPassword] = useState('');
-//     const [error, setError] = useState('');
-//     const [errMsg, setErrMsg] = useState('');
-//     const errRef = useRef();
-//
-//     const [PasswordInputType, ToggleIcon, toggleVisibility] = usePasswordToggle();
-//
-//     useEffect(() => {
-//         setErrMsg('');
-//     }, [email, password]);
-//
-//     const handleLogin = async (e) => {
-//         e.preventDefault();
-//
-//         try {
-//             const response = await api.post('/admin/login', {
-//                     email,
-//                     password
-//                 }
-//             );
-//
-//             const token = response.data.token;
-//             localStorage.setItem('token', token);
-//
-//             setIsLoggedIn(true);
-//             navigate('/');
-//
-//         } catch (err) {
-//             errRef.current.focus();
-//             toast.error('Login failed!');
-//         }
+//         userNameRef.current.focus();
 //     };
 //
+//     function handleInputChange(e) {
+//         const {name, value} = e.target;
+//         if (name === 'quantity' && !validateInput(value)) {
+//             return; //
+//         }
+//         setNewUser(prevState => ({...prevState, [name]: value}));
+//     }
+//
+//     function validateInput(value) {
+//         const regex = /^[1-9]\d*$/; // Only allow positive integers not starting with 0
+//         return regex.test(value);
+//     }
+//
 //     return (
-//         <div className={cx('wrapper')}>
-//             <MDBContainer fluid className={cx('signin-form')}>
-//                 fs
-//             </MDBContainer>
-//         </div>
-//     );
+//         <>
+//             <Button
+//                 size="lg"
+//                 variant="primary"
+//                 className={"mb-4"}
+//                 onClick={handleShow}
+//             >
+//                 <IoMdAddCircle/>
+//             </Button>
+//
+//             <Modal
+//                 show={show}
+//                 backdrop={"static"}
+//                 centered
+//                 onHide={handleClose}
+//             >
+//                 <Modal.Header closeButton>
+//                     <ModalTitle>Add User</ModalTitle>
+//                 </Modal.Header>
+//                 <Modal.Body>
+//                     <Form>
+//                         <FloatingLabel label="User Name">
+//                             <Form.Control
+//                                 ref={userNameRef}
+//                                 name="name"
+//                                 type="text"
+//                                 placeholder="User Name"
+//                                 value={newUser.name || ""}
+//                                 onChange={handleInputChange}
+//                             />
+//                         </FloatingLabel>
+//                         <FloatingLabel label="User Quantity">
+//                             <Form.Control
+//                                 name="email"
+//                                 type="email"
+//                                 placeholder="User Email"
+//                                 value={newUser.email || ''}
+//                                 onChange={handleInputChange}
+//                             />
+//                         </FloatingLabel>
+//                         <FloatingLabel label="User Phone Number">
+//                             <Form.Control
+//                                 name="phone"
+//                                 type="number"
+//                                 placeholder="Prouduct Quantity"
+//                                 value={newUser.phone || ''}
+//                                 onChange={handleInputChange}
+//                             />
+//                         </FloatingLabel>
+//                         <FloatingLabel label="User Quantity">
+//                             <Form.Control
+//                                 name="image"
+//                                 type="file"
+//                                 value={newUser.image || ''}
+//                                 onChange={handleInputChange}
+//                             />
+//                         </FloatingLabel>
+//                     </Form>
+//                 </Modal.Body>
+//                 <Modal.Footer>
+//                     <Button onClick={handleClose}>
+//                         Close
+//                     </Button>
+//                     <Button onClick={handleAddUser}>
+//                         Add User
+//                     </Button>
+//                 </Modal.Footer>
+//             </Modal>
+//         </>
+//     )
 // }
 //
-// export default SignIn;
+// export default AddUser;
