@@ -69,7 +69,7 @@ admin_route.use(session({
 // admin_route.post('/edit-user', AdminController.UpdateUser);
 //
 // admin_route.get('/delete-user', AdminAuth.isLogin, AdminController.DeleteUser);
-
+//
 // admin_route.get('*', (req, res) => {
 //     res.redirect('/admin');
 // });
