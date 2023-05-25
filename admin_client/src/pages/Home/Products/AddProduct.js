@@ -86,7 +86,10 @@ function AddProduct({
             label: (
                 <>
                     Product Quantity{" "}
-                    <span style={{color: "red"}} dangerouslySetInnerHTML={{__html: "*"}}/>
+                    <span
+                        style={{color: "red"}}
+                          dangerouslySetInnerHTML={{__html: "*"}}
+                    />
                 </>
             ),
             type: "number",

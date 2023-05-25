@@ -46,9 +46,11 @@ const DeleteProduct = ({cx, product, products, setProducts}) => {
             <Button
                 variant="danger"
                 className={cx('button-delete')}
+                style={{fontSize: "var(--default-font-size-button)"}}
                 onClick={() => handleShowDeleteModal(product._id)}
             >
-                <BsTrash className={cx('icon-action')}/>
+                {/*<BsTrash className={cx('icon-action')}/>*/}
+                Delete
             </Button>
 
             <Modal

@@ -11,13 +11,16 @@ td button {
 
 .icon-action {
   font-size: 1.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 td {
   font-size: var(--default-font-size);
 }
 
-.form-product input {
+.form-user input {
   caret-color: var(--primary);
 }
 

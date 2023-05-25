@@ -10,7 +10,6 @@ import classNames from "classnames/bind"
 import styles from "./Product.module.scss"
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
 import EditProduct from "~/pages/Home/Products/EditProduct";
-import DeleteUser from "~/pages/Users/DeleteUser";
 
 const cx = classNames.bind(styles)
 

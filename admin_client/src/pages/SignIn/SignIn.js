@@ -34,14 +34,11 @@ const cx = classNames.bind(styles)
 function SignIn() {
     const { setIsLoggedIn } = useContext(AuthContext);
     const navigate = useNavigate();
-    const location = useLocation();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [message, setMessage] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
     const errRef = useRef();
 
     const [PasswordInputType, ToggleIcon, toggleVisibility] = usePasswordToggle();

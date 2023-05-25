@@ -81,7 +81,15 @@ function AddUser({cx, styles, setUsers}) {
 
     const addUserForm = [
         {
-            label: "User Name",
+            label: (
+                <>
+                    User Name{" "}
+                    <span
+                        style={{color: "red"}}
+                        dangerouslySetInnerHTML={{__html: "*"}}
+                    />
+                </>
+            ),
             type: "text",
             id: "name",
             value: name,
@@ -90,7 +98,15 @@ function AddUser({cx, styles, setUsers}) {
             ref: userNameRef,
         },
         {
-            label: "User Email",
+            label: (
+                <>
+                    User Email{" "}
+                    <span
+                        style={{color: "red"}}
+                        dangerouslySetInnerHTML={{__html: "*"}}
+                    />
+                </>
+            ),
             type: "email",
             id: "email",
             value: email,
@@ -98,7 +114,15 @@ function AddUser({cx, styles, setUsers}) {
             onChange: handleEmailChange,
         },
         {
-            label: "User Phone Number",
+            label: (
+                <>
+                    User Phone Number{" "}
+                    <span
+                        style={{color: "red"}}
+                        dangerouslySetInnerHTML={{__html: "*"}}
+                    />
+                </>
+            ),
             type: "number",
             id: "phone",
             value: phone,
@@ -106,7 +130,15 @@ function AddUser({cx, styles, setUsers}) {
             onChange: handlePhoneChange,
         },
         {
-            label: "Avatar",
+            label: (
+                <>
+                    Avatar{" "}
+                    <span
+                        style={{color: "red"}}
+                        dangerouslySetInnerHTML={{__html: "*"}}
+                    />
+                </>
+            ),
             type: "file",
             id: "image",
             onChange: handleImageChange,

@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import api from "~/api/api";
 import { HiPencilAlt } from "react-icons/hi";
 
-const UpdateProduct = ({ cx, styles, product, products, setProducts }) => {
+const EditProduct = ({ cx, styles, product, products, setProducts }) => {
     const [show, setShow] = useState(false);
     const productNameRef = useRef(null);
 
@@ -94,12 +94,13 @@ const UpdateProduct = ({ cx, styles, product, products, setProducts }) => {
     return (
         <>
             <Button
-                size="lg"
-                variant="primary"
-                className="mb-4"
+                variant="success"
+                className={cx('button-success')}
+                style={{fontSize: "var(--default-font-size-button)"}}
                 onClick={handleShow}
             >
-                <HiPencilAlt className={cx("icon-action")} />
+                {/*<HiPencilAlt className={cx("icon-action")} />*/}
+                Edit
             </Button>
 
             <Modal show={show} backdrop="static" centered onHide={handleClose}>
@@ -136,4 +137,4 @@ const UpdateProduct = ({ cx, styles, product, products, setProducts }) => {
     );
 };
 
-export default UpdateProduct;
+export default EditProduct;
