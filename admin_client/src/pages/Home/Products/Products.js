@@ -16,11 +16,7 @@ const cx = classNames.bind(styles)
 function ListProducts() {
     const [products, setProducts] = useState([]);
     const [newProduct, setNewProduct] = useState({});
-    const [editableProduct, setEditableProduct] = useState(null);
-    const nameRef = useRef(null);
-    const quantityRef = useRef(null);
-
-    const [errorMessage, setErrorMessage] = useState('');
+    const nameInputRef = useRef(null);
 
     useEffect(() => {
         api.get('/products')
@@ -32,44 +28,16 @@ function ListProducts() {
             });
     }, []);
 
-    const handleEditProduct = (id) => {
-        const editedProduct = {
-            name: nameRef.current.value,
-            quantity: quantityRef.current.value
-        }
-        api.put(`/product/${id}`, editedProduct)
-            .then(response => {
-                // edit products state
-                const editedProducts = products.map(product => {
-                    if (product._id === id) {
-                        return {...product, ...editedProduct};
-                    }
-                    return product;
-                });
-                setProducts(editedProducts);
-                setEditableProduct(null);
-                toast.success('Product has been updated!', {
-                    position: "bottom-center",
-                    autoClose: 3000,
-                    theme: "colored",
-                });
-            })
-            .catch(error => {
-                console.log(error);
-                toast.error('Error edit product!');
-            });
-    }
-
     const actionArray = [
         {
             type: 'component',
             component: (product) => (
                 <EditProduct
                     cx={cx}
-                    styles={styles}
                     product={product}
                     products={products}
                     setProducts={setProducts}
+                    nameInputRef={nameInputRef}
                 />
             ),
         },
@@ -96,6 +64,7 @@ function ListProducts() {
                 newProduct={newProduct}
                 setProducts={setProducts}
                 setNewProduct={setNewProduct}
+                nameInputRef={nameInputRef}
             />
 
             <Table striped bordered hover>

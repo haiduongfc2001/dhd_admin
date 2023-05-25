@@ -1,19 +1,17 @@
+import {Button, Modal, Form, ModalTitle, FloatingLabel} from "react-bootstrap";
 import {useEffect, useRef, useState} from "react";
-import {IoMdAddCircle} from "react-icons/io";
-import {Button, FloatingLabel, Form, ModalTitle} from "react-bootstrap";
 import {toast} from "react-toastify";
-import Modal from "react-bootstrap/Modal";
 import api from "~/api/api";
 
-function AddUser({cx, styles, setUsers}) {
+const EditUser = ({cx, user}) => {
     const [show, setShow] = useState(false);
-    const nameInputRef = useRef(null);
-    const [newUser, setNewUser] = useState({});
-
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
     const [image, setImage] = useState(null);
+
+    const nameInputRef = useRef(null);
+
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleNameChange = (e) => {
@@ -32,29 +30,46 @@ function AddUser({cx, styles, setUsers}) {
         setImage(e.target.files[0]);
     };
 
-    const handleAddUser = async (e) => {
+    const handleShow = () => {
+        setName(user.name);
+        setEmail(user.email);
+        setPhone(user.phone);
+        setShow(true);
+    };
+
+    const handleClose = () => {
+        setShow(false);
+        setErrorMessage('');
+    };
+
+    const handleEditUser = async (e) => {
         e.preventDefault();
 
+        // Tạo một đối tượng FormData để gửi dữ liệu
         const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('phone', phone);
-        formData.append('image', image);
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("phone", phone);
+        formData.append("image", image);
 
         if (!name || !email || !phone || !image) {
             setErrorMessage('Please enter all information!')
         }
 
         try {
-            const response = await api.post('/admin/add-user', formData);
-            // setNewUser({});
-            setShow(false);
-            setName('');
-            setEmail('');
-            setPhone('');
-            setImage(null);
+
+            const response = await api.put(`/user/${user._id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            const updatedUser = response.data;
+
+            // Handle the updated user data here or close the modal
+            console.log("Updated User:", updatedUser);
+            handleClose();
             setErrorMessage('');
-            toast.success('User added successfully!', {
+            toast.success(`User ${name} has been updated!`, {
                 position: "bottom-center",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -65,24 +80,16 @@ function AddUser({cx, styles, setUsers}) {
                 theme: "colored",
             });
         } catch (error) {
-            // setErrorMessage('Failed to add user');
-            toast.error('Error adding user!');
-            console.error(error);
+            console.log(error);
+            toast.error("An error occurred while updating user information.");
         }
     };
 
-    const handleShow = () => {
-        setShow(true);
-    };
-    const handleClose = () => {
-        setShow(false);
-        // setNewUser({});
-        setName('');
-        setEmail('');
-        setPhone('');
-        setImage(null);
-        setErrorMessage('');
-    };
+    useEffect(() => {
+        setName(user.name);
+        setEmail(user.email);
+        setPhone(user.phone);
+    }, [user]);
 
     useEffect(() => {
         if (show) {
@@ -90,7 +97,7 @@ function AddUser({cx, styles, setUsers}) {
         }
     }, [show]);
 
-    const addUserForm = [
+    const editUserForm = [
         {
             label: (
                 <>
@@ -155,33 +162,28 @@ function AddUser({cx, styles, setUsers}) {
     return (
         <>
             <Button
-                size="lg"
-                variant="primary"
-                className={"mb-4"}
+                variant="success"
+                className={cx('button-delete')}
+                disabled={user.is_admin === 1 && user.is_verified === 1}
+                style={{fontSize: "var(--default-font-size-button)"}}
                 onClick={handleShow}
             >
-                <IoMdAddCircle className={cx('icon-action')}/>
+                Edit
             </Button>
 
-            <Modal
-                show={show}
-                backdrop={"static"}
-                centered
-                onHide={handleClose}
-            >
+            <Modal show={show} backdrop="static" centered onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <ModalTitle>Add User</ModalTitle>
+                    <ModalTitle>Edit User</ModalTitle>
                 </Modal.Header>
                 <Modal.Body>
                     {errorMessage && <p className={'text-danger'}>{errorMessage}</p>}
-                    {/*{successMessage && <p>{successMessage}</p>}*/}
 
                     <Form inline="true" className={cx('form-user')}>
-                        {addUserForm.map((form, index) => (
+                        {editUserForm.map((form, index) => (
                             <FloatingLabel
                                 key={index}
                                 label={form.label}
-                                className="mr-sm-2 mb-2"
+                                className="mr-sm-2 mb-3"
                             >
                                 <Form.Control
                                     ref={form.id === "name" ? nameInputRef : null}
@@ -201,34 +203,13 @@ function AddUser({cx, styles, setUsers}) {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button type="submit" variant="primary" onClick={handleAddUser}>
-                        Add User
+                    <Button variant="success" onClick={handleEditUser}>
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>
         </>
-    )
-}
+    );
+};
 
-export default AddUser;
-
-
-// <form onSubmit={handleSubmit}>
-//     <div>
-//         <label htmlFor="name">Name</label>
-//         <input type="text" id="name" value={name} onChange={handleNameChange}/>
-//     </div>
-//     <div>
-//         <label htmlFor="email">Email</label>
-//         <input type="email" id="email" value={email} onChange={handleEmailChange}/>
-//     </div>
-//     <div>
-//         <label htmlFor="phone">Phone</label>
-//         <input type="text" id="phone" value={phone} onChange={handlePhoneChange}/>
-//     </div>
-//     <div>
-//         <label htmlFor="image">Image</label>
-//         <input type="file" id="image" onChange={handleImageChange}/>
-//     </div>
-//     <button type="submit">Add User</button>
-// </form>
+export default EditUser;

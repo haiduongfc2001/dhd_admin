@@ -1,10 +1,10 @@
 import { Button, FloatingLabel, Modal, Form, ModalTitle } from "react-bootstrap";
-import { useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { toast } from "react-toastify";
 import api from "~/api/api";
 import { HiPencilAlt } from "react-icons/hi";
 
-const EditProduct = ({ cx, styles, product, products, setProducts }) => {
+const EditProduct = ({ cx, styles, product, products, setProducts, nameInputRef }) => {
     const [show, setShow] = useState(false);
     const productNameRef = useRef(null);
 
@@ -13,6 +13,12 @@ const EditProduct = ({ cx, styles, product, products, setProducts }) => {
         name: product.name,
         quantity: product.quantity
     });
+
+    useEffect(() => {
+        if (show) {
+            nameInputRef.current.focus();
+        }
+    }, [show]);
 
     const handleShow = () => {
         setShow(true);
@@ -112,12 +118,14 @@ const EditProduct = ({ cx, styles, product, products, setProducts }) => {
                         {editProductForm.map((form, index) => (
                             <FloatingLabel key={index} label={form.label} className="mr-sm-2 mb-2">
                                 <Form.Control
-                                    ref={form.ref}
+                                    ref={form.name === "name" ? nameInputRef : null}
                                     name={form.name}
                                     type={form.type}
                                     placeholder={form.placeholder}
                                     value={form.value}
                                     onChange={form.onChange}
+                                    size="lg"
+                                    style={{minHeight: "40px"}}
                                     required
                                 />
                             </FloatingLabel>

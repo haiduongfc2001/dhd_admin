@@ -1,4 +1,4 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {IoMdAddCircle} from "react-icons/io";
 import {Button, FloatingLabel, Form, ModalTitle} from "react-bootstrap";
 import {toast} from "react-toastify";
@@ -6,13 +6,21 @@ import Modal from "react-bootstrap/Modal";
 import api from "~/api/api";
 
 function AddProduct({
-                        cx, styles, newProduct,
-                        setNewProduct,setProducts,
+                        cx, newProduct,
+                        setNewProduct, setProducts,
+                        nameInputRef
                     }) {
     const [show, setShow] = useState(false);
-    const productNameRef = useRef(null)
 
-    const handleShow = () => setShow(true);
+    useEffect(() => {
+        if (show) {
+            nameInputRef.current.focus();
+        }
+    }, [show]);
+
+    const handleShow = () => {
+        setShow(true);
+    };
     const handleClose = () => {
         setShow(false);
         setNewProduct({});
@@ -45,27 +53,12 @@ function AddProduct({
                 console.log(error);
                 toast.error('Error adding product!');
             });
-
-        productNameRef.current.focus();
     };
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
         setNewProduct((prevState) => ({...prevState, [name]: value}));
     };
-
-    // function handleInputChange(e) {
-    //     const {name, value} = e.target;
-    //     if (name === 'quantity' && !validateInput(value)) {
-    //         return; // Do not update state if input is invalid
-    //     }
-    //     setNewProduct(prevState => ({...prevState, [name]: value}));
-    // }
-    //
-    // function validateInput(value) {
-    //     const regex = /^[1-9]\d*$/; // Only allow positive integers not starting with 0
-    //     return regex.test(value);
-    // }
 
     const addProductForm = [
         {
@@ -80,7 +73,6 @@ function AddProduct({
             placeholder: "Product Name",
             value: newProduct.name || '',
             onChange: handleInputChange,
-            ref: productNameRef,
         },
         {
             label: (
@@ -88,7 +80,7 @@ function AddProduct({
                     Product Quantity{" "}
                     <span
                         style={{color: "red"}}
-                          dangerouslySetInnerHTML={{__html: "*"}}
+                        dangerouslySetInnerHTML={{__html: "*"}}
                     />
                 </>
             ),
@@ -129,7 +121,7 @@ function AddProduct({
                                 className="mr-sm-2 mb-2"
                             >
                                 <Form.Control
-                                    ref={form.ref}
+                                    ref={form.name === "name" ? nameInputRef : null}
                                     name={form.name}
                                     type={form.type}
                                     placeholder={form.placeholder}

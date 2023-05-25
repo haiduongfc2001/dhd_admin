@@ -6,6 +6,7 @@ const randomstring = require('randomstring');
 
 require('dotenv').config(); // Add this line to load environment variables
 const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
+const Product = require("../models/ProductModel");
 
 const securePassword = async (password) => {
     try {
@@ -357,6 +358,20 @@ const AllUsers = async (req, res) => {
     }
 }
 
+const FindUserById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params._id);
+
+        if (user) {
+            res.json(user);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 
 module.exports = {
     LoadRegister,
@@ -375,4 +390,5 @@ module.exports = {
     SendVerificationLink,
     EditLoad,
     UpdateProfile,
+    FindUserById
 }

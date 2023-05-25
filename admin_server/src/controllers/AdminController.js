@@ -435,6 +435,46 @@ const AdminDeleteUser = async (req, res) => {
     }
 };
 
+// Sửa thông tin User
+const AdminEditUser = async (req, res) => {
+    try {
+        const name = req.body.name;
+        const email = req.body.email;
+        const phone = req.body.phone;
+        const image = req.file.filename;
+
+        const userId = req.params._id;
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Delete the old photo if it exists
+        if (user.image) {
+            const imagePath = path.join(__dirname, '../public/userImages', user.image);
+            fs.unlink(imagePath, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { name, email, phone, image },
+            { new: true }
+        );
+
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+
+
 module.exports = {
     LoadLogin,
     VerifyLogin,
@@ -455,5 +495,6 @@ module.exports = {
     AdminLogin,
     AdminLogout,
     AdminAddUser,
+    AdminEditUser,
     AdminDeleteUser
 }

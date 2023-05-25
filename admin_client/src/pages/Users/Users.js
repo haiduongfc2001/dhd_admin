@@ -15,26 +15,29 @@ import api from "~/api/api";
 import AddUser from "~/pages/Users/AddUser";
 import DeleteUser from "~/pages/Users/DeleteUser";
 import {ToastContainer} from "react-toastify";
+import EditUser from "~/pages/Users/EditUser";
 
 const cx = classNames.bind(styles);
 
 export default function Users() {
 
+    const [user, setUser] = useState({});
     const [users, setUsers] = useState([]);
     const [newUser, setNewUser] = useState({});
 
     const tableArray = ['User', 'UserID', 'Phone', 'Status', 'Actions'];
     const actionArray = [
         {
-            type: 'button',
-            className: 'btn btn-success',
-            name: 'Edit',
+            type: 'component',
+            component: (user) => (
+                <EditUser
+                    cx={cx}
+                    user={user}
+                    // users={users}
+                    // setUsers={setUsers}
+                />
+            )
         },
-        // {
-        //     type: 'button',
-        //     className: 'btn btn-danger',
-        //     name: 'Delete',
-        // },
         {
             type: 'component',
             component: (user) => (
@@ -117,20 +120,7 @@ export default function Users() {
                             <td>
                                 {actionArray.map((action, index) => (
                                     <React.Fragment key={index}>
-                                        {action.type === 'button' ? (
-                                            <button
-                                                type={action.type}
-                                                key={index}
-                                                className={action.className}
-                                                style={{fontSize: "var(--default-font-size-button)"}}
-                                                disabled={user.is_admin === 1 && user.is_verified === 1}
-                                            >
-                                                {action.name}
-                                            </button>
-                                        ) : (
-                                            action.component(user)
-                                        )
-                                        }
+                                        {action.component(user)}
                                     </React.Fragment>
                                 ))}
                             </td>

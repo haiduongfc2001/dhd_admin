@@ -25,6 +25,8 @@ user_route.use(bodyParser.urlencoded({ extended: true }));
 
 const multer = require("multer");
 const AdminController = require("../controllers/AdminController");
+const User = require("../models/UserModel");
+const randomstring = require("randomstring");
 
 user_route.use('/userImages', express.static('src/public/userImages'));
 
@@ -68,6 +70,58 @@ const upload = multer({storage: storage});
 
 // axios
 user_route.get('/users', UserController.AllUsers);
+user_route.get('/user/:_id', UserController.FindUserById);
+user_route.put('/user/:_id', upload.single('image'), AdminController.AdminEditUser)
 user_route.delete('/user/:_id', AdminController.AdminDeleteUser);
 
 module.exports = user_route;
+
+// const UpdateUser = async (req, res) => {
+//     try {
+//
+//         const userData = await User.findByIdAndUpdate({_id: req.body.id}, {
+//             $set: {
+//                 name: req.body.name,
+//                 email: req.body.email,
+//                 phone: req.body.phone,
+//                 is_verified: req.body.verify
+//             }
+//         })
+//
+//         res.redirect('/admin/dashboard');
+//
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+
+// const AdminAddUser = async (req, res) => {
+//     try {
+//         const name = req.body.name;
+//         const email = req.body.email;
+//         const phone = req.body.phone;
+//         const image = req.file.filename;
+//         const password = randomstring.generate(8);
+//
+//         const hashedPassword = await securePassword(password);
+//
+//         const user = new User({
+//             name: name,
+//             email: email,
+//             phone: phone,
+//             image: image,
+//             password: hashedPassword,
+//             is_admin: 0,
+//         });
+//
+//         const userData = await user.save();
+//
+//         if (userData) {
+//             await addUserMail(name, email, password, userData._id);
+//             res.status(200).json({message: 'Add User Successfully!'})
+//         }
+//
+//     } catch (error) {
+//         res.status(500).json({error: error.message});
+//     }
+// }
