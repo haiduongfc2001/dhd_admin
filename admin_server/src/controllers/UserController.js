@@ -376,31 +376,40 @@ const FindUserById = async (req, res) => {
 const UserRegister = async (req, res) => {
     try {
 
-        const {name, email, password} = req.body;
-
-        // Kiểm tra xem người dùng đã tồn tại hay chưa
-        const existingUser = await User.findOne({email: email});
-        if (existingUser) {
-            return res
-                .status(400)
-                .json({message: 'Tài khoản đã tồn tại. Xin vui lòng đăng nhập!'});
-        }
+        // const {name, email, phone, password} = req.body;
+        //
+        // // Kiểm tra xem người dùng đã tồn tại hay chưa
+        // const existingUser = await User.findOne({email: email});
+        // if (existingUser) {
+        //     return res.status(400).json({message: 'Tài khoản đã tồn tại. Xin vui lòng đăng nhập!'});
+        // }
 
         // Mã hóa mật khẩu trước khi lưu vào csdl
-        const hashedPassword = await securePassword(password);
+        const hashedPassword = await securePassword(req.body.password);
 
-        // Tạo user mới
         const user = new User({
-            name,
-            email,
-            password: hashedPassword,
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
             image: req.file.filename,
+            password: hashedPassword,
+            is_admin: 0,
         });
 
-        // Lưu user vào csdl
-        await user.save();
+        // Tạo user mới
+        // const user = new User({
+        //     name,
+        //     email,
+        //     phone,
+        //     password: hashedPassword,
+        //     image: req.file.filename,
+        //     is_admin: 0,
+        // });
 
-        res.json({message: 'Đăng ký thành công!'})
+        // Lưu user vào csdl
+        const userData = await user.save();
+
+        res.json(userData);
 
     } catch (error) {
         res.status(500).json({ message: 'Đã xảy ra lỗi' });

@@ -70,28 +70,36 @@ user_route.get('/users', UserController.AllUsers);
 user_route.get('/user/:_id', UserController.FindUserById);
 user_route.put('/user/:_id', upload.single('image'), AdminController.AdminEditUser)
 user_route.delete('/user/:_id', AdminController.AdminDeleteUser);
-user_route.post('/user/:_id', upload.single('image'), UserController.UserRegister);
+user_route.post('/user', upload.single('image'), UserController.UserRegister);
 
 module.exports = user_route;
 
-// const UpdateUser = async (req, res) => {
+// const AddUser = async (req, res) => {
 //     try {
+//         const spassword = await securePassword(req.body.password)
 //
-//         const userData = await User.findByIdAndUpdate({_id: req.body.id}, {
-//             $set: {
-//                 name: req.body.name,
-//                 email: req.body.email,
-//                 phone: req.body.phone,
-//                 is_verified: req.body.verify
-//             }
-//         })
+//         const user = new User({
+//             name: req.body.name,
+//             email: req.body.email,
+//             phone: req.body.phone,
+//             image: req.file.filename,
+//             password: spassword,
+//             is_admin: 0,
+//         });
 //
-//         res.redirect('/admin/dashboard');
+//         const userData = await user.save();
 //
-//     } catch (error) {
-//         console.log(error.message);
+//         if (userData) {
+//             await sendVerifyMail(req.body.name, req.body.email, userData._id);
+//             res.render('registration', {message: 'Your registration has been successfully! Please check your email!'});
+//         } else {
+//             res.render('registration', {message: 'Your registration has been failed!'});
+//         }
+//
+//     } catch (err) {
+//         res.send(err.message);
 //     }
-// }
+// };
 
 // const AdminAddUser = async (req, res) => {
 //     try {
