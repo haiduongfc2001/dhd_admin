@@ -20,7 +20,6 @@ admin_route.set('view engine', 'ejs');
 admin_route.set('views', path.join(__dirname, '../views/admin'));
 
 const multer = require("multer");
-
 admin_route.use('/userImages', express.static('src/public/userImages'));
 
 const storage = multer.diskStorage({
@@ -40,12 +39,6 @@ const UserController = require("../controllers/UserController");
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const {authAdmin} = require("../middleware/AdminAuth");
-
-admin_route.use(session({
-    secret: 'secret_key',
-    resave: false,
-    saveUninitialized: false,
-}));
 
 // admin_route.get('/', AdminAuth.isLogout, AdminController.LoadLogin);
 // admin_route.post('/', AdminController.VerifyLogin);

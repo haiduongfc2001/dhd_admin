@@ -11,8 +11,10 @@ user_route.use(session({
 }));
 
 const Auth = require('../middleware/Auth');
+const User = require("../models/UserModel");
 
 const UserController = require("../controllers/UserController");
+const AdminController = require("../controllers/AdminController");
 
 const path = require("path");
 user_route.set('view engine', 'ejs');
@@ -22,12 +24,7 @@ const bodyParser = require("body-parser");
 user_route.use(bodyParser.json());
 user_route.use(bodyParser.urlencoded({ extended: true }));
 
-
 const multer = require("multer");
-const AdminController = require("../controllers/AdminController");
-const User = require("../models/UserModel");
-const randomstring = require("randomstring");
-
 user_route.use('/userImages', express.static('src/public/userImages'));
 
 const storage = multer.diskStorage({
@@ -73,6 +70,7 @@ user_route.get('/users', UserController.AllUsers);
 user_route.get('/user/:_id', UserController.FindUserById);
 user_route.put('/user/:_id', upload.single('image'), AdminController.AdminEditUser)
 user_route.delete('/user/:_id', AdminController.AdminDeleteUser);
+user_route.post('/user/:_id', upload.single('image'), UserController.UserRegister);
 
 module.exports = user_route;
 

@@ -6,8 +6,6 @@ const randomstring = require('randomstring');
 
 require('dotenv').config(); // Add this line to load environment variables
 const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
-const Product = require("../models/ProductModel");
-
 const securePassword = async (password) => {
     try {
         return await bcrypt.hash(password, 10);
@@ -234,7 +232,7 @@ const ForgetPasswordLoad = async (req, res) => {
 
         const token = req.query.token;
         const tokenData = await User.findOne({token: token})
-        if(tokenData) {
+        if (tokenData) {
             res.render('forget-password', {user_id: tokenData._id})
         } else {
             res.render('404', {message: 'Token không đúng'})
@@ -252,7 +250,12 @@ const ResetPassword = async (req, res) => {
         const user_id = req.body.user_id;
 
         const secure_password = await securePassword(password);
-        const updatedData = await User.findByIdAndUpdate({_id: user_id}, {$set: {password: secure_password, token: ''}});
+        const updatedData = await User.findByIdAndUpdate({_id: user_id}, {
+            $set: {
+                password: secure_password,
+                token: ''
+            }
+        });
 
         res.redirect('/');
 
@@ -264,9 +267,7 @@ const ResetPassword = async (req, res) => {
 // For verification send mail link
 const VerificationLoad = async (req, res) => {
     try {
-
         res.render('verification', {message: 'Verification'})
-
     } catch (error) {
         console.log(error.message);
     }
@@ -277,7 +278,7 @@ const SendVerificationLink = async (req, res) => {
 
         const email = req.body.email;
         const userData = await User.findOne({email: email});
-        if(userData) {
+        if (userData) {
             sendVerifyMail(userData.name, userData.email, userData._id);
             res.render('verification', {message: 'Reset verification mail sent your mail id, please check!'})
         } else {
@@ -321,8 +322,8 @@ const UpdateProfile = async (req, res) => {
         }
 
         const userData = await User.findByIdAndUpdate(
-            { _id: req.body.user_id },
-            { $set: updateData }
+            {_id: req.body.user_id},
+            {$set: updateData}
         );
 
         res.redirect('/home');
@@ -347,7 +348,7 @@ const UpdateProfile = async (req, res) => {
 //     }
 // }
 
-
+// ----------------------------------------------------------------
 // JSON - Connect to Client
 const AllUsers = async (req, res) => {
     try {
@@ -372,10 +373,43 @@ const FindUserById = async (req, res) => {
     }
 };
 
+const UserRegister = async (req, res) => {
+    try {
+
+        const {name, email, password} = req.body;
+
+        // Kiểm tra xem người dùng đã tồn tại hay chưa
+        const existingUser = await User.findOne({email: email});
+        if (existingUser) {
+            return res
+                .status(400)
+                .json({message: 'Tài khoản đã tồn tại. Xin vui lòng đăng nhập!'});
+        }
+
+        // Mã hóa mật khẩu trước khi lưu vào csdl
+        const hashedPassword = await securePassword(password);
+
+        // Tạo user mới
+        const user = new User({
+            name,
+            email,
+            password: hashedPassword,
+            image: req.file.filename,
+        });
+
+        // Lưu user vào csdl
+        await user.save();
+
+        res.json({message: 'Đăng ký thành công!'})
+
+    } catch (error) {
+        res.status(500).json({ message: 'Đã xảy ra lỗi' });
+    }
+}
+
 
 module.exports = {
     LoadRegister,
-    AddUser,
     VerifyMail,
     AllUsers,
     LoginLoad,
@@ -390,5 +424,8 @@ module.exports = {
     SendVerificationLink,
     EditLoad,
     UpdateProfile,
-    FindUserById
+    //----------------------------
+    AddUser,
+    FindUserById,
+    UserRegister
 }
