@@ -6,6 +6,7 @@ const randomstring = require('randomstring');
 
 require('dotenv').config(); // Add this line to load environment variables
 const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
+const jwt = require("jsonwebtoken");
 const securePassword = async (password) => {
     try {
         return await bcrypt.hash(password, 10);
@@ -373,7 +374,7 @@ const UserRegister = async (req, res) => {
         // Kiểm tra xem người dùng đã tồn tại hay chưa
         const existingUser = await User.findOne({email: req.body.email});
         if (existingUser) {
-            return res.status(400).json({message: 'Tài khoản đã tồn tại. Xin vui lòng đăng nhập!'});
+            return res.status(200).json({message: 'Tài khoản đã tồn tại. Xin vui lòng đăng nhập!'});
         } else {
             // Mã hóa mật khẩu trước khi lưu vào csdl
             const hashedPassword = await securePassword(req.body.password);
@@ -392,7 +393,7 @@ const UserRegister = async (req, res) => {
             if (userData) {
                 await sendVerifyMail(req.body.name, req.body.email, userData._id);
                 return res
-                    .status(400)
+                    .status(200)
                     .json({message: 'Xin vui lòng xác thực tài khoản trong tin nhắn được chúng tôi gửi trong email của bạn!'});
             } else {
                 res.status(404).json({message: 'Đăng ký không thành công'})
@@ -415,15 +416,56 @@ const UserVerifyMail = async (req, res) => {
     }
 };
 
-// const VerifyMail = async (req, res) => {
-//     try {
-//         const updateInfo = await User.updateOne({_id: req.query.id}, {$set: {is_verified: 1}});
-//         console.log(updateInfo);
-//         res.render('email-verified');
-//     } catch (err) {
-//         console.log(err.message);
-//     }
-// };
+const UserVerifyLogin = async (req, res) => {
+    try {
+
+        const {email, password} = req.body;
+
+        const userData = await User.findOne({email});
+        // if (userData) {
+        //     const passwordMatch = await bcrypt.compare(password, userData.password);
+        //     if (passwordMatch) {
+        //         if (userData.is_verified === 0) {
+        //             res.status(400).json({ message: 'Bạn chưa xác thực tài khoản. ' +
+        //                     'Xin check mail được gửi đến để xác thực tài khoản'});
+        //         } else {
+        //             res.session.user_id = userData._id;
+        //         }
+        //     } else {
+        //         res.status(404).json({message: 'Email hoặc mật khẩu không đúng!'})
+        //     }
+        // } else {
+        //     res.status(404).json({message: 'Email hoặc mật khẩu không đúng!'})
+        // }
+
+        if (!userData) {
+            return res.status(401).json({message: 'Bạn chưa đăng ký tài khoản'});
+        } else {
+            if (userData.is_verified === 0) {
+                res.status(401).json({ message: 'Bạn chưa xác thực tài khoản. ' +
+                        'Xin check mail được gửi đến để xác thực tài khoản'});
+            } else {
+                // Compare the provided password with the hashed password stored in the database
+                const passwordMatch = await bcrypt.compare(password, userData.password);
+
+                // If passwords don't match, return an error
+                if (!passwordMatch) {
+                    return res.status(401).json({message: 'Email hoặc mật khẩu không đúng!'});
+                } else {
+                    // Create a JWT token
+                    const token = jwt.sign({userId: userData._id}, process.env.JWT_SECRET);
+
+                    // Lưu thông tin người dùng trong session
+                    req.session.adminId = userData._id;
+
+                    res.json({token});
+                }
+            }
+        }
+    } catch {
+        res.status(500).json({message: 'Server error'});
+    }
+}
 
 
 module.exports = {
@@ -446,5 +488,6 @@ module.exports = {
     AddUser,
     FindUserById,
     UserRegister,
-    UserVerifyMail
+    UserVerifyMail,
+    UserVerifyLogin
 }

@@ -25,6 +25,7 @@ user_route.use(bodyParser.json());
 user_route.use(bodyParser.urlencoded({ extended: true }));
 
 const multer = require("multer");
+const bcrypt = require("bcrypt");
 user_route.use('/userImages', express.static('src/public/userImages'));
 
 const storage = multer.diskStorage({
@@ -72,5 +73,6 @@ user_route.put('/user/:_id', upload.single('image'), AdminController.AdminEditUs
 user_route.delete('/user/:_id', AdminController.AdminDeleteUser);
 user_route.post('/register', upload.single('image'), UserController.UserRegister);
 user_route.get('/verify', UserController.VerifyMail);
+user_route.post('/login', UserController.UserVerifyLogin)
 
 module.exports = user_route;

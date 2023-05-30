@@ -10,24 +10,14 @@ import {
 }
     from 'mdb-react-ui-kit';
 import usePasswordToggle from "~/hooks/usePasswordToggle";
-import classNames from "classnames/bind";
-import styles from "./SignIn.module.scss";
 import logoDHD from "~/assets/images/logo_dhdadmin.png";
-
-// import Button from 'react-bootstrap/Button';
-// import Col from 'react-bootstrap/Col';
-// import Form from 'react-bootstrap/Form';
-// import InputGroup from 'react-bootstrap/InputGroup';
-// import Row from 'react-bootstrap/Row';
-
-import {useLocation, useNavigate} from 'react-router-dom';
-import {createBrowserHistory} from 'history';
+import {useNavigate} from 'react-router-dom';
 import api from "~/api/api";
 import { AuthContext } from '~/context/AuthContext';
 import {toast} from "react-toastify";
 
-const history = createBrowserHistory();
-
+import classNames from "classnames/bind";
+import styles from "./SignIn.module.scss";
 const cx = classNames.bind(styles)
 
 
