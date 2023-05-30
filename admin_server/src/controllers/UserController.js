@@ -33,7 +33,8 @@ const sendVerifyMail = async (name, email, user_id) => {
             to: email,
             subject: 'For Verification Mail',
             text: "Plaintext version of the message",
-            html: '<p>Hi ' + name + ', please click here to <a href="http://127.0.0.1:5000/verify?id=' + user_id + '"> Verify </a> your mail.</p>',
+            html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:5000/verify?id=' + user_id + '"> Verify </a> your mail.</p>',
+            // html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:3000/verify?id=' + user_id + '"> Verify </a> your mail.</p>',
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -43,13 +44,6 @@ const sendVerifyMail = async (name, email, user_id) => {
                 console.log('Email has been sent: ' + info.response);
             }
         });
-
-        // console.log("Message sent: %s", MailOptions.messageId);
-        // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-        //
-        // // Preview only available when sending through an Ethereal account
-        // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(MailOptions));
-        // // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 
     } catch (error) {
         console.log(error.message);
@@ -129,6 +123,7 @@ const VerifyMail = async (req, res) => {
         const updateInfo = await User.updateOne({_id: req.query.id}, {$set: {is_verified: 1}});
         console.log(updateInfo);
         res.render('email-verified');
+        // res.redirect('http://localhost:3000/verify')
     } catch (err) {
         console.log(err.message);
     }
@@ -375,9 +370,6 @@ const FindUserById = async (req, res) => {
 
 const UserRegister = async (req, res) => {
     try {
-
-        // const {name, email, phone, password} = req.body;
-        //
         // Kiểm tra xem người dùng đã tồn tại hay chưa
         const existingUser = await User.findOne({email: req.body.email});
         if (existingUser) {
@@ -397,13 +389,41 @@ const UserRegister = async (req, res) => {
 
             // Lưu user vào csdl
             const userData = await user.save();
-            res.json(userData);
+            if (userData) {
+                await sendVerifyMail(req.body.name, req.body.email, userData._id);
+                return res
+                    .status(400)
+                    .json({message: 'Xin vui lòng xác thực tài khoản trong tin nhắn được chúng tôi gửi trong email của bạn!'});
+            } else {
+                res.status(404).json({message: 'Đăng ký không thành công'})
+            }
         }
 
     } catch (error) {
-        res.status(500).json({ message: 'Đã xảy ra lỗi' });
+        res.status(500).json({message: 'Đã xảy ra lỗi'});
     }
 }
+
+const UserVerifyMail = async (req, res) => {
+    try {
+        const updateInfo = await User.updateOne({ _id: req.query.id }, { $set: { is_verified: 1 } });
+        console.log(updateInfo);
+        // res.render('email-verified');
+        // res.redirect('/verify-success'); // Chuyển hướng đến trang thành công sau khi xác thực
+    } catch (err) {
+        res.status(500).json({ message: 'Đã xảy ra lỗi' });
+    }
+};
+
+// const VerifyMail = async (req, res) => {
+//     try {
+//         const updateInfo = await User.updateOne({_id: req.query.id}, {$set: {is_verified: 1}});
+//         console.log(updateInfo);
+//         res.render('email-verified');
+//     } catch (err) {
+//         console.log(err.message);
+//     }
+// };
 
 
 module.exports = {
@@ -425,5 +445,6 @@ module.exports = {
     //----------------------------
     AddUser,
     FindUserById,
-    UserRegister
+    UserRegister,
+    UserVerifyMail
 }

@@ -70,64 +70,7 @@ user_route.get('/users', UserController.AllUsers);
 user_route.get('/user/:_id', UserController.FindUserById);
 user_route.put('/user/:_id', upload.single('image'), AdminController.AdminEditUser)
 user_route.delete('/user/:_id', AdminController.AdminDeleteUser);
-user_route.post('/user', upload.single('image'), UserController.UserRegister);
+user_route.post('/register', upload.single('image'), UserController.UserRegister);
+user_route.get('/verify', UserController.VerifyMail);
 
 module.exports = user_route;
-
-// const AddUser = async (req, res) => {
-//     try {
-//         const spassword = await securePassword(req.body.password)
-//
-//         const user = new User({
-//             name: req.body.name,
-//             email: req.body.email,
-//             phone: req.body.phone,
-//             image: req.file.filename,
-//             password: spassword,
-//             is_admin: 0,
-//         });
-//
-//         const userData = await user.save();
-//
-//         if (userData) {
-//             await sendVerifyMail(req.body.name, req.body.email, userData._id);
-//             res.render('registration', {message: 'Your registration has been successfully! Please check your email!'});
-//         } else {
-//             res.render('registration', {message: 'Your registration has been failed!'});
-//         }
-//
-//     } catch (err) {
-//         res.send(err.message);
-//     }
-// };
-
-// const AdminAddUser = async (req, res) => {
-//     try {
-//         const name = req.body.name;
-//         const email = req.body.email;
-//         const phone = req.body.phone;
-//         const image = req.file.filename;
-//         const password = randomstring.generate(8);
-//
-//         const hashedPassword = await securePassword(password);
-//
-//         const user = new User({
-//             name: name,
-//             email: email,
-//             phone: phone,
-//             image: image,
-//             password: hashedPassword,
-//             is_admin: 0,
-//         });
-//
-//         const userData = await user.save();
-//
-//         if (userData) {
-//             await addUserMail(name, email, password, userData._id);
-//             res.status(200).json({message: 'Add User Successfully!'})
-//         }
-//
-//     } catch (error) {
-//         res.status(500).json({error: error.message});
-//     }
-// }
