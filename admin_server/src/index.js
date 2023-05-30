@@ -10,12 +10,16 @@ const ProductRoute = require('./routes/ProductRoute');
 const UserRegisterRoute = require('./routes/UserRegisterRoute');
 const UserRoute = require('./routes/UserRoute');
 const AdminRoute = require('./routes/AdminRoute');
+const path = require("path");
 
 // Connect to db
 db.connect();
 
 // Enable CORS
 app.use(cors());
+
+// phục vụ các tệp tin tĩnh từ thư mục tài nguyên
+app.use(express.static(path.join(__dirname, '/public')));
 
 // For user route
 app.use('/', ProductRoute);
