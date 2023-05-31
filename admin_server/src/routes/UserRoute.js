@@ -78,7 +78,8 @@ user_route.post('/login', UserController.UserVerifyLogin);
 user_route.get('/logout', UserController.Logout);
 
 user_route.post('/forget', UserController.UserForgetVerify);
-user_route.get('/forget-password', UserController.ForgetPasswordLoad);
+user_route.get('/forget-password-sss', UserController.UserForgetPassword);
 user_route.post('/forget-password', UserController.UserResetPassword);
+
 
 module.exports = user_route;

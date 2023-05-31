@@ -69,7 +69,8 @@ const sendResetPasswordMail = async (name, email, token) => {
             from: USERNAME, // Use the same email username as the sender
             to: email,
             subject: 'For Reset Password',
-            html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:5000/forget-password?token=' + token + '"> Reset </a> your password.</p>',
+            // html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:5000/forget-password?token=' + token + '"> Reset </a> your password.</p>',
+            html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:3000/reset-password?token=' + token + '"> Reset </a> your password.</p>',
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -226,11 +227,12 @@ const ForgetPasswordLoad = async (req, res) => {
     try {
 
         const token = req.query.token;
-        const tokenData = await User.findOne({token: token})
+        const tokenData = await User.findOne({token: token});
         if (tokenData) {
-            res.render('forget-password', {user_id: tokenData._id})
+            // res.render('forget-password', {user_id: tokenData._id});
+            res.redirect('http://localhost:3000/reset-password', {user_id: tokenData._id});
         } else {
-            res.render('404', {message: 'Token không đúng'})
+            res.render('404', {message: 'Token không đúng'});
         }
 
     } catch (error) {
@@ -481,7 +483,7 @@ const UserForgetVerify = async (req, res) => {
             if (userData.is_verified === 1) {
 
                 const randomString = randomstring.generate();
-                const upadtedData = await User.updateOne({email: email}, {$set: {token: randomString}});
+                const updatedData = await User.updateOne({email: email}, {$set: {token: randomString}});
 
                 await sendResetPasswordMail(userData.name, userData.email, randomString);
                 res.status(200).send({message: 'Xin vui lòng check mail để reset lại mật khẩu!'})
@@ -499,6 +501,21 @@ const UserForgetVerify = async (req, res) => {
     }
 }
 
+const UserForgetPassword = async (req, res) => {
+    try {
+        const token = req.query.token;
+        const tokenData = await User.findOne({ token: token });
+
+        if (tokenData) {
+            res.status(200).json({ user_id: tokenData._id });
+        } else {
+            res.status(404).json({ message: 'Token không đúng' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
 const UserResetPassword = async (req, res) => {
     try {
 
@@ -513,7 +530,9 @@ const UserResetPassword = async (req, res) => {
             }
         });
 
-        res.redirect('http://localhost:3000/login');
+        res.status(200).json({message: 'Cập nhật mật khẩu thành công!'});
+
+        // res.redirect('http://localhost:3000/login');
 
     } catch (err) {
         res.status(500).json({message: 'Server error'});
@@ -545,5 +564,6 @@ module.exports = {
     UserVerifyLogin,
     Logout,
     UserForgetVerify,
+    UserForgetPassword,
     UserResetPassword
 }
