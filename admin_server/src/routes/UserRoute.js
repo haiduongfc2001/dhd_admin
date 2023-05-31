@@ -73,6 +73,7 @@ user_route.put('/user/:_id', upload.single('image'), AdminController.AdminEditUs
 user_route.delete('/user/:_id', AdminController.AdminDeleteUser);
 user_route.post('/register', upload.single('image'), UserController.UserRegister);
 user_route.get('/verify', UserController.VerifyMail);
-user_route.post('/login', UserController.UserVerifyLogin)
+user_route.post('/login', UserController.UserVerifyLogin);
+user_route.get('/logout', UserController.Logout);
 
 module.exports = user_route;

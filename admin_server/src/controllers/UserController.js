@@ -456,15 +456,35 @@ const UserVerifyLogin = async (req, res) => {
                     const token = jwt.sign({userId: userData._id}, process.env.JWT_SECRET);
 
                     // Lưu thông tin người dùng trong session
-                    req.session.adminId = userData._id;
+                    // req.session.adminId = userData._id;
+                    req.session.token = token;
 
-                    res.json({token});
+                    res.json({ message: 'Logged in successfully', token });
                 }
             }
         }
     } catch {
         res.status(500).json({message: 'Server error'});
     }
+}
+
+const Logout = async (req, res) => {
+    // const {token} = req.body;
+    //
+    // jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    //     if (err) {
+    //         return res.status(401).json({message: 'Invalid Token'});
+    //     }
+    //
+    //     res.status(200).json({message: 'Logged out successfully'});
+    //
+    // })
+
+    // Xóa token khỏi session để đăng xuất
+    delete req.session.token;
+
+    res.json({ message: 'Logged out successfully' });
+
 }
 
 
@@ -489,5 +509,6 @@ module.exports = {
     FindUserById,
     UserRegister,
     UserVerifyMail,
-    UserVerifyLogin
+    UserVerifyLogin,
+    Logout
 }
