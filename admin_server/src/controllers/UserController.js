@@ -34,8 +34,8 @@ const sendVerifyMail = async (name, email, user_id) => {
             to: email,
             subject: 'For Verification Mail',
             text: "Plaintext version of the message",
-            html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:5000/verify?id=' + user_id + '"> Verify </a> your mail.</p>',
-            // html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:3000/verify?id=' + user_id + '"> Verify </a> your mail.</p>',
+            // html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:5000/verify?id=' + user_id + '"> Verify </a> your mail.</p>',
+            html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:3000/verify?id=' + user_id + '"> Verify </a> your mail.</p>',
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -123,8 +123,8 @@ const AddUser = async (req, res) => {
 const VerifyMail = async (req, res) => {
     try {
         const updateInfo = await User.updateOne({_id: req.query.id}, {$set: {is_verified: 1}});
-        console.log(updateInfo);
-        res.render('email-verified');
+        // console.log(updateInfo);
+        // res.render('email-verified');
     } catch (err) {
         console.log(err.message);
     }
