@@ -26,6 +26,7 @@ user_route.use(bodyParser.urlencoded({ extended: true }));
 
 const multer = require("multer");
 const bcrypt = require("bcrypt");
+const randomstring = require("randomstring");
 user_route.use('/userImages', express.static('src/public/userImages'));
 
 const storage = multer.diskStorage({
@@ -75,5 +76,9 @@ user_route.post('/register', upload.single('image'), UserController.UserRegister
 user_route.get('/verify', UserController.VerifyMail);
 user_route.post('/login', UserController.UserVerifyLogin);
 user_route.get('/logout', UserController.Logout);
+
+user_route.post('/forget', UserController.UserForgetVerify);
+user_route.get('/forget-password', UserController.ForgetPasswordLoad);
+user_route.post('/forget-password', UserController.UserResetPassword);
 
 module.exports = user_route;

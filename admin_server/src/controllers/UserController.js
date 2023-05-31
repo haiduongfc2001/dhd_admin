@@ -69,7 +69,7 @@ const sendResetPasswordMail = async (name, email, token) => {
             from: USERNAME, // Use the same email username as the sender
             to: email,
             subject: 'For Reset Password',
-            html: '<p>Hi ' + name + ', please click here to <a href="http://127.0.0.1:5000/forget-password?token=' + token + '"> Reset </a> your password.</p>',
+            html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:5000/forget-password?token=' + token + '"> Reset </a> your password.</p>',
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -124,7 +124,6 @@ const VerifyMail = async (req, res) => {
         const updateInfo = await User.updateOne({_id: req.query.id}, {$set: {is_verified: 1}});
         console.log(updateInfo);
         res.render('email-verified');
-        // res.redirect('http://localhost:3000/verify')
     } catch (err) {
         console.log(err.message);
     }
@@ -422,21 +421,6 @@ const UserVerifyLogin = async (req, res) => {
         const {email, password} = req.body;
 
         const userData = await User.findOne({email});
-        // if (userData) {
-        //     const passwordMatch = await bcrypt.compare(password, userData.password);
-        //     if (passwordMatch) {
-        //         if (userData.is_verified === 0) {
-        //             res.status(400).json({ message: 'Bạn chưa xác thực tài khoản. ' +
-        //                     'Xin check mail được gửi đến để xác thực tài khoản'});
-        //         } else {
-        //             res.session.user_id = userData._id;
-        //         }
-        //     } else {
-        //         res.status(404).json({message: 'Email hoặc mật khẩu không đúng!'})
-        //     }
-        // } else {
-        //     res.status(404).json({message: 'Email hoặc mật khẩu không đúng!'})
-        // }
 
         if (!userData) {
             return res.status(401).json({message: 'Bạn chưa đăng ký tài khoản'});
@@ -487,6 +471,55 @@ const Logout = async (req, res) => {
 
 }
 
+const UserForgetVerify = async (req, res) => {
+    try {
+
+        const {email} = req.body;
+        const userData = await User.findOne({ email: email });
+
+        if (userData) {
+            if (userData.is_verified === 1) {
+
+                const randomString = randomstring.generate();
+                const upadtedData = await User.updateOne({email: email}, {$set: {token: randomString}});
+
+                await sendResetPasswordMail(userData.name, userData.email, randomString);
+                res.status(200).send({message: 'Xin vui lòng check mail để reset lại mật khẩu!'})
+
+            } else {
+                res.status(401).json({ message: 'Bạn chưa xác thực tài khoản. ' +
+                        'Xin check mail được gửi đến để xác thực tài khoản'});
+            }
+        } else {
+            res.status(401).json({ message: 'Bạn chưa đăng ký tài khoản!'});
+        }
+
+    } catch (err) {
+        res.status(500).json({message: 'Server error'});
+    }
+}
+
+const UserResetPassword = async (req, res) => {
+    try {
+
+        const password = req.body.password;
+        const user_id = req.body.user_id;
+
+        const secure_password = await securePassword(password);
+        const updatedData = await User.findByIdAndUpdate({_id: user_id}, {
+            $set: {
+                password: secure_password,
+                token: ''
+            }
+        });
+
+        res.redirect('http://localhost:3000/login');
+
+    } catch (err) {
+        res.status(500).json({message: 'Server error'});
+    }
+}
+
 
 module.exports = {
     LoadRegister,
@@ -510,5 +543,7 @@ module.exports = {
     UserRegister,
     UserVerifyMail,
     UserVerifyLogin,
-    Logout
+    Logout,
+    UserForgetVerify,
+    UserResetPassword
 }
