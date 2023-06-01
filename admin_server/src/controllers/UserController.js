@@ -428,7 +428,7 @@ const UserVerifyLogin = async (req, res) => {
             return res.status(401).json({message: 'Bạn chưa đăng ký tài khoản'});
         } else {
             if (userData.is_verified === 0) {
-                res.status(401).json({ message: 'Bạn chưa xác thực tài khoản. ' +
+                return res.status(401).json({ message: 'Bạn chưa xác thực tài khoản. ' +
                         'Xin check mail được gửi đến để xác thực tài khoản'});
             } else {
                 // Compare the provided password with the hashed password stored in the database
@@ -439,18 +439,19 @@ const UserVerifyLogin = async (req, res) => {
                     return res.status(401).json({message: 'Email hoặc mật khẩu không đúng!'});
                 } else {
                     // Create a JWT token
-                    const token = jwt.sign({userId: userData._id}, process.env.JWT_SECRET);
+                    const token = jwt.sign({user_id: userData._id}, process.env.JWT_SECRET);
 
                     // Lưu thông tin người dùng trong session
                     // req.session.adminId = userData._id;
                     req.session.token = token;
+                    req.session.user_id = userData._id;
 
-                    res.json({ message: 'Logged in successfully', token });
+                    return res.json({ message: 'Logged in successfully', token, user_id: userData._id, user: userData });
                 }
             }
         }
     } catch {
-        res.status(500).json({message: 'Server error'});
+        return res.status(500).json({message: 'Server error'});
     }
 }
 

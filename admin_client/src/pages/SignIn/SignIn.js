@@ -14,7 +14,7 @@ import logoDHD from "~/assets/images/logo_dhdadmin.png";
 import {useNavigate} from 'react-router-dom';
 import api from "~/api/api";
 import { AuthContext } from '~/context/AuthContext';
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 
 import classNames from "classnames/bind";
 import styles from "./SignIn.module.scss";
@@ -200,6 +200,8 @@ function SignIn() {
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>
+
+            <ToastContainer />
         </div>
     );
 }

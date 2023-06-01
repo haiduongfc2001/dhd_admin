@@ -72,13 +72,18 @@ user_route.get('/users', UserController.AllUsers);
 user_route.get('/user/:_id', UserController.FindUserById);
 user_route.put('/user/:_id', upload.single('image'), AdminController.AdminEditUser)
 user_route.delete('/user/:_id', AdminController.AdminDeleteUser);
+
 user_route.post('/register', upload.single('image'), UserController.UserRegister);
 user_route.get('/verify', UserController.VerifyMail);
+
+user_route.get('/login', UserController.UserVerifyLogin);
 user_route.post('/login', UserController.UserVerifyLogin);
+
 user_route.get('/logout', UserController.Logout);
 
 user_route.post('/forget', UserController.UserForgetVerify);
-user_route.get('/forget-password-sss', UserController.UserForgetPassword);
+
+user_route.get('/forget-password', UserController.UserForgetPassword);
 user_route.post('/forget-password', UserController.UserResetPassword);
 
 

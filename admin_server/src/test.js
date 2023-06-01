@@ -1,33 +1,28 @@
-// const sendVerifyMail = async (name, email, user_id) => {
+// const UserVerifyLogin = async (req, res) => {
 //     try {
-//         const transporter = nodemailer.createTransport({
-//             host: HOST,
-//             port: PORT,
-//             secure: false,
-//             requireTLS: true,
-//             auth: {
-//                 user: USERNAME,
-//                 pass: PASSWORD,
-//             },
-//         });
 //
-//         const MailOptions = {
-//             from: USERNAME, // Use the same email username as the sender
-//             to: email,
-//             subject: 'For Verification Mail',
-//             text: "Plaintext version of the message",
-//             html: '<p>Hi ' + name + ', please click here to <a href="http://127.0.0.1:3000/verify?id=' + user_id + '"> Verify </a> your mail.</p>',
-//         }
+//         const {email, password} = req.body;
 //
-//         transporter.sendMail(MailOptions, function (error, info) {
-//             if (error) {
-//                 console.log(error);
-//             } else {
-//                 console.log('Email has been sent: ' + info.response);
+//         const userData = await User.findOne({email});
+//
+//         if (!userData) {
+//             return res.status(401).json({message: 'Bạn chưa đăng ký tài khoản'});
+//         } else {
+//             if (userData.is_verified === 0) {
+//                 res.status(401).json({ message: 'Bạn chưa xác thực tài khoản'});
+//             } else {const passwordMatch = await bcrypt.compare(password, userData.password);
+//                 if (!passwordMatch) {
+//                     return res.status(401).json({message: 'Email hoặc mật khẩu không đúng!'});
+//                 } else {
+//                     const token = jwt.sign({user_id: userData._id}, process.env.JWT_SECRET);
+//
+//                     req.session.token = token;
+//
+//                     res.json({ message: 'Logged in successfully', token, user_id: userData._id });
+//                 }
 //             }
-//         });
-//
-//     } catch (error) {
-//         console.log(error.message);
+//         }
+//     } catch {
+//         res.status(500).json({message: 'Server error'});
 //     }
-// };
+// }
