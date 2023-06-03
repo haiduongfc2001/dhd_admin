@@ -7,6 +7,8 @@ const randomstring = require('randomstring');
 require('dotenv').config(); // Add this line to load environment variables
 const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs");
 const securePassword = async (password) => {
     try {
         return await bcrypt.hash(password, 10);
@@ -540,6 +542,63 @@ const UserResetPassword = async (req, res) => {
     }
 }
 
+const UserEditProfile = async (req, res) => {
+    try {
+
+        // const name = req.body.name;
+        // const phone = req.body.phone;
+
+        const { name, phone } = req.body;
+
+        const userId = req.params._id;
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { name, phone },
+            { new: true }
+        );
+
+        res.status(200).json(updatedUser);
+
+        // const { name, phone } = req.body;
+        // const image = req.file.filename;
+        // const user_id = req.params._id;
+        //
+        // const user = await User.findById({user_id});
+        //
+        // if (!user) {
+        //     res.status(404).json({message: 'User not found'});
+        // }
+        //
+        // // Xóa ảnh cũ nếu người dùng update ảnh mới
+        // if (user.image) {
+        //     const imagePath = path.join(__dirname, '../public/userImages', user.image);
+        //     fs.unlink(imagePath, (err) => {
+        //         if (err) {
+        //             console.log(err);
+        //         }
+        //     });
+        // };
+        //
+        // const updatedUser = await User.findByIdAndUpdate(
+        //     user_id,
+        //     { name, phone, image },
+        //     { new: true }
+        // );
+        //
+        // res.status(200).json({ message: 'Thay đổi thông tin thành công!', updatedUser});
+
+    } catch (err) {
+        res.status(500).json({message: 'Server error'});
+    }
+}
+
 
 module.exports = {
     LoadRegister,
@@ -566,5 +625,6 @@ module.exports = {
     Logout,
     UserForgetVerify,
     UserForgetPassword,
-    UserResetPassword
+    UserResetPassword,
+    UserEditProfile
 }
