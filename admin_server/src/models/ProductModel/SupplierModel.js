@@ -1,17 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Product = new Schema({
+const Supplier = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        // minLength: 1
     },
-    quantity: {
-        type: Number,
+    country: {
+        type: String,
         required: true,
-        // minLength: 1
     },
 })
 
-module.exports = mongoose.model('Product', Product);
+module.exports = mongoose.model('Supplier', Supplier);

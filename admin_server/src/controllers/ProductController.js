@@ -1,14 +1,23 @@
-const Product = require("../models/ProductModel");
+const Product = require("../models/ProductModel/ProductModel");
+const Supplier = require("../models/ProductModel/SupplierModel");
 const randomstring = require("randomstring");
 const User = require("../models/UserModel");
 
 // Tất cả sản phẩm
 const AllProducts = async (req, res) => {
+    // try {
+    //     const products = await Product.find()
+    //     res.json(products);
+    // } catch (error) {
+    //     res.send(error.message);
+    // }
+
     try {
-        const products = await Product.find()
+        const products = await Product.find().populate('supplierID');
         res.json(products);
     } catch (error) {
-        res.send(error.message);
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 }
 

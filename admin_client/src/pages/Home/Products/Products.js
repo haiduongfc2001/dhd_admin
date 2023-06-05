@@ -13,6 +13,18 @@ import EditProduct from "~/pages/Home/Products/EditProduct";
 
 const cx = classNames.bind(styles)
 
+function formatPrice(price) {
+    return price.toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+        minimumFractionDigits: price % 1 === 0 ? 0 : 2,
+    });
+
+    // Sử dụng hàm formatPrice để định dạng giá sản phẩm
+    const formattedPrice = formatPrice(price);
+
+}
+
 function ListProducts() {
     const [products, setProducts] = useState([]);
     const [newProduct, setNewProduct] = useState({});
@@ -73,6 +85,8 @@ function ListProducts() {
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Category</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -80,8 +94,40 @@ function ListProducts() {
                 {products.map((product) => (
                     <tr key={product._id}>
                         <td style={{textAlign: "center"}}>{product._id}</td>
-                        <td>{product.name}</td>
+                        <td>
+                            {/*{product.name}*/}
+                            <div className='d-flex align-items-center'>
+                                <img
+                                    src={product.img}
+                                    alt="{user.name}"
+                                    style={{width: '45px', height: '45px'}}
+                                    className='rounded-circle'
+                                />
+                                <div className='ms-3'>
+                                    <p className='fw-bold mb-1'>{product.name}</p>
+                                    <p className='text-muted mb-0'>{product.supplierID.name}</p>
+                                </div>
+                            </div>
+                        </td>
                         <td>{product.quantity}</td>
+                        <td>
+                            <div className='ms-3'>
+                                <p
+                                    className='fw-bold mb-1'
+                                >
+                                    {formatPrice(product.price - product.discount)}
+                                </p>
+                                <p
+                                    className='text-muted mb-0'
+                                    style={{ textDecoration: "line-through" }}
+                                >
+                                    {formatPrice(product.price)}
+                                </p>
+                            </div>
+                        </td>
+                        <td>
+                            {product.category}
+                        </td>
                         <td>
                             {actionArray.map((action, index) => (
                                 <React.Fragment key={index}>

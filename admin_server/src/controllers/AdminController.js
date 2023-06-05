@@ -8,7 +8,7 @@ const fs = require("fs");
 
 require('dotenv').config(); // Add this line to load environment variables
 const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
-const Product = require("../models/ProductModel");
+const Product = require("../models/ProductModel/ProductModel");
 const path = require("path");
 
 const securePassword = async (password) => {
