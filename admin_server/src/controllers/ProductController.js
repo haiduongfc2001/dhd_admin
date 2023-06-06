@@ -178,6 +178,21 @@ const EditSupplier = async (req, res) => {
     }
 }
 
+const DeleteSupplier = async (req, res) => {
+    try {
+
+        const deleteSupplier = await Supplier.findOneAndRemove({_id: req.params._id});
+
+        if (deleteSupplier) {
+            res.send(`Supplier ${req.params._id} deleted successfully!`);
+        } else {
+            res.send(`Supplier ${req.params._id} not found!`);
+        }
+
+    } catch (error) {
+        res.status(500).json({message: 'Internal Server Error!'});
+    }
+}
 
 module.exports = {
     AddProduct,
@@ -191,4 +206,5 @@ module.exports = {
     FindSupplierById,
     AddSupplier,
     EditSupplier,
+    DeleteSupplier
 }

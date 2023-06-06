@@ -1,29 +1,29 @@
-import {BsTrash} from "react-icons/bs";
 import {Button} from "react-bootstrap";
 import {toast} from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 import {useState} from "react";
 import api from "~/api/api";
 
-function DeleteUser ({cx, styles, user, users, setUsers}) {
+function DeleteSupplier ({cx, supplier, suppliers, setSuppliers}) {
     const [show, setShow] = useState(false);
-    const [deleteUser, setDeleteUser] = useState(null);
+    
+    const [deleteSupplier, setDeleteSupplier] = useState(null);
 
     const handleClose = () => {
         setShow(false);
-        setDeleteUser(null);
+        setDeleteSupplier(null);
     }
 
     const handleShow = (id) => {
         setShow(true);
-        setDeleteUser(id);
+        setDeleteSupplier(id);
     };
 
-    const handleDeleteUser = (id) => {
+    const handleDeleteSupplier = (id) => {
         api
-            .delete(`/user/${id}`)
+            .delete(`/supplier/${id}`)
             .then(response => {
-                setUsers(users.filter((user) => user._id !== id));
+                setSuppliers(suppliers.filter((supplier) => supplier._id !== id));
             })
             .catch((error) => {
                 console.log(error);
@@ -31,9 +31,9 @@ function DeleteUser ({cx, styles, user, users, setUsers}) {
     };
 
     const handleComfirmDelete = () => {
-        handleDeleteUser(deleteUser);
+        handleDeleteSupplier(deleteSupplier);
         handleClose();
-        toast.error('User deleted successfully!', {
+        toast.error('Supplier deleted successfully!', {
             position: "bottom-center",
             autoClose: 3000,
             theme: "colored",
@@ -46,7 +46,7 @@ function DeleteUser ({cx, styles, user, users, setUsers}) {
                 variant="danger"
                 className={cx('button-delete')}
                 style={{fontSize: "var(--default-font-size-button)"}}
-                onClick={() => handleShow(user._id)}
+                onClick={() => handleShow(supplier._id)}
             >
                 {/*<BsTrash className={cx('icon-action')}/>*/}
                 Delete
@@ -62,7 +62,7 @@ function DeleteUser ({cx, styles, user, users, setUsers}) {
                 <Modal.Header closeButton>
                     <Modal.Title>Confirm Delete</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
+                <Modal.Body>Are you sure you want to delete this supplier?</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Cancel
@@ -76,4 +76,4 @@ function DeleteUser ({cx, styles, user, users, setUsers}) {
     )
 }
 
-export default DeleteUser;
+export default DeleteSupplier;

@@ -42,7 +42,6 @@ function Suppliers() {
             component: (supplier) => (
                 <DeleteSupplier
                     cx={cx}
-                    styles={styles}
                     supplier={supplier}
                     suppliers={suppliers}
                     setSuppliers={setSuppliers}
