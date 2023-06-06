@@ -53,7 +53,8 @@ const EditUser = ({cx, user}) => {
         formData.append("image", image);
 
         if (!name || !email || !phone || !image) {
-            setErrorMessage('Please enter all information!')
+            setErrorMessage('Please enter all information!');
+            return;
         }
 
         try {

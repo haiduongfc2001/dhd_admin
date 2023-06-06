@@ -1,56 +1,58 @@
-// import React, {useState} from 'react';
-// import {Button, FloatingLabel, Form} from "react-bootstrap";
-// import Modal from "react-bootstrap/Modal";
+// import {Button, Modal, Form, ModalTitle, FloatingLabel} from "react-bootstrap";
+// import {useEffect, useState} from "react";
 // import api from "~/api/api";
 //
-// function AddSupplier() {
+// const EditSupplier = ({cx, supplier}) => {
 //     const [show, setShow] = useState(false);
 //
-//     const [name, setName] = useState('');
-//     const [country, setCountry] = useState('');
+//     const [name, setName] = useState("");
+//     const [country, setCountry] = useState("");
 //
 //     const handleNameChange = (e) => {
 //         setName(e.target.value);
-//     }
+//     };
 //
 //     const handleCountryChange = (e) => {
 //         setCountry(e.target.value);
-//     }
+//     };
 //
 //     const handleShow = () => {
+//         setName(supplier.name);
+//         setCountry(supplier.country);
 //         setShow(true);
-//     }
+//     };
 //
 //     const handleClose = () => {
 //         setShow(false);
-//     }
+//     };
 //
-//     const handleAddSupplier = async (e) => {
+//     const handleEditSupplier = async (e) => {
 //         e.preventDefault();
 //
+//         // Tạo một đối tượng FormData để gửi dữ liệu
 //         const formData = new FormData();
-//         formData.append('name', name);
-//         formData.append('country', country);
-//
-//         if (!name || !country) {
-//             return;
-//         }
+//         formData.append("name", name);
+//         formData.append("country", country);
 //
 //         try {
-//
-//             const response = await api.post('/supplier', formData);
-//
-//             setShow(false);
-//             setName('');
-//             setCountry('');
-//
-//         } catch (e) {
-//             console.error(e);
+//             const response = await api.put(`/supplier/${supplier._id}`, formData, {
+//                 headers: {
+//                     'Content-Type': 'multipart/form-data',
+//                 },
+//             });
+//             const updatedSupplier = response.data;
+//             handleClose();
+//         } catch (error) {
+//             console.log(error);
 //         }
+//     };
 //
-//     }
+//     useEffect(() => {
+//         setName(supplier.name);
+//         setCountry(supplier.country);
+//     }, [supplier]);
 //
-//     const addSupplierForm = [
+//     const editSupplierForm = [
 //         {
 //             label: 'Supplier Name',
 //             type: "text",
@@ -70,25 +72,21 @@
 //     return (
 //         <>
 //             <Button onClick={handleShow}>
-//                 Add
+//                 Edit
 //             </Button>
 //
-//             <Modal
-//                 show={show}
-//                 onHide={handleClose}
-//             >
+//             <Modal show={show} onHide={handleClose}>
 //                 <Modal.Header closeButton>
-//                     <Modal.Title>Add Supplier</Modal.Title>
+//                     <ModalTitle>Edit Supplier</ModalTitle>
 //                 </Modal.Header>
 //                 <Modal.Body>
-//                     <Form inline='true'>
-//                         {addSupplierForm.map((form, index) => (
+//                     <Form>
+//                         {editSupplierForm.map((form, index) => (
 //                             <FloatingLabel
 //                                 key={index}
 //                                 label={form.label}
 //                             >
 //                                 <Form.Control
-//                                     autoFocus={form.id === "name"}
 //                                     type={form.type}
 //                                     id={form.id}
 //                                     value={form.value}
@@ -99,16 +97,16 @@
 //                     </Form>
 //                 </Modal.Body>
 //                 <Modal.Footer>
-//                     <Button variant="secondary" onClick={handleClose}>
+//                     <Button onClick={handleClose}>
 //                         Close
 //                     </Button>
-//                     <Button type="submit" onClick={handleAddSupplier}>
-//                         Add Supplier
+//                     <Button onClick={handleEditSupplier}>
+//                         Save
 //                     </Button>
 //                 </Modal.Footer>
 //             </Modal>
 //         </>
-//     )
-// }
+//     );
+// };
 //
-// export default AddSupplier;
+// export default EditSupplier;

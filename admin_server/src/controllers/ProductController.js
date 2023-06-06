@@ -120,6 +120,21 @@ const AllSuppliers = async (req, res) => {
     }
 }
 
+// Tìm nhà sản xuất theo id
+const FindSupplierById = async (req, res) => {
+    try {
+        const supplier = await Supplier.findById(req.params._id);
+
+        if (supplier) {
+            res.json(supplier);
+        } else {
+            return res.status(404).json({ error: 'Supplier not found' });
+        }
+    } catch (error) {
+        res.status(500).json({message: 'Internal Server Error!'});
+    }
+};
+
 // Thêm nhà sản xuất
 const AddSupplier = async (req, res) => {
     try {
@@ -133,7 +148,33 @@ const AddSupplier = async (req, res) => {
         res.status(200).json(supplier);
 
     } catch (error) {
-        res.send(error.message);
+        res.status(500).json({message: 'Internal Server Error!'});
+    }
+}
+
+const EditSupplier = async (req, res) => {
+    const { id } = req.params;
+    const { name, country } = req.body;
+
+    try {
+        // Kiểm tra xem nhà cung cấp có tồn tại không
+        const supplier = await Supplier.findById(id);
+        if (!supplier) {
+            return res.status(404).json({ error: 'Supplier not found' });
+        }
+
+        // Cập nhật thông tin nhà cung cấp
+        supplier.name = name;
+        supplier.country = country;
+
+        // Lưu các thay đổi vào cơ sở dữ liệu
+        await supplier.save();
+
+        // Trả về thông tin nhà cung cấp đã được cập nhật
+        res.json(supplier);
+
+    } catch (error) {
+        res.status(500).json({message: 'Internal Server Error!'});
     }
 }
 
@@ -147,5 +188,7 @@ module.exports = {
 
     // Supplier
     AllSuppliers,
+    FindSupplierById,
     AddSupplier,
+    EditSupplier,
 }

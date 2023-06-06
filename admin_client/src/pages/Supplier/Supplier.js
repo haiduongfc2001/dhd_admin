@@ -27,32 +27,29 @@ function Suppliers() {
             });
     });
 
-    // const actionArray = [
-    //     {
-    //         type: 'component',
-    //         component: (supplier) => (
-    //             <EditSupplier
-    //                 cx={cx}
-    //                 supplier={supplier}
-    //                 suppliers={suppliers}
-    //                 setSuppliers={setSuppliers}
-    //                 nameInputRef={nameInputRef}
-    //             />
-    //         ),
-    //     },
-    //     {
-    //         type: 'component',
-    //         component: (supplier) => (
-    //             <DeleteSupplier
-    //                 cx={cx}
-    //                 styles={styles}
-    //                 supplier={supplier}
-    //                 suppliers={suppliers}
-    //                 setSuppliers={setSuppliers}
-    //             />
-    //         ),
-    //     },
-    // ]
+    const actionArray = [
+        {
+            type: 'component',
+            component: (supplier) => (
+                <EditSupplier
+                    cx={cx}
+                    supplier={supplier}
+                />
+            ),
+        },
+        {
+            type: 'component',
+            component: (supplier) => (
+                <DeleteSupplier
+                    cx={cx}
+                    styles={styles}
+                    supplier={supplier}
+                    suppliers={suppliers}
+                    setSuppliers={setSuppliers}
+                />
+            ),
+        },
+    ]
 
     return (
         <>
@@ -67,6 +64,7 @@ function Suppliers() {
                     <th style={{ maxWidth: '215px', width: '215px' }}>Supplier ID</th>
                     <th>Supplier Name</th>
                     <th>Supplier Country</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -77,13 +75,13 @@ function Suppliers() {
                             {supplier.name}
                         </td>
                         <td>{supplier.country}</td>
-                        {/*<td>*/}
-                        {/*    {actionArray.map((action, index) => (*/}
-                        {/*        <React.Fragment key={index}>*/}
-                        {/*            {action.component(supplier)}*/}
-                        {/*        </React.Fragment>*/}
-                        {/*    ))}*/}
-                        {/*</td>*/}
+                        <td>
+                            {actionArray.map((action, index) => (
+                                <React.Fragment key={index}>
+                                    {action.component(supplier)}
+                                </React.Fragment>
+                            ))}
+                        </td>
                     </tr>
                 ))}
                 </tbody>

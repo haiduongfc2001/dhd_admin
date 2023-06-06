@@ -53,7 +53,7 @@ function AddSupplier({cx}) {
             setName('');
             setCountry('');
             setErrorMessage('');
-            toast.success('User added successfully!', {
+            toast.success('Supplier added successfully!', {
                 position: "bottom-center",
                 autoClose: 3000,
                 hideProgressBar: false,
