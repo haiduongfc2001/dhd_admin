@@ -1,22 +1,16 @@
 import React, {useEffect, useRef, useState} from 'react';
 
 import {MDBBadge, MDBTable, MDBTableHead, MDBTableBody} from 'mdb-react-ui-kit';
-// import { Button, Form, Table } from "react-bootstrap";
-// import { AiFillSave } from "react-icons/ai";
-// import { GiCancel } from "react-icons/gi";
-// import { HiPencilAlt } from "react-icons/hi";
 
-// import { Table } from "react-bootstrap";
-
-import classNames from "classnames/bind";
-import styles from "./Users.module.scss";
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
 import api from "~/api/api";
 import AddUser from "~/pages/Users/AddUser";
 import DeleteUser from "~/pages/Users/DeleteUser";
-import {ToastContainer} from "react-toastify";
 import EditUser from "~/pages/Users/EditUser";
+import {ToastContainer} from "react-toastify";
 
+import classNames from "classnames/bind";
+import styles from "./Users.module.scss";
 const cx = classNames.bind(styles);
 
 export default function Users() {

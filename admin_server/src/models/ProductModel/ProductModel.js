@@ -7,19 +7,19 @@ const Product = new Schema({
         required: true,
         // minLength: 1
     },
-    supplierID: {   // nha san xuat
+    supplierID: { // house san xuat
         type: Schema.Types.ObjectId,
-        ref: 'Supplier', // Tên của model Supplier liên quan
+        ref: 'Supplier', // Name of the relevant Supplier model
         required: true,
     },
     category: {
-      type: String,
-      required: true,
+        type: String,
+        required: true,
     },
-    // categoryID: {   // loai san pham
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Category', // Tên của model Supplier liên quan
-    //     required: true,
+    // categoryID: { // category ID
+    // type: Schema.Types.ObjectId,
+    // ref: 'Category', // Name of the relevant Supplier model
+    // required: true,
     // },
     description: {
         type: String,

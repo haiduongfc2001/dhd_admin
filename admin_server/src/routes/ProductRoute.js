@@ -21,4 +21,8 @@ productRoute.post('/product', ProductController.AddProduct);
 productRoute.put('/product/:_id', ProductController.EditProduct);
 productRoute.delete('/product/:_id', ProductController.DeleteProduct);
 
+// Supplier
+productRoute.get('/suppliers', ProductController.AllSuppliers);
+productRoute.post('/supplier', ProductController.AddSupplier);
+
 module.exports = productRoute;

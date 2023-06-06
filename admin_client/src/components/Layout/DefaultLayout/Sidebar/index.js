@@ -13,7 +13,7 @@ const Sidebar = () => {
         {icon: <AiOutlineShoppingCart className={cx('icon-sidebar')}/>, text: "Products", link: "/products"},
         {icon: <FaUserAlt className={cx('icon-sidebar')}/>, text: "Users", link: "/users"},
         {icon: <BsFillCartCheckFill className={cx('icon-sidebar')}/>, text: "Orders", link: "/orders"},
-        {icon: <FaUserPlus className={cx('icon-sidebar')}/>, text: "Register", link: "/register"}
+        {icon: <FaUserPlus className={cx('icon-sidebar')}/>, text: "Supplier", link: "/supplier"}
     ];
 
     return (

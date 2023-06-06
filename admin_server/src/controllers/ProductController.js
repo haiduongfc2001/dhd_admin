@@ -13,8 +13,10 @@ const AllProducts = async (req, res) => {
     // }
 
     try {
+
         const products = await Product.find().populate('supplierID');
         res.json(products);
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
@@ -24,7 +26,7 @@ const AllProducts = async (req, res) => {
 // Tìm sản phẩm theo id
 const FindProductById = async (req, res) => {
     try {
-        const product = await Product.findById(req.params._id);
+        const product = await Product.findById(req.params._id).populate('supplierID');
 
         if (product) {
             res.json(product);
@@ -40,13 +42,17 @@ const FindProductById = async (req, res) => {
 const AddProduct = async (req, res) => {
     try {
 
-        const product = new Product({
-            name: req.body.name,
-            quantity: req.body.quantity,
-        });
+        // const product = new Product({
+        //     name: req.body.name,
+        //     quantity: req.body.quantity,
+        // });
 
-        const result = await product.save();
-        res.json(result);
+        // const result = await product.save();
+        // res.json(result);
+
+        const product = new Product(req.body);
+        await product.save();
+        res.status(200).json(product);
 
     } catch (error) {
         res.send(error.message);
@@ -102,10 +108,44 @@ const DeleteProduct = async (req, res) => {
 // });
 
 
+// Tất cả các nhà cung cấp (Supplier)
+const AllSuppliers = async (req, res) => {
+    try {
+
+        const suppliers = await Supplier.find();
+        res.json(suppliers);
+
+    } catch {
+        res.status(500).json({message: 'Internal Server Error!'});
+    }
+}
+
+// Thêm nhà sản xuất
+const AddSupplier = async (req, res) => {
+    try {
+
+        // const product = new Product(req.body);
+        // await product.save();
+        // res.status(200).json(product);
+
+        const supplier = new Supplier(req.body);
+        await supplier.save();
+        res.status(200).json(supplier);
+
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
+
 module.exports = {
     AddProduct,
     AllProducts,
     FindProductById,
     EditProduct,
     DeleteProduct,
+
+    // Supplier
+    AllSuppliers,
+    AddSupplier,
 }

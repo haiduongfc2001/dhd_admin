@@ -10,20 +10,9 @@ import classNames from "classnames/bind"
 import styles from "./Product.module.scss"
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
 import EditProduct from "~/pages/Home/Products/EditProduct";
+import formatPrice from "~/hooks/formatPrice";
 
 const cx = classNames.bind(styles)
-
-function formatPrice(price) {
-    return price.toLocaleString("vi-VN", {
-        style: "currency",
-        currency: "VND",
-        minimumFractionDigits: price % 1 === 0 ? 0 : 2,
-    });
-
-    // Sử dụng hàm formatPrice để định dạng giá sản phẩm
-    const formattedPrice = formatPrice(price);
-
-}
 
 function ListProducts() {
     const [products, setProducts] = useState([]);

@@ -42,7 +42,8 @@ function AddUser({cx, styles, setUsers}) {
         formData.append('image', image);
 
         if (!name || !email || !phone || !image) {
-            setErrorMessage('Please enter all information!')
+            setErrorMessage('Please enter all information!');
+            return;
         }
 
         try {

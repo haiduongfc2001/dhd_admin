@@ -6,8 +6,8 @@ import Test from "~/test";
 import Products from "~/pages/Home/Products/Products";
 import Users from "~/pages/Users/Users";
 import Orders from "~/pages/Orders/Orders";
-import Register from "~/pages/Register/Register";
 import NotFound from "~/components/NotFound/NotFound";
+import Suppliers from "~/pages/Supplier/Supplier";
 
 export const publicRoutes = [
     { path: '/admin/login', component: SignIn, layout: null },
@@ -22,7 +22,7 @@ export const privateRoutes = [
     { path: '/products', component: Products },
     { path: '/users', component: Users },
     { path: '/orders', component: Orders },
-    { path: '/register', component: Register },
+    { path: '/supplier', component: Suppliers },
 ]
 
 const errorRoutes = [
