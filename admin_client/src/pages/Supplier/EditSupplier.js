@@ -8,6 +8,7 @@ const EditSupplier = ({cx, supplier}) => {
 
     const [name, setName] = useState("");
     const [country, setCountry] = useState("");
+    const [image, setImage] = useState("");
 
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -19,9 +20,14 @@ const EditSupplier = ({cx, supplier}) => {
         setCountry(e.target.value);
     };
 
+    const handleImageChange = (e) => {
+        setImage(e.target.value);
+    };
+
     const handleShow = () => {
         setName(supplier.name);
         setCountry(supplier.country);
+        setImage(supplier.image);
         setShow(true);
     };
 
@@ -33,8 +39,11 @@ const EditSupplier = ({cx, supplier}) => {
     const handleEditSupplier = async (e) => {
         e.preventDefault();
 
-        if (!name || !country) {
-            setErrorMessage('Xin nhập đủ thông tin!');
+        if (!name) {
+            setErrorMessage('Xin nhập tên của nhà sản xuất!');
+            return;
+        } else if (!country) {
+            setErrorMessage('Xin nhập vào trường country');
             return;
         }
 
@@ -44,6 +53,7 @@ const EditSupplier = ({cx, supplier}) => {
             const response = await api.put(`/supplier/${supplier._id}`, {
                 name,
                 country,
+                image,
             });
 
             const updatedSupplier = response.data;
@@ -114,6 +124,21 @@ const EditSupplier = ({cx, supplier}) => {
             value: country,
             onChange: handleCountryChange,
         },
+        {
+            label: (
+                <>
+                    Supplier Image{" "}
+                    <span
+                        style={{color: "red"}}
+                        dangerouslySetInnerHTML={{__html: "*"}}
+                    />
+                </>
+            ),
+            type: "text",
+            id: "image",
+            value: image,
+            onChange: handleImageChange,
+        },
     ]
 
     return (
@@ -153,6 +178,16 @@ const EditSupplier = ({cx, supplier}) => {
                                 />
                             </FloatingLabel>
                         ))}
+                        {supplier.image  ? (
+                            <img
+                                src={supplier.image}
+                                alt={supplier.name}
+                                style={{width: "125px", height: "60px"}}
+                            />
+                        ) : (
+                            <span>Không có ảnh</span>
+                        )
+                        }
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

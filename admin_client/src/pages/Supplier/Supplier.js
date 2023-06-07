@@ -61,6 +61,7 @@ function Suppliers() {
                 <thead>
                 <tr style={{backgroundColor: 'antiquewhite'}} className={cx('table-supplier-category')}>
                     <th style={{ maxWidth: '215px', width: '215px' }}>Supplier ID</th>
+                    <th>Supplier Logo</th>
                     <th>Supplier Name</th>
                     <th>Supplier Country</th>
                     <th>Actions</th>
@@ -71,8 +72,15 @@ function Suppliers() {
                     <tr key={supplier._id}>
                         <td style={{textAlign: "center"}}>{supplier._id}</td>
                         <td>
-                            {supplier.name}
+                            {supplier.image && (
+                                <img
+                                    src={supplier.image}
+                                    alt={supplier.name}
+                                    className={cx('supplier-image')}
+                                />
+                            )}
                         </td>
+                        <td>{supplier.name}</td>
                         <td>{supplier.country}</td>
                         <td>
                             {actionArray.map((action, index) => (

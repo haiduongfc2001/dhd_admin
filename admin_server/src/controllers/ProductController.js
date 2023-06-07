@@ -154,7 +154,7 @@ const AddSupplier = async (req, res) => {
 
 const EditSupplier = async (req, res) => {
     const { id } = req.params;
-    const { name, country } = req.body;
+    const { name, country, image } = req.body;
 
     try {
         // Kiểm tra xem nhà cung cấp có tồn tại không
@@ -166,6 +166,7 @@ const EditSupplier = async (req, res) => {
         // Cập nhật thông tin nhà cung cấp
         supplier.name = name;
         supplier.country = country;
+        supplier.image = image;
 
         // Lưu các thay đổi vào cơ sở dữ liệu
         await supplier.save();

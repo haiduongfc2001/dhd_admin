@@ -10,6 +10,7 @@ function AddSupplier({cx}) {
 
     const [name, setName] = useState('');
     const [country, setCountry] = useState('');
+    const [image, setImage] = useState('');
 
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -19,6 +20,10 @@ function AddSupplier({cx}) {
 
     const handleCountryChange = (e) => {
         setCountry(e.target.value);
+    }
+
+    const handleImageChange = (e) => {
+        setImage(e.target.value);
     }
 
     const handleShow = () => {
@@ -35,14 +40,18 @@ function AddSupplier({cx}) {
     const handleAddSupplier = async (e) => {
         e.preventDefault();
 
-        if (!name || !country) {
-            setErrorMessage('Xin nhập đủ thông tin!');
+        if (!name) {
+            setErrorMessage('Xin nhập tên của nhà sản xuất!');
+            return;
+        } else if (!country) {
+            setErrorMessage('Xin nhập vào trường country');
             return;
         }
 
         const data = {
             name: name,
-            country: country
+            country: country,
+            image: image,
         };
 
         try {
@@ -52,6 +61,7 @@ function AddSupplier({cx}) {
             setShow(false);
             setName('');
             setCountry('');
+            setImage('');
             setErrorMessage('');
             toast.success('Supplier added successfully!', {
                 position: "bottom-center",
@@ -111,6 +121,21 @@ function AddSupplier({cx}) {
             value: country,
             onChange: handleCountryChange,
         },
+        {
+            label: (
+                <>
+                    Supplier Image{" "}
+                    <span
+                        style={{color: "red"}}
+                        dangerouslySetInnerHTML={{__html: "*"}}
+                    />
+                </>
+            ),
+            type: "text",
+            id: "image",
+            value: image,
+            onChange: handleImageChange,
+        },
     ]
 
     return (
@@ -144,7 +169,6 @@ function AddSupplier({cx}) {
                                 className='mr-sm-2 mb-2'
                             >
                                 <Form.Control
-                                    // ref={form.name === "name" ? nameInputRef : null}
                                     autoFocus={form.id === "name"}
                                     type={form.type}
                                     id={form.id}
