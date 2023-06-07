@@ -11,15 +11,14 @@ import {ToastContainer} from "react-toastify";
 
 import classNames from "classnames/bind";
 import styles from "./Users.module.scss";
+import formatTime from "~/hooks/formatTime";
 const cx = classNames.bind(styles);
 
 export default function Users() {
 
-    const [user, setUser] = useState({});
     const [users, setUsers] = useState([]);
-    const [newUser, setNewUser] = useState({});
 
-    const tableArray = ['User', 'UserID', 'Phone', 'Status', 'Actions'];
+    const tableArray = ['User', 'UserID', 'Phone', 'Status','Creat Time', 'Actions'];
     const actionArray = [
         {
             type: 'component',
@@ -110,6 +109,14 @@ export default function Users() {
                                     }
                                 </MDBBadge>
 
+                            </td>
+                            <td>
+                                {formatTime(user.createdAt)}
+                                <div>
+                                    <span>Lần cập nhật gần nhất: </span>
+                                    <br />
+                                    {formatTime(user.updatedAt)};
+                                </div>
                             </td>
                             <td>
                                 {actionArray.map((action, index) => (

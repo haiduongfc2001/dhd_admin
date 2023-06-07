@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// const moment = require('moment-timezone');
+// const utcVietnam = moment.tz(Date.now(), 'Asia/Ho_Chi_Minh');
+// const formattedTime = utcVietnam.format('DD-MM-YYYY HH:mm:ss');
+
 const User = new Schema ({
     name: {
         type: String,
@@ -30,12 +34,25 @@ const User = new Schema ({
     },
     is_verified: {
         type: Number,
-        default: 0
+        default: 0,
     },
     token: {
         type: String,
-        default: ''
+        default: '',
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
     }
 })
+
+// User.pre('save', function(next) {
+//     this.updatedAt = Date.now();
+//     next();
+// });
 
 module.exports = mongoose.model('User', User);

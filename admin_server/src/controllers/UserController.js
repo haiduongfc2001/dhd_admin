@@ -560,9 +560,11 @@ const UserEditProfile = async (req, res) => {
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { name, phone },
+            { name, phone, updatedAt: Date.now() },
             { new: true }
         );
+
+        // await updatedUser.save();
 
         res.status(200).json(updatedUser);
 
