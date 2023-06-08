@@ -7,9 +7,12 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
 require('dotenv').config(); // Add this line to load environment variables
-const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
+const {HOST, PORT, USERNAME, PASSWORD, BASE_URL} = require("../config/MailConfig");
 const Product = require("../models/ProductModel/ProductModel");
 const path = require("path");
+
+// <a href="http://127.0.0.1:3000/verify?id=' + user_id + '"> Verify </a>
+
 
 const securePassword = async (password) => {
     try {
@@ -36,7 +39,7 @@ const sendResetPasswordMail = async (name, email, token) => {
             from: USERNAME, // Use the same email username as the sender
             to: email,
             subject: 'For Reset Password',
-            html: '<p>Hi ' + name + ', please click here to <a href="http://127.0.0.1:5000/admin/forget-password?token=' + token + '"> Reset </a> your password.</p>',
+            html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:3000/forget-password?token=' + token + '"> Reset </a> your password.</p>',
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -54,6 +57,8 @@ const sendResetPasswordMail = async (name, email, token) => {
 // For send mail
 const addUserMail = async (name, email, password, user_id) => {
     try {
+        const userVerificationLink = `${BASE_URL}/verify?id=${user_id}`;
+
         const transporter = nodemailer.createTransport({
             host: HOST,
             port: PORT,
@@ -69,11 +74,13 @@ const addUserMail = async (name, email, password, user_id) => {
             from: USERNAME, // Use the same email username as the sender
             to: email,
             subject: 'Admin add you and verify your email',
-            html: '<p>Hi ' + name + ', please click here to <a href="http://127.0.0.1:5000/verify?id=' + user_id + '"> Verify </a> your mail.</p>' +
+            html: '<p>Hi ' + name + ', please click here to <a href="' +
+                userVerificationLink +
+                '">Verify</a> your mail.</p>' +
                 '<br><br>' +
-                '<b>Email: ' + email + '</b>' +
+                'Email: <b>' + email + '</b>' +
                 '<br>' +
-                '<b>Password: ' + password + '</b>',
+                'Password: <b>' + password + '</b>',
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -387,28 +394,33 @@ const AdminLogout = async (req, res) => {
 
 const AdminAddUser = async (req, res) => {
     try {
-        const name = req.body.name;
-        const email = req.body.email;
-        const phone = req.body.phone;
-        const image = req.file.filename;
-        const password = randomstring.generate(8);
+        const existingUser = await User.findOne({email: req.body.email});
+        if (existingUser) {
+            return res.status(400).json({message: 'Tài khoản đã tồn tại!'})
+        } else {
+            const password = randomstring.generate(8);
 
-        const hashedPassword = await securePassword(password);
+            // Mã hóa mật khẩu trước khi lưu vào csdl
+            const hashedPassword = await securePassword(password);
 
-        const user = new User({
-            name: name,
-            email: email,
-            phone: phone,
-            image: image,
-            password: hashedPassword,
-            is_admin: 0,
-        });
+            const user = new User({
+                name: req.body.name,
+                email: req.body.email,
+                phone: req.body.phone,
+                image: req.file.filename,
+                password: hashedPassword,
+                is_admin: 0,
+            });
 
-        const userData = await user.save();
+            // Lưu user vào csdl
+            const userData = await user.save();
 
-        if (userData) {
-            await addUserMail(name, email, password, userData._id);
-            res.status(200).json({message: 'Add User Successfully!'})
+            if (userData) {
+                await addUserMail(req.body.name, req.body.email, password, userData._id);
+                return res.status(201).json({message: 'Add User Successfully!'})
+            } else {
+                return res.status(404).json({message: 'Add User Failure!'});
+            }
         }
 
     } catch (error) {

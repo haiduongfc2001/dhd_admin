@@ -39,6 +39,9 @@ const UserController = require("../controllers/UserController");
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const {authAdmin} = require("../middleware/AdminAuth");
+const randomstring = require("randomstring");
+const nodemailer = require("nodemailer");
+const {HOST, PORT, USERNAME, PASSWORD} = require("../config/MailConfig");
 
 // admin_route.get('/', AdminAuth.isLogout, AdminController.LoadLogin);
 // admin_route.post('/', AdminController.VerifyLogin);
@@ -77,9 +80,6 @@ admin_route.delete('/delete-user', AdminController.AdminDeleteUser);
 admin_route.post('/logout', AdminController.AdminLogout);
 
 module.exports = admin_route;
-
-
-
 
 
 
