@@ -31,8 +31,23 @@ td {
   font-size: var(--default-font-size)
 }
 
+tr td {
+  height: 60px;
+}
+
+tr td:nth-of-type(2) {
+  min-width: 240px;
+}
+
 .icon-action {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.limitLineClassName {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Số dòng tối đa hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
