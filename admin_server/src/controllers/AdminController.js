@@ -12,6 +12,7 @@ const Product = require("../models/ProductModel/ProductModel");
 const path = require("path");
 
 // <a href="http://127.0.0.1:3000/verify?id=' + user_id + '"> Verify </a>
+// <a href="http://127.0.0.1:3000/forget-password?token=' + token + '"> Reset </a>
 
 
 const securePassword = async (password) => {
@@ -24,6 +25,8 @@ const securePassword = async (password) => {
 
 const sendResetPasswordMail = async (name, email, token) => {
     try {
+        const resetPasswordLink = `${BASE_URL}/forget-password?token=${token}`;
+
         const transporter = nodemailer.createTransport({
             host: HOST,
             port: PORT,
@@ -39,7 +42,9 @@ const sendResetPasswordMail = async (name, email, token) => {
             from: USERNAME, // Use the same email username as the sender
             to: email,
             subject: 'For Reset Password',
-            html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:3000/forget-password?token=' + token + '"> Reset </a> your password.</p>',
+            html: '<p>Hi <b>' + name + '</b>, please click here to ' +
+                '<a href="' + resetPasswordLink + '"> Reset </a> ' +
+                'your password.</p>',
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -74,10 +79,10 @@ const addUserMail = async (name, email, password, user_id) => {
             from: USERNAME, // Use the same email username as the sender
             to: email,
             subject: 'Admin add you and verify your email',
-            html: '<p>Hi ' + name + ', please click here to <a href="' +
-                userVerificationLink +
-                '">Verify</a> your mail.</p>' +
-                '<br><br>' +
+            html: '<p>Hi ' + name + ', please click here to ' +
+                '<a href="' + userVerificationLink + '">Verify</a> ' +
+                'your mail.</p>' +
+                '<br>' +
                 'Email: <b>' + email + '</b>' +
                 '<br>' +
                 'Password: <b>' + password + '</b>',
@@ -460,7 +465,7 @@ const AdminEditUser = async (req, res) => {
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({message: 'User not found'});
         }
 
         // Delete the old photo if it exists
@@ -475,8 +480,8 @@ const AdminEditUser = async (req, res) => {
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { name, email, phone, image },
-            { new: true }
+            {name, email, phone, image},
+            {new: true}
         );
 
         res.status(200).json(updatedUser);
@@ -484,7 +489,6 @@ const AdminEditUser = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
-
 
 
 module.exports = {
