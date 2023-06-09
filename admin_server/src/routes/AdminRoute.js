@@ -77,6 +77,10 @@ admin_route.post('/login', AdminController.AdminLogin);
 admin_route.post('/add-user', upload.single('image'), AdminController.AdminAddUser);
 admin_route.delete('/delete-user', AdminController.AdminDeleteUser);
 
+admin_route.post('/forget', AdminController.AdminForgetVerify);
+admin_route.get('/forgot-password', AdminController.AdminResetPassword);
+admin_route.post('/forgot-password', AdminController.AdminResetPassword);
+
 admin_route.post('/logout', AdminController.AdminLogout);
 
 module.exports = admin_route;

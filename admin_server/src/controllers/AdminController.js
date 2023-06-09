@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
 require('dotenv').config(); // Add this line to load environment variables
-const {HOST, PORT, USERNAME, PASSWORD, BASE_URL} = require("../config/MailConfig");
+const {HOST, PORT, USERNAME, PASSWORD, BASE_URL, BASE_ADMIN_URL} = require("../config/MailConfig");
 const Product = require("../models/ProductModel/ProductModel");
 const path = require("path");
 
@@ -490,6 +490,86 @@ const AdminEditUser = async (req, res) => {
     }
 };
 
+const sendResetPasswordMailAdmin = async (name, email, token) => {
+    try {
+        const resetPasswordLink = `${BASE_ADMIN_URL}/admin/reset-password?token=${token}`;
+
+        const transporter = nodemailer.createTransport({
+            host: HOST,
+            port: PORT,
+            secure: false, // upgrade later with STARTTLS
+            requireTLS: true,
+            auth: {
+                user: USERNAME, // Use environment variable for email username
+                pass: PASSWORD, // Use environment variable for email password
+            },
+        });
+
+        const MailOptions = {
+            from: USERNAME, // Use the same email username as the sender
+            to: email,
+            subject: 'For Reset Password Admin',
+            html: '<p>Hi <b>' + name + '</b>, please click here to ' +
+                '<a href="' + resetPasswordLink + '"> Reset </a> ' +
+                'your password.</p>',
+        }
+
+        transporter.sendMail(MailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email has been sent: ' + info.response);
+            }
+        });
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+const AdminForgetVerify = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const userData = await User.findOne({email: email});
+
+        if (userData) {
+            if (userData.is_admin === 0) {
+                res.status(400).send({message: 'Email không đúng!!'});
+            } else {
+                const randomString = randomstring.generate();
+                const updatedData = await User.updateOne({email: email}, {$set: {token: randomString}});
+                await sendResetPasswordMailAdmin(userData.name, userData.email, randomString);
+                res.status(200).send({message: 'Xin vui lòng check mail để reset lại mật khẩu!'});
+            }
+        } else {
+            res.status(400).send({message: 'Email không đúng!!'});
+        }
+
+    } catch (error) {
+        res.status(500).json({message: 'Server error'});
+    }
+}
+
+const AdminResetPassword = async (req, res) => {
+    try {
+
+        const password = req.body.password;
+        const user_id = req.body.user_id;
+
+        const secure_password = await securePassword(password);
+        const updatedData = await User.findByIdAndUpdate({_id: user_id}, {
+            $set: {
+                password: secure_password,
+                token: ''
+            }
+        });
+
+        res.status(200).json({message: 'Cập nhật mật khẩu thành công!'});
+
+    } catch (error) {
+        res.status(500).json({message: 'Server error'});
+    }
+}
+
 
 module.exports = {
     LoadLogin,
@@ -512,5 +592,8 @@ module.exports = {
     AdminLogout,
     AdminAddUser,
     AdminEditUser,
-    AdminDeleteUser
+    AdminDeleteUser,
+
+    AdminForgetVerify,
+    AdminResetPassword
 }

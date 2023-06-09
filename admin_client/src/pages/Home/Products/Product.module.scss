@@ -33,11 +33,15 @@ td {
 
 tr td {
   height: 60px;
+
+  &:nth-of-type(2) {
+    min-width: 240px;
+  }
 }
 
-tr td:nth-of-type(2) {
-  min-width: 240px;
-}
+//tr td:nth-of-type(2) {
+//  min-width: 240px;
+//}
 
 .icon-action {
   display: flex;

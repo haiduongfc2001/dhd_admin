@@ -181,7 +181,7 @@ function SignIn() {
                                 {error && <p className='text-danger'>{error}</p>}
 
                                 <p className='small mb-3 pb-lg-2'>
-                                    <a className='text-black-50' href='/admin/login'>
+                                    <a className='text-black-50' href='/admin/forgot-password'>
                                         Forgot password?
                                     </a>
                                 </p>

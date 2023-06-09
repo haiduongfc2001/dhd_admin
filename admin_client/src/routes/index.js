@@ -8,9 +8,13 @@ import Users from "~/pages/Users/Users";
 import Orders from "~/pages/Orders/Orders";
 import NotFound from "~/components/NotFound/NotFound";
 import Suppliers from "~/pages/Supplier/Supplier";
+import ForgotPassword from "~/pages/SignIn/ForgotPassword/ForgotPassword";
+import ResetPassword from "~/pages/SignIn/ForgotPassword/ResetPassword";
 
 export const publicRoutes = [
     { path: '/admin/login', component: SignIn, layout: null },
+    { path: '/admin/forgot-password', component: ForgotPassword, layout: null },
+    { path: '/admin/reset-password', component: ResetPassword, layout: null },
     // { path: '/test', component: Test, layout: null },
     { path: '/not-found', component: NotFound, layout: null },
 ]
