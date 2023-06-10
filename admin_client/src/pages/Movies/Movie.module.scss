@@ -1,0 +1,53 @@
+//.button-update,
+//.button-delete {
+//  margin: 0 20px;
+//  align-items: center;
+//  justify-content: center;
+//}
+
+td Button {
+  margin: 0 5px;
+}
+
+.icon-action {
+  font-size: 1.4rem;
+}
+
+td {
+  font-size: var(--default-font-size)
+}
+
+
+.form-product input {
+  caret-color: var(--primary);
+}
+
+.table-product-category th:nth-child(1),
+.table-product-category th:nth-child(3) {
+  width: var(--default-width-table);
+}
+
+.table-product-category th {
+  font-size: var(--default-font-size)
+}
+
+.icon-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.supplier-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+tr td:nth-of-type(2) {
+  width: 125px;
+  height: 60px;
+}
+
+tr td {
+  vertical-align: middle;
+}

@@ -346,25 +346,25 @@ const AdminLogin = async (req, res) => {
         const admin = await User.findOne({email});
 
         // If admin doesn't exist, return an error
-        if (!admin) {
+        if (admin.is_admin !== 1) {
             return res.status(401).json({message: 'Invalid email or password'});
+        } else {
+            // Compare the provided password with the hashed password stored in the database
+            const passwordMatch = await bcrypt.compare(password, admin.password);
+
+            // If passwords don't match, return an error
+            if (!passwordMatch) {
+                return res.status(401).json({message: 'Invalid email or password'});
+            } else {
+                // Create a JWT token
+                const token = jwt.sign({adminId: admin._id}, process.env.JWT_SECRET);
+
+                // Lưu thông tin người dùng trong session
+                req.session.adminId = admin._id;
+
+                res.json({token});
+            }
         }
-
-        // Compare the provided password with the hashed password stored in the database
-        const passwordMatch = await bcrypt.compare(password, admin.password);
-
-        // If passwords don't match, return an error
-        if (!passwordMatch) {
-            return res.status(401).json({message: 'Invalid email or password'});
-        }
-
-        // Create a JWT token
-        const token = jwt.sign({adminId: admin._id}, process.env.JWT_SECRET);
-
-        // Lưu thông tin người dùng trong session
-        req.session.adminId = admin._id;
-
-        res.json({token});
 
     } catch (error) {
         console.error('Login error:', error);

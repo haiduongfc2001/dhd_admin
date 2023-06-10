@@ -175,9 +175,13 @@ const EditMovie = ({cx, movie}) => {
                         ))}
                         {movie.poster_path  ? (
                             <img
-                                src={movie.poster_path}
+                                src={
+                                    movie.poster_path.startsWith("/")
+                                        ? `https://image.tmdb.org/t/p/w300_and_h450_bestv2${movie.poster_path}`
+                                        : movie.poster_path
+                                }
                                 alt={movie.title}
-                                style={{width: "125px", height: "60px"}}
+                                style={{width: "125px", height: "80px"}}
                             />
                         ) : (
                             <span>Không có ảnh</span>

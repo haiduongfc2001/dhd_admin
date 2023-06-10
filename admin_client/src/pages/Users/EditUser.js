@@ -86,11 +86,11 @@ const EditUser = ({cx, user}) => {
         }
     };
 
-    useEffect(() => {
-        setName(user.name);
-        setEmail(user.email);
-        setPhone(user.phone);
-    }, [user]);
+    // useEffect(() => {
+    //     setName(user.name);
+    //     setEmail(user.email);
+    //     setPhone(user.phone);
+    // }, [user]);
 
     useEffect(() => {
         if (show) {

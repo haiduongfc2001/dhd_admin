@@ -1,4 +1,5 @@
 const Movie = require("../models/MovieModel/MovieModel");
+const axios = require("axios");
 
 // Tất cả movie
 const AllMovies = async (req, res) => {
@@ -100,11 +101,44 @@ const DeleteMovie = async (req, res) => {
 //     });
 // });
 
+const AddMovieByLink = async (req, res) => {
+    try {
+        // const movie = new Movie(req.body);
+        // await movie.save();
+        // res.status(200).json(movie);
+
+        // Access the link value from the request body
+        const { link } = req.body;
+
+        // Make a request to fetch the movie data based on the provided link
+        const response = await axios.get(link);
+        const movieData = response.data;
+
+        // Process the movie data and add it to your database or perform any other necessary operations
+        // Replace this logic with your actual implementation to add the movie based on the provided link
+
+        // Create a new movie instance
+        const newMovie = new Movie({
+            ...movieData,
+        });
+
+        // Save the movie to the database
+        const savedMovie = await newMovie.save();
+
+        // Return a success response with the saved movie data
+        res.status(201).json(savedMovie);
+
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+
 
 module.exports = {
-    AddMovie,
     AllMovies,
     FindMovieById,
+    AddMovie,
     EditMovie,
     DeleteMovie,
+    AddMovieByLink
 }

@@ -20,5 +20,6 @@ movieRoute.get('/movie/:_id', MovieController.FindMovieById);
 movieRoute.post('/movie', MovieController.AddMovie);
 movieRoute.put('/movie/:_id', MovieController.EditMovie);
 movieRoute.delete('/movie/:_id', MovieController.DeleteMovie);
+movieRoute.post('/movie/add-link', MovieController.AddMovieByLink);
 
 module.exports = movieRoute;
