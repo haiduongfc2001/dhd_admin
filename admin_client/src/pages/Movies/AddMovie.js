@@ -1,85 +1,67 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Button, FloatingLabel, Form} from "react-bootstrap";
+import React, {useState} from "react";
 import {IoMdAddCircle} from "react-icons/io";
-import Modal from "react-bootstrap/Modal";
+import {Button, FloatingLabel, Form, ModalTitle} from "react-bootstrap";
 import {toast} from "react-toastify";
+import Modal from "react-bootstrap/Modal";
 import api from "~/api/api";
 
-function AddSupplier({cx}) {
+function AddMovie({ cx }) {
+
     const [show, setShow] = useState(false);
-
-    const [name, setName] = useState('');
-    const [country, setCountry] = useState('');
-    const [image, setImage] = useState('');
-
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleNameChange = (e) => {
-        setName(e.target.value);
-    }
-
-    const handleCountryChange = (e) => {
-        setCountry(e.target.value);
-    }
-
-    const handleImageChange = (e) => {
-        setImage(e.target.value);
-    }
+    const [title, setTitle] = useState('');
+    const [overview, setOverview] = useState('');
+    const [poster_path, setPoster_Path] = useState('');
 
     const handleShow = () => {
         setShow(true);
-    }
-
+    };
     const handleClose = () => {
         setShow(false);
-        setName('');
-        setCountry('');
-        setImage('');
+        setTitle('');
+        setOverview('');
+        setPoster_Path('');
         setErrorMessage('');
-    }
+    };
 
-    const handleAddSupplier = async (e) => {
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+    };
+
+    const handleOverviewChange = (e) => {
+        setOverview(e.target.value);
+    };
+
+    const handlePoster_PathChange = (e) => {
+        setPoster_Path(e.target.value);
+    };
+
+    const handleAddMovie = async (e) => {
         e.preventDefault();
 
-        if (!name) {
-            setErrorMessage('Xin nhập tên của nhà sản xuất!');
-            return;
-        } else if (!country) {
-            setErrorMessage('Xin nhập vào trường country');
+        if (!title || !overview || !poster_path) {
+            toast.error("Xin vui lòng nhập đầy đủ thông tin!");
             return;
         }
 
         const data = {
-            name: name,
-            country: country,
-            image: image,
-        };
+            title: title,
+            overview: overview,
+            poster_path: poster_path,
+        }
 
         try {
-
-            const response = await api.post('/supplier', data);
+            const response = await api.post('/movie', data);
 
             console.log(response.data);
 
-            setShow(false);
-            setName('');
-            setCountry('');
-            setImage('');
+            setShow(false);setTitle('');
+            setOverview('');
+            setPoster_Path('');
             setErrorMessage('');
-            toast.success('Supplier added successfully!', {
-                position: "bottom-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
 
-        } catch (e) {
-            console.error(e);
-            toast.error('Error adding supplier!', {
+            toast.success('Movie added successfully!', {
                 position: "bottom-center",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -89,29 +71,39 @@ function AddSupplier({cx}) {
                 progress: undefined,
                 theme: "colored",
             });
+        } catch (error) {
+            // setErrorMessage('Failed to add movie');
+            toast.error('Error adding movie!', {
+                position: "bottom-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+            console.error(error);
         }
-    }
+    };
 
-    const addSupplierForm = [
+    const addMovieForm = [
         {
             label: (
                 <>
-                    Supplier Name{" "}
-                    <span
-                        style={{color: "red"}}
-                        dangerouslySetInnerHTML={{__html: "*"}}
-                    />
+                    Movie Name{" "}
+                    <span style={{color: "red"}} dangerouslySetInnerHTML={{__html: "*"}}/>
                 </>
             ),
             type: "text",
-            id: "name",
-            value: name,
-            onChange: handleNameChange,
+            id: "title",
+            value: title,
+            onChange: handleTitleChange,
         },
         {
             label: (
                 <>
-                    Supplier Country{" "}
+                    Movie Overview{" "}
                     <span
                         style={{color: "red"}}
                         dangerouslySetInnerHTML={{__html: "*"}}
@@ -119,14 +111,14 @@ function AddSupplier({cx}) {
                 </>
             ),
             type: "text",
-            id: "country",
-            value: country,
-            onChange: handleCountryChange,
+            id: "overview",
+            value: overview,
+            onChange: handleOverviewChange,
         },
         {
             label: (
                 <>
-                    Supplier Image{" "}
+                    Movie Poster Path{" "}
                     <span
                         style={{color: "red"}}
                         dangerouslySetInnerHTML={{__html: "*"}}
@@ -134,9 +126,9 @@ function AddSupplier({cx}) {
                 </>
             ),
             type: "text",
-            id: "image",
-            value: image,
-            onChange: handleImageChange,
+            id: "poster_path",
+            value: poster_path,
+            onChange: handlePoster_PathChange,
         },
     ]
 
@@ -153,27 +145,25 @@ function AddSupplier({cx}) {
 
             <Modal
                 show={show}
-                backdrop={'static'}
+                backdrop={"static"}
                 centered
                 onHide={handleClose}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Add Supplier</Modal.Title>
+                    <ModalTitle>Add Movie</ModalTitle>
                 </Modal.Header>
                 <Modal.Body>
-                    {errorMessage && <p className={'text-danger'}>{errorMessage}</p>}
-
-                    <Form className={cx('form-supplier')}>
-                        {addSupplierForm.map((form, index) => (
+                    <Form className={cx('form-movie')}>
+                        {addMovieForm.map((form, index) => (
                             <FloatingLabel
                                 key={index}
                                 label={form.label}
-                                className='mr-sm-2 mb-2'
+                                className="mr-sm-2 mb-2"
                             >
                                 <Form.Control
-                                    autoFocus={form.id === "name"}
-                                    type={form.type}
+                                    autoFocus={form.id === 'title'}
                                     id={form.id}
+                                    type={form.type}
                                     value={form.value}
                                     onChange={form.onChange}
                                     size="lg"
@@ -183,13 +173,16 @@ function AddSupplier({cx}) {
                             </FloatingLabel>
                         ))}
                     </Form>
+
+                    {errorMessage && <p className={'text-danger'}>{errorMessage}</p>}
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button type="submit" variant="primary" onClick={handleAddSupplier}>
-                        Add Supplier
+                    <Button variant="primary" onClick={handleAddMovie}>
+                        Add Movie
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -197,4 +190,4 @@ function AddSupplier({cx}) {
     )
 }
 
-export default AddSupplier;
+export default AddMovie;

@@ -137,14 +137,19 @@ function SignIn() {
                                     alt="logo dhd"
                                     className={cx('logo-admin')}
                                 />
-                                <p className="text-black-150 mt-3 mb-3">
-                                    Please login with your admin account!
+                                <p className="text-black-150 mt-3 mb-4">
+                                    Vui lòng đăng nhập bằng tài khoản admin của bạn!
                                 </p>
 
                                 <MDBInput
                                     wrapperClass='mb-4 mx-5 w-100'
                                     labelClass='text-black'
-                                    label='Email address'
+                                    label={(
+                                        <>
+                                            Email
+                                            <span style={{color: 'red', marginLeft: '3px'}}>*</span>
+                                        </>
+                                    )}
                                     // id='formControlLg'
                                     type='email'
                                     size='lg'
@@ -158,7 +163,12 @@ function SignIn() {
                                 <MDBInput
                                     wrapperClass='mb-4 mx-5 w-100'
                                     labelClass='text-black'
-                                    label='Password'
+                                    label={(
+                                        <>
+                                            Mật khẩu
+                                            <span style={{color: 'red', marginLeft: '3px'}}>*</span>
+                                        </>
+                                    )}
                                     // id='formControlLg'
                                     type={PasswordInputType}
                                     size='lg'

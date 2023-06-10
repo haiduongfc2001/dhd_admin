@@ -8,12 +8,12 @@ import api from "~/api/api";
 function AddUser({cx, styles, setUsers}) {
     const [show, setShow] = useState(false);
     const nameInputRef = useRef(null);
-    const [newUser, setNewUser] = useState({});
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [image, setImage] = useState(null);
+
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleNameChange = (e) => {

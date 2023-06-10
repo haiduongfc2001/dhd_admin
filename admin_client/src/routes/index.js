@@ -10,6 +10,7 @@ import NotFound from "~/components/NotFound/NotFound";
 import Suppliers from "~/pages/Supplier/Supplier";
 import ForgotPassword from "~/pages/SignIn/ForgotPassword/ForgotPassword";
 import ResetPassword from "~/pages/SignIn/ForgotPassword/ResetPassword";
+import Movies from "~/pages/Movies/Movies";
 
 export const publicRoutes = [
     { path: '/admin/login', component: SignIn, layout: null },
@@ -24,6 +25,7 @@ export const privateRoutes = [
     { path: '/', component: Home },
     { path: '/account', component: CreateDefaultAdmin },
     { path: '/products', component: Products },
+    { path: '/movies', component: Movies },
     { path: '/users', component: Users },
     { path: '/orders', component: Orders },
     { path: '/supplier', component: Suppliers },

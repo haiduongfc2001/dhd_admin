@@ -62,8 +62,6 @@ export default function Users() {
             <AddUser
                 cx={cx}
                 styles={styles}
-                // newUser={newUser}
-                // setNewUser={setNewUser}
                 setUsers={setUsers}
             />
 

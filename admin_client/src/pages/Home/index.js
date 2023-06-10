@@ -1,7 +1,7 @@
 import styles from './Home.module.scss'
 import classNames from "classnames/bind"
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
-import ListProducts from "~/pages/Home/Products/Products";
+import ListMovies from "~/pages/Movies/Movies";
 
 const cx = classNames.bind(styles)
 
@@ -9,7 +9,7 @@ function Home() {
     return(
         <div className={cx('wrapper')}>
             {/*<BreadcrumbExample />*/}
-            <ListProducts />
+            <ListMovies />
         </div>
     )
 }
