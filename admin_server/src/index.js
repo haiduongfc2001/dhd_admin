@@ -31,6 +31,11 @@ app.use('/', UserRegisterRoute);
 app.use('/', UserRoute);
 app.use('/admin', AdminRoute);
 
+const dataMovies = require('./config/dataMovie.json');
+app.get('/api/all-movies', async (req, res) => {
+    res.json(dataMovies);
+});
+
 app.listen(5000, () => {
     console.log('Server is running...');
 });

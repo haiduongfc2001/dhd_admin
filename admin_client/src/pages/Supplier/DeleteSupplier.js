@@ -3,6 +3,7 @@ import {toast} from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 import {useState} from "react";
 import api from "~/api/api";
+import {BsTrash} from "react-icons/bs";
 
 function DeleteSupplier ({cx, supplier, suppliers, setSuppliers}) {
     const [show, setShow] = useState(false);
@@ -48,8 +49,8 @@ function DeleteSupplier ({cx, supplier, suppliers, setSuppliers}) {
                 style={{fontSize: "var(--default-font-size-button)"}}
                 onClick={() => handleShow(supplier._id)}
             >
-                {/*<BsTrash className={cx('icon-action')}/>*/}
-                Delete
+                <BsTrash className={cx('icon-action')}/>
+                {/*Delete*/}
             </Button>
 
             <Modal

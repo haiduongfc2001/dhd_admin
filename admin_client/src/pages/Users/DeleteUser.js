@@ -49,8 +49,8 @@ function DeleteUser ({cx, styles, user, users, setUsers}) {
                 style={{fontSize: "var(--default-font-size-button)"}}
                 onClick={() => handleShow(user._id)}
             >
-                {/*<BsTrash className={cx('icon-action')}/>*/}
-                Delete
+                <BsTrash className={cx('icon-action')}/>
+                {/*Delete*/}
             </Button>
 
             <Modal

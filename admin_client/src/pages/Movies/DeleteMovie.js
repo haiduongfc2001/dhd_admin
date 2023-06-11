@@ -3,6 +3,7 @@ import {toast} from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 import {useState} from "react";
 import api from "~/api/api";
+import {BsTrash} from "react-icons/bs";
 
 const DeleteMovie = ({cx, movie, movies, setMovies}) => {
 
@@ -47,8 +48,8 @@ const DeleteMovie = ({cx, movie, movies, setMovies}) => {
                 style={{fontSize: "var(--default-font-size-button)"}}
                 onClick={() => handleShowDeleteModal(movie._id)}
             >
-                {/*<BsTrash className={cx('icon-action')}/>*/}
-                Delete
+                <BsTrash className={cx('icon-action')}/>
+                {/*Delete*/}
             </Button>
 
             <Modal

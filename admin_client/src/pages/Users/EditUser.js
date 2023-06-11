@@ -2,6 +2,7 @@ import {Button, Modal, Form, ModalTitle, FloatingLabel} from "react-bootstrap";
 import {useEffect, useRef, useState} from "react";
 import {toast} from "react-toastify";
 import api from "~/api/api";
+import {AiFillEdit} from "react-icons/ai";
 
 const EditUser = ({cx, user}) => {
     const [show, setShow] = useState(false);
@@ -169,7 +170,8 @@ const EditUser = ({cx, user}) => {
                 style={{fontSize: "var(--default-font-size-button)"}}
                 onClick={handleShow}
             >
-                Edit
+                <AiFillEdit className={cx('icon-action')}/>
+                {/*Edit*/}
             </Button>
 
             <Modal show={show} backdrop="static" centered onHide={handleClose}>

@@ -2,6 +2,7 @@ import {Button, Modal, Form, ModalTitle, FloatingLabel} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import api from "~/api/api";
+import {AiFillEdit} from "react-icons/ai";
 
 const EditMovie = ({cx, movie}) => {
     const [show, setShow] = useState(false);
@@ -144,7 +145,7 @@ const EditMovie = ({cx, movie}) => {
                 style={{fontSize: "var(--default-font-size-button)"}}
                 onClick={handleShow}
             >
-                Edit
+                <AiFillEdit className={cx('icon-action')}/>
             </Button>
 
             <Modal show={show} backdrop="static" centered onHide={handleClose}>
