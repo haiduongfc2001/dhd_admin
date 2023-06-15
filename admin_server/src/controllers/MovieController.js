@@ -178,14 +178,6 @@ const RatingMovie = async (req, res) => {
                 return res.status(200).json({message: 'Rating updated successfully', rating});
             }
         }
-        //
-        // const existingRatingUser = await movie.ratings.find((ratingUser) => String(ratingUser.user) === userId)
-        // if (existingRatingUser) {
-        //     existingRatingUser.rating = rating;
-        //     await movie.save();
-        //     return res.status(200).json({message: 'Rating updated successfully'});
-        // }
-
 
         // Create a new rating
         const newRatingMovie = {
@@ -195,12 +187,6 @@ const RatingMovie = async (req, res) => {
         user.ratedMovies.push(newRatingMovie);
         await user.save();
 
-        // const newRatingUser = {
-        //     user: userId,
-        //     rating: rating,
-        // };
-        // movie.ratings.push(newRatingUser);
-        // await movie.save({$set: {vote_count_user: (vote_count_user + 1)}});
         const newRatingUser = {
             user: userId,
             rating: rating,
@@ -224,25 +210,31 @@ const RatingMovie = async (req, res) => {
     }
 };
 
-const FindUserRating = async (req, res) => {
+const FilterActionMovie = async (req, res) => {
     try {
 
-        // const movieId = req.params._id;
-        // const userId = req.user._id; // Assume the user is authenticated and the user ID is available in the request object
-        //
-        // const user = await User.findById(userId);
-        // if (!user) {
-        //     return res.status(404).json({ error: 'User not found' });
-        // }
-        //
-        // const ratedMovie = user.ratedMovies.find((ratedMovie) => String(ratedMovie.movie) === movieId);
-        // if (!ratedMovie) {
-        //     return res.status(404).json({ error: 'Rating not found' });
-        // }
-        //
-        // const rating = ratedMovie.rating;
-        // return res.status(200).json({ rating });
+        const actionMovies = await Movie.find({ 'genres.name': { $regex: /action/i } })
+        if (actionMovies) {
+            res.json(actionMovies);
+        } else {
+            res.status(404).json({message: 'Movie not found!'});
+        }
 
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({error: 'Server error'});
+    }
+}
+
+const FilterDramaMovie = async (req, res) => {
+    try {
+
+        const actionMovies = await Movie.find({ 'genres.name': { $regex: /drama/i } })
+        if (actionMovies) {
+            res.json(actionMovies);
+        } else {
+            res.status(404).json({message: 'Movie not found!'});
+        }
 
     } catch (error) {
         console.error(error);
@@ -259,5 +251,6 @@ module.exports = {
     DeleteMovie,
     AddMovieByLink,
     RatingMovie,
-    FindUserRating
+    FilterActionMovie,
+    FilterDramaMovie
 }

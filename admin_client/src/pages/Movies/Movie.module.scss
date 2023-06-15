@@ -50,4 +50,42 @@ tr td:nth-of-type(2) {
 
 tr td {
   vertical-align: middle;
+  align-items: center;
 }
+
+.table-movie-category {
+  background-color: antiquewhite;
+  font-size: 16px;
+
+  & th {
+    vertical-align: middle;
+    align-items: center;
+    text-align: center;
+  }
+
+  & th:nth-of-type(1) {
+    width: 40px;
+  }
+  & th:nth-of-type(3) {
+    width: 120px;
+  }
+}
+
+.search-hover {
+  border: 1px solid #ccc;
+  outline: none;
+  background-size: 22px;
+  background-position: 13px;
+  border-radius: 10px;
+  //width: 50px;
+  width: 300px;
+  height: 50px;
+  padding: 25px;
+  transition: all 0.5s;
+}
+//.search-hover:hover {
+//  width: 300px;
+//  padding-left: 50px;
+//}
+
+

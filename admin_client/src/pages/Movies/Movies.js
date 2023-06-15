@@ -12,11 +12,15 @@ import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/
 
 import classNames from "classnames/bind"
 import styles from "./Movie.module.scss"
+import formatReleaseDate from "~/components/formatReleaseDate";
+import {MDBContainer} from "mdb-react-ui-kit";
+import highlightKeyword from "~/components/highlightKeyword";
 
 const cx = classNames.bind(styles)
 
 function ListMovies() {
     const [movies, setMovies] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const [link, setLink] = useState('');
 
@@ -33,7 +37,7 @@ function ListMovies() {
     const handleSubmit = (e) => {
         e.preventDefault();
         api
-            .post("/movie/add-link", { link })
+            .post("/movie/add-link", {link})
             .then((response) => {
                 setLink("");
                 toast.success('Movie added successfully!', {
@@ -86,6 +90,25 @@ function ListMovies() {
         },
     ]
 
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+    }
+
+    const filteredMovies = movies.filter((movie) => {
+        const idMatch = movie.id.toString().includes(searchTerm);
+        const titleMatch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
+        return idMatch || titleMatch;
+    });
+
+
+    // const filteredMovies = movies.filter(
+    //     m =>
+    //         m.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //         m._id.includes(searchTerm)
+    // )
+
+
+
     return (
         <>
             <BreadcrumbExample/>
@@ -93,105 +116,120 @@ function ListMovies() {
                 cx={cx}
             />
 
-            <div>
-                {/*<span className={'bold mb-3'}>Enter link to add</span>*/}
+            <div className={'mt-3 mb-3 d-flex align-items-center justify-content-between'}>
+                <MDBContainer className="d-flex align-items-center">
+                    <h2>Search:</h2>
+                    <input
+                        type="text"
+                        className={cx('search-hover', 'ms-3')}
+                        placeholder="search here..."
+                        value={searchTerm}
+                        onChange={handleSearch}
+                    />
+                </MDBContainer>
 
-                <Form onSubmit={handleSubmit} style={{display: 'flex'}}>
-                    <Form.Group controlId="linkInput" className="mb-3">
-                        {/*<Form.Label>Enter Link</Form.Label>*/}
-                        <Form.Control
-                            type="text"
-                            name="json"
-                            placeholder="Enter link"
-                            style={{minWidth: '300px', height: '40px'}}
-                            value={link}
-                            onChange={(e) => setLink(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
+                <div className={'d-flex align-items-center'}>
+                    {/*<span className={'bold mb-3'}>Enter link to add</span>*/}
 
-                    <Button
-                        variant="primary"
-                        type="submit"
-                        style={{height: '40px'}}
-                        className={'ms-3'}
-                    >
-                        Add
-                    </Button>
-                </Form>
+                    <Form onSubmit={handleSubmit} style={{display: 'flex'}}>
+                        <Form.Group controlId="linkInput">
+                            {/*<Form.Label>Enter Link</Form.Label>*/}
+                            <Form.Control
+                                type="text"
+                                name="json"
+                                placeholder="Enter link"
+                                style={{minWidth: '300px', height: '40px', fontSize: 'var(--default-font-size)'}}
+                                value={link}
+                                onChange={(e) => setLink(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Button
+                            variant="primary"
+                            type="submit"
+                            style={{height: '40px', fontSize: 'var(--default-font-size)'}}
+                            className={'ms-3'}
+                        >
+                            Add
+                        </Button>
+                    </Form>
+                </div>
             </div>
-
 
             <Table striped bordered hover>
                 <thead>
-                <tr style={{backgroundColor: 'antiquewhite'}} className={cx('table-movie-category')}>
-                    <th>Movie ID</th>
-                    <th>Movie Name</th>
+                <tr className={cx('table-movie-category')}>
+                    <th>ID</th>
+                    <th>Movie Title</th>
                     <th>Release Date</th>
                     <th>Overview</th>
                     <th>Action</th>
                 </tr>
+
                 </thead>
                 <tbody>
-                {movies
+                {filteredMovies
                     .sort((a, b) => a.id - b.id)
-                    .map((movie) => (
-                        <tr key={movie._id}>
-                            <td style={{textAlign: "center"}}>{movie.id}</td>
-                            <td>
-                                {/*{movie.title}*/}
-                                <div className='d-flex align-items-center'>
-                                    <img
-                                        src={
-                                            movie.poster_path.startsWith("/")
-                                                ? `https://image.tmdb.org/t/p/w300_and_h450_bestv2${movie.poster_path}`
-                                                : movie.poster_path
-                                        }
-                                        alt="{user.title}"
-                                        style={{width: '45px', height: '45px'}}
-                                        className='rounded-circle'
-                                    />
-                                    <div className='ms-3'>
-                                        <p
-                                            className='fw-bold mb-1 limitLineClassName'
-                                        >
-                                            {movie.title}
-                                        </p>
-                                        {/*<p className='text-muted mb-0'>{movie.genres[0].name}</p>*/}
-                                        <p className='text-muted mb-0'>
-                                            {movie.genres.map((genre, index) => (
-                                                genre.name
-                                            )).join(', ')
+                    .map((movie) =>
+                        movie ? (
+                            <tr key={movie._id}>
+                                <td style={{ textAlign: "center" }}>
+                                    {highlightKeyword(movie.id, searchTerm)}
+                                </td>
+                                <td>
+                                    <div className="d-flex align-items-center">
+                                        <img
+                                            src={
+                                                movie.poster_path.startsWith("/")
+                                                    ? `https://image.tmdb.org/t/p/w300_and_h450_bestv2${movie.poster_path}`
+                                                    : movie.poster_path
                                             }
-                                        </p>
+                                            alt="{user.title}"
+                                            style={{ width: "45px", height: "45px" }}
+                                            className="rounded-circle"
+                                        />
+                                        <div className="ms-3">
+                                            <p className="fw-bold mb-1 limitLineClassName">
+                                                {highlightKeyword(movie.title, searchTerm)}
+                                            </p>
+                                            <p className="text-muted mb-0">
+                                                {movie.genres.map((genre) => genre.name).join(", ")}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td>{movie.release_date}</td>
-                            <td>
-                                <div className='ms-3'>
-                                    <p
-                                        className='fw-bold mb-1'
-                                    >
-                                        {movie.overview}
-                                    </p>
-                                </div>
-                            </td>
-                            <td>
-                                {actionArray.map((action, index) => (
-                                    <React.Fragment key={index}>
-                                        {action.component(movie)}
-                                    </React.Fragment>
-                                ))}
-                            </td>
-                        </tr>
-                    ))}
+                                </td>
+                                <td style={{ textAlign: "center" }}>
+                                    {formatReleaseDate(movie.release_date)}
+                                </td>
+                                <td>
+                                    <div className="ms-3">
+                                        <p className="fw-bold mb-1">{movie.overview}</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    {actionArray.map((action, index) => (
+                                        <React.Fragment key={index}>
+                                            {action.component(movie)}
+                                        </React.Fragment>
+                                    ))}
+                                </td>
+                            </tr>
+                        ) : (
+                            <tr key="no-movies">
+                                <td colSpan="5">
+                                    <h1 className="d-flex justify-content-center">Không có phim nào</h1>
+                                </td>
+                            </tr>
+                        )
+                    )}
                 </tbody>
+
             </Table>
 
             <ToastContainer/>
         </>
-);
+    );
 }
 
 export default ListMovies;

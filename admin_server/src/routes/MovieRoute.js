@@ -24,6 +24,8 @@ movieRoute.delete('/movie/:_id', MovieController.DeleteMovie);
 movieRoute.post('/movie/add-link', MovieController.AddMovieByLink);
 
 movieRoute.post('/movie/:_id/rating', MovieController.RatingMovie);
-movieRoute.get('/movie/:_id/rating', MovieController.FindUserRating);
+
+movieRoute.get('/movie/genres/action', MovieController.FilterActionMovie);
+movieRoute.get('/movie/genres/drama', MovieController.FilterDramaMovie);
 
 module.exports = movieRoute;
