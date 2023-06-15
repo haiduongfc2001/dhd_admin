@@ -25,8 +25,6 @@ user_route.use(bodyParser.json());
 user_route.use(bodyParser.urlencoded({ extended: true }));
 
 const multer = require("multer");
-const bcrypt = require("bcrypt");
-const randomstring = require("randomstring");
 user_route.use('/userImages', express.static('src/public/userImages'));
 
 const storage = multer.diskStorage({
@@ -70,6 +68,7 @@ const upload = multer({storage: storage});
 // axios
 user_route.get('/users', UserController.AllUsers);
 user_route.get('/user/:_id', UserController.FindUserById);
+// user_route.post('/user/:_id', UserController.FindUserById);
 user_route.put('/user/:_id', upload.single('image'), AdminController.AdminEditUser)
 user_route.delete('/user/:_id', AdminController.AdminDeleteUser);
 

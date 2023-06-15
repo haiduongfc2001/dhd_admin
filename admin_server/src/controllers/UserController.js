@@ -371,9 +371,9 @@ const FindUserById = async (req, res) => {
         const user = await User.findById(req.params._id);
 
         if (user) {
-            res.json(user);
+            res.status(200).json(user);
         } else {
-            res.sendStatus(404);
+            res.status(404).json({message: 'User not found'});
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -385,7 +385,7 @@ const UserRegister = async (req, res) => {
         // Kiểm tra xem người dùng đã tồn tại hay chưa
         const existingUser = await User.findOne({email: req.body.email});
         if (existingUser) {
-            return res.status(200).json({message: 'Tài khoản đã tồn tại. Xin vui lòng đăng nhập!'});
+            return res.status(401).json({message: 'Tài khoản đã tồn tại. Xin vui lòng đăng nhập!'});
         } else {
             // Mã hóa mật khẩu trước khi lưu vào csdl
             const hashedPassword = await securePassword(req.body.password);
@@ -451,14 +451,24 @@ const UserVerifyLogin = async (req, res) => {
                     return res.status(401).json({message: 'Email hoặc mật khẩu không đúng!'});
                 } else {
                     // Create a JWT token
-                    const token = jwt.sign({user_id: userData._id}, process.env.JWT_SECRET);
+                    const token = await jwt.sign(
+                        {user_id: userData._id, email: email},
+                        process.env.JWT_SECRET, {
+                            expiresIn: '1h'
+                        }
+                    );
 
                     // Lưu thông tin người dùng trong session
                     // req.session.adminId = userData._id;
                     req.session.token = token;
                     req.session.user_id = userData._id;
 
-                    return res.json({message: 'Logged in successfully', token, user_id: userData._id, user: userData});
+                    res.status(200)
+                        .header('Authorization', `Bearer ${token}`)
+                        .status(200).json({message: 'Logged in successfully', token, user_id: userData._id, user: userData});
+
+                    // return res.status(200)
+                    //     .json({message: 'Logged in successfully', token, user_id: userData._id, user: userData});
                 }
             }
         }

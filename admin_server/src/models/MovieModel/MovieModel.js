@@ -61,11 +61,35 @@ const Movie = new Schema({
     vote_count_user: {
         type: Number,
         default: 0,
+        min: 0,
     },
     vote_average_user: {
         type: Number,
         default: 0,
-    }
+        min: 0,
+        max: 100,
+    },
+    ratings: [
+        {
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+            },
+            rating: {
+                type: Number,
+                min: 1,
+                max: 10,
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now
+            },
+            updatedAt: {
+                type: Date,
+                default: Date.now
+            },
+        }
+    ]
 })
 
 module.exports = mongoose.model('Movie', Movie);

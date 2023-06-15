@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 // const utcVietnam = moment.tz(Date.now(), 'Asia/Ho_Chi_Minh');
 // const formattedTime = utcVietnam.format('DD-MM-YYYY HH:mm:ss');
 
-const User = new Schema ({
+const User = new Schema({
     name: {
         type: String,
         required: true,
@@ -47,7 +47,28 @@ const User = new Schema ({
     updatedAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    ratedMovies: [
+        {
+            movie: {
+                type: Schema.Types.ObjectId,
+                ref: 'Movie',
+            },
+            rating: {
+                type: Number,
+                min: 1,
+                max: 10
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now
+            },
+            updatedAt: {
+                type: Date,
+                default: Date.now
+            },
+        }
+    ]
 })
 
 // User.pre('save', function(next) {

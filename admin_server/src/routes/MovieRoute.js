@@ -5,6 +5,7 @@ const MovieController = require('../controllers/MovieController');
 const path = require("path");
 
 const bodyParser = require('body-parser');
+const Auth = require("../middleware/Auth");
 movieRoute.use(bodyParser.json());
 movieRoute.use(bodyParser.urlencoded({ extended: true }));
 
@@ -21,5 +22,8 @@ movieRoute.post('/movie', MovieController.AddMovie);
 movieRoute.put('/movie/:_id', MovieController.EditMovie);
 movieRoute.delete('/movie/:_id', MovieController.DeleteMovie);
 movieRoute.post('/movie/add-link', MovieController.AddMovieByLink);
+
+movieRoute.post('/movie/:_id/rating', MovieController.RatingMovie);
+movieRoute.get('/movie/:_id/rating', MovieController.FindUserRating);
 
 module.exports = movieRoute;
