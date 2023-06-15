@@ -178,7 +178,7 @@ function SignIn() {
                                 >
                                     {password && (
                                         <span
-                                            className={cx('password-toogle-icon')}
+                                            className={cx('password-toggle-icon')}
                                             onClick={toggleVisibility}
                                         >
                                             {ToggleIcon}

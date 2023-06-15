@@ -127,6 +127,7 @@ function ListMovies() {
                 <tr style={{backgroundColor: 'antiquewhite'}} className={cx('table-movie-category')}>
                     <th>Movie ID</th>
                     <th>Movie Name</th>
+                    <th>Release Date</th>
                     <th>Overview</th>
                     <th>Action</th>
                 </tr>
@@ -166,6 +167,7 @@ function ListMovies() {
                                     </div>
                                 </div>
                             </td>
+                            <td>{movie.release_date}</td>
                             <td>
                                 <div className='ms-3'>
                                     <p

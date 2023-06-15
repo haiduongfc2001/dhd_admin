@@ -46,6 +46,7 @@ body {
   line-height: 1.5;
   text-rendering: optimizeSpeed;
   color: var(--text-color);
+  overflow: scroll;
 
   ///* fallback for old browsers */
   //background: #6a11cb;
