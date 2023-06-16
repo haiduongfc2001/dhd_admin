@@ -97,7 +97,8 @@ function ListMovies() {
     const filteredMovies = movies.filter((movie) => {
         const idMatch = movie.id.toString().includes(searchTerm);
         const titleMatch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
-        return idMatch || titleMatch;
+        const overviewMatch = movie.overview.toLowerCase().includes(searchTerm.toLowerCase());
+        return idMatch || titleMatch || overviewMatch;
     });
 
 
@@ -106,7 +107,6 @@ function ListMovies() {
     //         m.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     //         m._id.includes(searchTerm)
     // )
-
 
 
     return (
@@ -138,7 +138,12 @@ function ListMovies() {
                                 type="text"
                                 name="json"
                                 placeholder="Enter link"
-                                style={{minWidth: '300px', height: '40px', fontSize: 'var(--default-font-size)'}}
+                                style={{
+                                    minWidth: '300px',
+                                    height: '40px',
+                                    fontSize: 'var(--default-font-size)',
+                                    borderRadius: '10px'
+                                }}
                                 value={link}
                                 onChange={(e) => setLink(e.target.value)}
                                 required
@@ -174,7 +179,7 @@ function ListMovies() {
                     .map((movie) =>
                         movie ? (
                             <tr key={movie._id}>
-                                <td style={{ textAlign: "center" }}>
+                                <td style={{textAlign: "center"}}>
                                     {highlightKeyword(movie.id, searchTerm)}
                                 </td>
                                 <td>
@@ -186,7 +191,7 @@ function ListMovies() {
                                                     : movie.poster_path
                                             }
                                             alt="{user.title}"
-                                            style={{ width: "45px", height: "45px" }}
+                                            style={{width: "45px", height: "45px"}}
                                             className="rounded-circle"
                                         />
                                         <div className="ms-3">
@@ -199,12 +204,14 @@ function ListMovies() {
                                         </div>
                                     </div>
                                 </td>
-                                <td style={{ textAlign: "center" }}>
+                                <td style={{textAlign: "center"}}>
                                     {formatReleaseDate(movie.release_date)}
                                 </td>
                                 <td>
                                     <div className="ms-3">
-                                        <p className="fw-bold mb-1">{movie.overview}</p>
+                                        <p className="fw-bold mb-1">
+                                            {highlightKeyword(movie.overview, searchTerm)}
+                                        </p>
                                     </div>
                                 </td>
                                 <td>
