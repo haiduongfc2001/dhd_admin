@@ -17,8 +17,8 @@ const Sidebar = () => {
     }
 
     const iconStyle = {
-        className: cx('icon-sidebar'),
-        style: {marginRight: isOpen ? '16px' : '0px'}
+        className: cx('icon-sidebar', { close: !isOpen }),
+        // style: {marginRight: isOpen ? '16px' : '0px'}
     };
 
     const buttons = [
@@ -46,55 +46,21 @@ const Sidebar = () => {
 
     return (
         <div
-            className={cx('wrapper')}
-            style={{
-                width: isOpen
-                    ? 'var(--default-layout-sidebar-width)'
-                    : 'var(--default-layout-sidebar-width-close)'
-            }}
+            className={cx('wrapper', { close: !isOpen })}
         >
-            <div
-                className={cx('inner')}
-                style={{
-                    margin: isOpen
-                        ? 'var(--default-margin)'
-                        : 'var(--default-margin-close)'
-                }}
-            >
+            <div className={cx('inner', { close: !isOpen })}>
                 <div className={cx('toggle-bar', 'mb-3')}>
                     <FaBars onClick={toggle}/>
                 </div>
                 {buttons.map((button, index) => (
                     <NavLink to={button.link} key={index}>
                         <MDBBtn
-                            className={cx('sidebar-menu', {'selected': selectedButton === index})}
+                            className={cx('sidebar-menu', { close: !isOpen }, {'selected': selectedButton === index})}
                             onClick={() => setSelectedButton(index)}
-                            style={
-                                isOpen ? (
-                                    {
-                                        minWidth: 'calc(var(--default-layout-sidebar-width) - var(--default-margin) * 2)',
-                                        fontSize: 'var(--default-font-size)'
-                                    }
-                                ) : (
-                                    {
-                                        minWidth: 'calc(var(--default-layout-sidebar-width-close) ' +
-                                            '- (var(--default-margin-close) * 2))',
-                                        fontSize: 'var(--default-font-size)',
-                                        marginRight: '0px'
-                                    }
-                                )
-                            }
                         >
                             {button.icon}
                             <div
-                                className={cx('sidebar-category')}
-                                style={
-                                    isOpen ? (
-                                        {fontSize: 'var(--default-font-size)'}
-                                    ) : (
-                                        {display: 'none'}
-                                    )
-                                }
+                                className={cx('sidebar-category', { close: !isOpen })}
                             >
                                 {button.text}
                             </div>

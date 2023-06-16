@@ -1,17 +1,33 @@
+$sidebar-width: 220px;
+$sidebar-width-close: 50px;
+$default-margin: 20px;
+$default-margin-close: 10px;
+$default-font-size: 1.6rem;
+
+$min-width: calc(#{$sidebar-width} - #{$default-margin} * 2);
+$min-width-close: calc(#{$sidebar-width-close} - #{$default-margin-close} * 2);
+
 .wrapper {
 
-  width: var(--default-layout-sidebar-width);
+  width: $sidebar-width;
   //min-height: 1000px;
   background-color: antiquewhite;
 
+  &.close {
+    width: $sidebar-width-close;
+  }
+
   .inner {
-    margin: var(--default-margin);
+    margin: $default-margin;
+
+    &.close {
+      margin: $default-margin-close;
+    }
 
     & button {
       margin: 10px 0;
       display: flex;
       align-items: center;
-      //min-width: calc(var(--default-layout-sidebar-width) - var(--default-margin) * 2);
       border: none;
 
       &:hover {
@@ -21,23 +37,39 @@
     }
 
     .toggle-bar {
-      font-size: calc(var(--default-font-size) * 5 / 4);
+      font-size: calc($default-font-size * 5 / 4);
       cursor: pointer;
     }
 
     .sidebar-menu {
+      min-width: $min-width;
+      font-size: $default-font-size;
+
+      &.close {
+        min-width: $min-width-close;
+        font-size: $default-font-size;
+        margin-right: 0;
+      }
+
       &.selected {
         background-color: #031fc4 !important;
       }
 
-
       .sidebar-category {
-        //font-size: var(--default-font-size);
+        font-size: $default-font-size;
+
+        &.close {
+          display: none;
+        }
       }
 
       .icon-sidebar {
         //font-size: var(--sidebar-font-size);
-        //margin-right: 16px;
+        margin-right: 16px;
+
+        &.close {
+          margin-right: 0;
+        }
       }
     }
   }
