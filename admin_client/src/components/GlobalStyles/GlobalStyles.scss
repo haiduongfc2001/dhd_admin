@@ -77,3 +77,23 @@ a[href] {
 tr th {
   color: blue;
 }
+
+tr td {
+  vertical-align: middle;
+  align-items: center;
+}
+
+td {
+  font-size: var(--default-font-size)
+}
+
+td button {
+  margin: 0 5px;
+}
+
+.icon-action {
+  font-size: var(--default-font-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

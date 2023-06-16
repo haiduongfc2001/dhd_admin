@@ -1,8 +1,8 @@
-$sidebar-width: 220px;
-$sidebar-width-close: 50px;
-$default-margin: 20px;
-$default-margin-close: 10px;
-$default-font-size: 1.6rem;
+$sidebar-width: var(--default-layout-sidebar-width);
+$sidebar-width-close: var(--default-layout-sidebar-width-close);
+$default-margin: var(--default-margin);
+$default-margin-close: var(--default-margin-close);
+$default-font-size: var(--default-font-size);
 
 $min-width: calc(#{$sidebar-width} - #{$default-margin} * 2);
 $min-width-close: calc(#{$sidebar-width-close} - #{$default-margin-close} * 2);

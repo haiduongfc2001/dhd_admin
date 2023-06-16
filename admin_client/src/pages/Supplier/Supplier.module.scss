@@ -1,24 +1,4 @@
-//.button-update,
-//.button-delete {
-//  margin: 0 20px;
-//  align-items: center;
-//  justify-content: center;
-//}
-
-td Button {
-  margin: 0 5px;
-}
-
-.icon-action {
-  font-size: 1.4rem;
-}
-
-td {
-  font-size: var(--default-font-size)
-}
-
-
-.form-product input {
+.form-supplier input {
   caret-color: var(--primary);
 }
 
@@ -27,14 +7,15 @@ td {
   width: var(--default-width-table);
 }
 
-.table-product-category th {
-  font-size: var(--default-font-size)
-}
+.table-supplier-category {
+  background-color: antiquewhite;
+  font-size: var(--default-font-size);
 
-.icon-action {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  & th {
+    vertical-align: middle;
+    align-items: center;
+    text-align: center;
+  }
 }
 
 .supplier-image {
@@ -46,4 +27,14 @@ td {
 tr td:nth-of-type(2) {
   width: 125px;
   height: 60px;
+}
+
+// Add Supplier
+.form-supplier {
+  font-size: calc(var(--default-font-size) - 4px);
+  font-weight: lighter;
+
+  & div input {
+    min-height: 50px !important;
+  }
 }

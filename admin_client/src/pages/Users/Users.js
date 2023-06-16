@@ -12,11 +12,19 @@ import {ToastContainer} from "react-toastify";
 import classNames from "classnames/bind";
 import styles from "./Users.module.scss";
 import formatTime from "~/hooks/formatTime";
+import SearchInput from "~/components/SearchInput/SearchInput";
+import {Button, Form} from "react-bootstrap";
 const cx = classNames.bind(styles);
 
 export default function Users() {
 
     const [users, setUsers] = useState([]);
+
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+    }
 
     const tableArray = ['User', 'UserID', 'Phone', 'Status','Creat Time', 'Actions'];
     const actionArray = [
@@ -56,7 +64,9 @@ export default function Users() {
 
 
     return (
-        <>
+        <div
+            style={{fontSize: 'var(--default-font-size'}}
+        >
             <BreadcrumbExample/>
 
             <AddUser
@@ -64,6 +74,14 @@ export default function Users() {
                 styles={styles}
                 setUsers={setUsers}
             />
+
+            <div className={'mt-3 mb-3'}>
+                <SearchInput
+                    searchTerm={searchTerm}
+                    handleSearch={handleSearch}
+                    style={{marginLeft: '0', paddingLeft: '0'}}
+                />
+            </div>
 
             <MDBTable align='middle'>
                 <MDBTableHead style={{backgroundColor: 'antiquewhite'}}>
@@ -106,7 +124,6 @@ export default function Users() {
                                             : 'Not Verified'
                                     }
                                 </MDBBadge>
-
                             </td>
                             <td>
                                 {formatTime(user.createdAt)}
@@ -128,7 +145,7 @@ export default function Users() {
                 </MDBTableBody>
             </MDBTable>
             <ToastContainer/>
-        </>
+        </div>
     );
 }
 
