@@ -52,6 +52,16 @@ const Movie = new Schema({
             },
         }
     ],
+    production_countries: [
+        {
+            iso_3166_1: {
+                type: String,
+            },
+            name: {
+                type: String,
+            }
+        }
+    ],
     release_date: {
         type: Date,
     },

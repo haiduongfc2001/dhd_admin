@@ -112,7 +112,7 @@ const AddMovieByLink = async (req, res) => {
         const {link} = req.body;
 
         // Make a request to fetch the movie data based on the provided link
-        const response = await axios.get(link);
+        const response = await axios.get(`https://api.themoviedb.org/3/movie/${link}?api_key=043ea53b0f115cd3997dcbb3f8a46a1a`);
         const movieData = response.data;
 
         // Process the movie data and add it to your database or perform any other necessary operations
