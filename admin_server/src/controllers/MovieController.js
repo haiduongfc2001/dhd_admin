@@ -210,12 +210,20 @@ const RatingMovie = async (req, res) => {
     }
 };
 
-const FilterActionMovie = async (req, res) => {
+const FilterMovie = async (req, res) => {
     try {
 
-        const actionMovies = await Movie.find({ 'genres.name': { $regex: /action/i } })
-        if (actionMovies) {
-            res.json(actionMovies);
+        const { genre } = req.params;
+
+        // movie.genres.name
+        // sử dụng biểu thức chính quy `regex` để tìm kiếm
+        // $regex: new RegExp(genre, 'i') là một toán tử so khớp mẫu (regex) được sử dụng để tìm kiếm.
+        // Chúng ta tạo một đối tượng RegExp mới bằng cách truyền biến genre vào hàm RegExp và
+        // tham số 'i' để cho phép tìm kiếm không phân biệt chữ hoa chữ thường.
+        const genreMovies = await Movie.find({ 'genres.name': { $regex: new RegExp(genre, 'i') } });
+
+        if (genreMovies.length > 0) {
+            res.json(genreMovies);
         } else {
             res.status(404).json({message: 'Movie not found!'});
         }
@@ -226,21 +234,21 @@ const FilterActionMovie = async (req, res) => {
     }
 }
 
-const FilterDramaMovie = async (req, res) => {
-    try {
-
-        const actionMovies = await Movie.find({ 'genres.name': { $regex: /drama/i } })
-        if (actionMovies) {
-            res.json(actionMovies);
-        } else {
-            res.status(404).json({message: 'Movie not found!'});
-        }
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({error: 'Server error'});
-    }
-}
+// const FilterActionMovie = async (req, res) => {
+//     try {
+//
+//         const actionMovies = await Movie.find({ 'genres.name': { $regex: /action/i } })
+//         if (actionMovies) {
+//             res.json(actionMovies);
+//         } else {
+//             res.status(404).json({message: 'Movie not found!'});
+//         }
+//
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({error: 'Server error'});
+//     }
+// }
 
 
 module.exports = {
@@ -251,6 +259,6 @@ module.exports = {
     DeleteMovie,
     AddMovieByLink,
     RatingMovie,
-    FilterActionMovie,
-    FilterDramaMovie
+    // FilterActionMovie,
+    FilterMovie
 }

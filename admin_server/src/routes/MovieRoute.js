@@ -25,7 +25,7 @@ movieRoute.post('/movie/add-link', MovieController.AddMovieByLink);
 
 movieRoute.post('/movie/:_id/rating', MovieController.RatingMovie);
 
-movieRoute.get('/movie/genres/action', MovieController.FilterActionMovie);
-movieRoute.get('/movie/genres/drama', MovieController.FilterDramaMovie);
+// movieRoute.get('/movie/genres/action', MovieController.FilterActionMovie);
+movieRoute.get('/movie/genre/:genre', MovieController.FilterMovie);
 
 module.exports = movieRoute;
