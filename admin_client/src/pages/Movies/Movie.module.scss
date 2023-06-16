@@ -5,6 +5,23 @@
 //  justify-content: center;
 //}
 
+// Add Movie
+
+.form-movie {
+  font-size: calc(var(--default-font-size) - 4px);
+  font-weight: lighter;
+
+  & div input {
+    min-height: 50px !important;
+  }
+}
+
+.modal-footer button {
+  font-size: var(--default-font-size);
+}
+
+// Movie
+
 td Button {
   margin: 0 5px;
 }
@@ -66,8 +83,11 @@ tr td {
   & th:nth-of-type(1) {
     width: 40px;
   }
+  & th:nth-of-type(4) {
+     width: 240px;
+   }
   & th:nth-of-type(3) {
-    width: 120px;
+    width: 104px;
   }
 }
 
@@ -77,8 +97,7 @@ tr td {
   background-size: 22px;
   background-position: 13px;
   border-radius: 10px;
-  //width: 50px;
-  width: 150px;
+  width: 144px;
   height: 50px;
   padding: 25px;
   transition: all 0.5s;
@@ -86,6 +105,12 @@ tr td {
 .search-hover:hover {
   width: 300px;
   padding-left: 50px;
+}
+
+.movie-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 

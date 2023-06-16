@@ -15,6 +15,7 @@ import styles from "./Movie.module.scss"
 import formatReleaseDate from "~/components/formatReleaseDate";
 import {MDBContainer} from "mdb-react-ui-kit";
 import highlightKeyword from "~/components/highlightKeyword";
+import CircularProgressBarVote from "~/components/CircularProgressBar";
 
 const cx = classNames.bind(styles)
 
@@ -116,7 +117,10 @@ function ListMovies() {
                 cx={cx}
             />
 
-            <div className={'mt-3 mb-3 d-flex align-items-center justify-content-between'}>
+            <div
+                className={'mt-3 mb-3 d-flex align-items-center justify-content-between'}
+                style={{fontSize: 'var(--default-font-size'}}
+            >
                 <MDBContainer className="d-flex align-items-center">
                     <h2>Search:</h2>
                     <input
@@ -169,6 +173,7 @@ function ListMovies() {
                     <th>Movie Title</th>
                     <th>Release Date</th>
                     <th>Overview</th>
+                    <th>Rating</th>
                     <th>Action</th>
                 </tr>
 
@@ -198,7 +203,7 @@ function ListMovies() {
                                             <p className="fw-bold mb-1 limitLineClassName">
                                                 {highlightKeyword(movie.title, searchTerm)}
                                             </p>
-                                            <p className="text-muted mb-0">
+                                            <p className="mb-0">
                                                 {movie.genres.map((genre) => genre.name).join(", ")}
                                             </p>
                                         </div>
@@ -209,10 +214,42 @@ function ListMovies() {
                                 </td>
                                 <td>
                                     <div className="ms-3">
-                                        <p className="fw-bold mb-1">
+                                        <p
+                                            className="fw-bold mb-1"
+                                            style={{
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                                display: "-webkit-box",
+                                                WebkitLineClamp: "3",
+                                                WebkitBoxOrient: "vertical",
+                                            }}
+
+                                        >
                                             {highlightKeyword(movie.overview, searchTerm)}
                                         </p>
                                     </div>
+                                </td>
+                                <td>
+                                    {
+                                        movie.vote_count_user !== 0 ? (
+                                            <div className={cx('movie-rating')}>
+                                                <CircularProgressBarVote
+                                                    value={(movie.vote_average_user * 10)}
+                                                    text={`${(movie.vote_average_user * 10)}%`}
+                                                />
+                                                {/*<p className="fw-bold mb-1 limitLineClassName">*/}
+                                                {/*    {movie.vote_average_user}*/}
+                                                {/*</p>*/}
+                                                <p className="text-muted mb-0">
+                                                    {movie.vote_count_user} ratings
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            <div className='d-flex justify-content-center'>
+                                                No ratings available
+                                            </div>
+                                        )
+                                    }
                                 </td>
                                 <td>
                                     {actionArray.map((action, index) => (

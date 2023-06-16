@@ -150,7 +150,9 @@ function AddMovie({ cx }) {
                 onHide={handleClose}
             >
                 <Modal.Header closeButton>
-                    <ModalTitle>Add Movie</ModalTitle>
+                    <ModalTitle>
+                        <h2>Add Movie</h2>
+                    </ModalTitle>
                 </Modal.Header>
                 <Modal.Body>
                     <Form className={cx('form-movie')}>
@@ -158,7 +160,7 @@ function AddMovie({ cx }) {
                             <FloatingLabel
                                 key={index}
                                 label={form.label}
-                                className="mr-sm-2 mb-2"
+                                className="mr-sm-2 mb-2 min-height-50"
                             >
                                 <Form.Control
                                     autoFocus={form.id === 'title'}
@@ -167,7 +169,7 @@ function AddMovie({ cx }) {
                                     value={form.value}
                                     onChange={form.onChange}
                                     size="lg"
-                                    style={{minHeight: "40px"}}
+                                    style={{minHeight: "50px"}}
                                     required
                                 />
                             </FloatingLabel>
@@ -177,7 +179,9 @@ function AddMovie({ cx }) {
                     {errorMessage && <p className={'text-danger'}>{errorMessage}</p>}
 
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer
+                    className={cx('modal-footer')}
+                >
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>

@@ -10,7 +10,6 @@
   // Default layout
   --default-layout-header-height: 60px;
   --default-layout-width: 100%;
-  --default-layout-sidebar-width: 300px;
 
   // Default margin
   --default-margin-left: 20px;
@@ -27,6 +26,11 @@
 
   // Default size table
   --default-width-table: 150px;
+
+  // Sidebar
+  --default-layout-sidebar-width: 220px;
+  --default-layout-sidebar-width-close: 50px;
+  --default-margin-close: 10px;
 
 }
 
@@ -68,4 +72,8 @@ input,
 a[href] {
   color: var(--text-color);
   text-decoration: none;
+}
+
+tr th {
+  color: blue;
 }
