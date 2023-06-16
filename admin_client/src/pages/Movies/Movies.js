@@ -13,9 +13,10 @@ import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/
 import classNames from "classnames/bind"
 import styles from "./Movie.module.scss"
 import formatReleaseDate from "~/components/formatReleaseDate";
-import {MDBContainer} from "mdb-react-ui-kit";
+import {MDBBadge, MDBContainer} from "mdb-react-ui-kit";
 import highlightKeyword from "~/components/highlightKeyword";
 import CircularProgressBarVote from "~/components/CircularProgressBar";
+import SearchInput from "~/components/SearchInput/SearchInput";
 
 const cx = classNames.bind(styles)
 
@@ -103,13 +104,6 @@ function ListMovies() {
     });
 
 
-    // const filteredMovies = movies.filter(
-    //     m =>
-    //         m.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //         m._id.includes(searchTerm)
-    // )
-
-
     return (
         <>
             <BreadcrumbExample/>
@@ -121,16 +115,10 @@ function ListMovies() {
                 className={'mt-3 mb-3 d-flex align-items-center justify-content-between'}
                 style={{fontSize: 'var(--default-font-size'}}
             >
-                <MDBContainer className="d-flex align-items-center">
-                    <h2>Search:</h2>
-                    <input
-                        type="text"
-                        className={cx('search-hover', 'ms-3')}
-                        placeholder="search here..."
-                        value={searchTerm}
-                        onChange={handleSearch}
-                    />
-                </MDBContainer>
+                <SearchInput
+                    searchTerm={searchTerm}
+                    handleSearch={handleSearch}
+                />
 
                 <div className={'d-flex align-items-center'}>
                     {/*<span className={'bold mb-3'}>Enter link to add</span>*/}
@@ -141,9 +129,9 @@ function ListMovies() {
                             <Form.Control
                                 type="text"
                                 name="json"
-                                placeholder="Enter link"
+                                placeholder="Enter movie id to add"
                                 style={{
-                                    minWidth: '300px',
+                                    minWidth: '180px',
                                     height: '40px',
                                     fontSize: 'var(--default-font-size)',
                                     borderRadius: '10px'
@@ -172,6 +160,7 @@ function ListMovies() {
                     <th>ID</th>
                     <th>Movie Title</th>
                     <th>Release Date</th>
+                    <th>Production Country</th>
                     <th>Overview</th>
                     <th>Rating</th>
                     <th>Action</th>
@@ -204,13 +193,26 @@ function ListMovies() {
                                                 {highlightKeyword(movie.title, searchTerm)}
                                             </p>
                                             <p className="mb-0">
-                                                {movie.genres.map((genre) => genre.name).join(", ")}
+                                                {movie.genres
+                                                    && movie.genres
+                                                        .map((genre) => genre.name)
+                                                        .join(", ")}
                                             </p>
                                         </div>
                                     </div>
                                 </td>
                                 <td style={{textAlign: "center"}}>
                                     {formatReleaseDate(movie.release_date)}
+                                </td>
+                                <td>
+                                    {movie.production_countries
+                                        && movie.production_countries
+                                            .map((country) => (
+                                                <MDBBadge color={'info'} pill>
+                                                    {country.name}
+                                                </MDBBadge>
+                                            ))
+                                    }
                                 </td>
                                 <td>
                                     <div className="ms-3">
