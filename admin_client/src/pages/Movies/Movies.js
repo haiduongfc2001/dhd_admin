@@ -17,12 +17,17 @@ import {MDBBadge, MDBContainer} from "mdb-react-ui-kit";
 import highlightKeyword from "~/components/highlightKeyword";
 import CircularProgressBarVote from "~/components/CircularProgressBar";
 import SearchInput from "~/components/SearchInput/SearchInput";
+import {AiFillFilter} from "react-icons/ai";
+import FilterMovieGenre from "~/pages/Movies/FilterMovieGenre";
 
 const cx = classNames.bind(styles)
 
 function ListMovies() {
     const [movies, setMovies] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+
+    const [genreMovies, setGenreMovies] = useState([]);
+    const [showGenreMovies, setShowGenreMovies] = useState(false);
 
     const [link, setLink] = useState('');
 
@@ -103,7 +108,6 @@ function ListMovies() {
         return idMatch || titleMatch || overviewMatch;
     });
 
-
     return (
         <>
             <BreadcrumbExample/>
@@ -154,124 +158,278 @@ function ListMovies() {
                 </div>
             </div>
 
-            <Table striped bordered hover>
-                <thead>
-                <tr className={cx('table-movie-category')}>
-                    <th>ID</th>
-                    <th>Movie Title</th>
-                    <th>Release Date</th>
-                    <th>Production Country</th>
-                    <th>Overview</th>
-                    <th>Rating</th>
-                    <th>Action</th>
-                </tr>
+            <div className={'d-flex'}>
+                <Table striped bordered hover>
+                    <thead>
+                    <tr className={cx('table-movie-category')}>
+                        <th>ID</th>
+                        <th>Movie Title</th>
+                        <th>Release Date</th>
+                        <th>Production Country</th>
+                        <th>Overview</th>
+                        <th>Rating</th>
+                        <th>Action</th>
+                    </tr>
 
-                </thead>
-                <tbody>
-                {filteredMovies
-                    .sort((a, b) => a.id - b.id)
-                    .map((movie) =>
-                        movie ? (
-                            <tr key={movie._id}>
-                                <td style={{textAlign: "center"}}>
-                                    {highlightKeyword(movie.id, searchTerm)}
-                                </td>
-                                <td>
-                                    <div className="d-flex align-items-center">
-                                        <img
-                                            src={
-                                                movie.poster_path.startsWith("/")
-                                                    ? `https://image.tmdb.org/t/p/w300_and_h450_bestv2${movie.poster_path}`
-                                                    : movie.poster_path
-                                            }
-                                            alt="{user.title}"
-                                            style={{width: "45px", height: "45px"}}
-                                            className="rounded-circle"
-                                        />
-                                        <div className="ms-3">
-                                            <p className="fw-bold mb-1 limitLineClassName">
-                                                {highlightKeyword(movie.title, searchTerm)}
-                                            </p>
-                                            <p className="mb-0">
-                                                {movie.genres
-                                                    && movie.genres
-                                                        .map((genre) => genre.name)
-                                                        .join(", ")}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td style={{textAlign: "center"}}>
-                                    {formatReleaseDate(movie.release_date)}
-                                </td>
-                                <td>
-                                    {movie.production_countries
-                                        && movie.production_countries
-                                            .map((country) => (
-                                                <MDBBadge color={'info'} pill>
-                                                    {country.name}
-                                                </MDBBadge>
-                                            ))
-                                    }
-                                </td>
-                                <td>
-                                    <div className="ms-3">
-                                        <p
-                                            className="fw-bold mb-1"
-                                            style={{
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                                display: "-webkit-box",
-                                                WebkitLineClamp: "3",
-                                                WebkitBoxOrient: "vertical",
-                                            }}
+                    </thead>
+                    <tbody>
+                    {
+                        showGenreMovies
+                            ? genreMovies.length !== 0
+                                ? (
+                                    genreMovies
+                                        .sort((a, b) => a.id - b.id)
+                                        .map((movie) =>
+                                            movie ? (
+                                                <tr key={movie._id}>
+                                                    <td style={{textAlign: "center"}}>
+                                                        {highlightKeyword(movie.id, searchTerm)}
+                                                    </td>
+                                                    <td>
+                                                        <div className="d-flex align-items-center">
+                                                            <img
+                                                                src={
+                                                                    movie.poster_path.startsWith("/")
+                                                                        ? `https://image.tmdb.org/t/p/w300_and_h450_bestv2${movie.poster_path}`
+                                                                        : movie.poster_path
+                                                                }
+                                                                alt="{user.title}"
+                                                                style={{width: "45px", height: "45px"}}
+                                                                className="rounded-circle"
+                                                            />
+                                                            <div className="ms-3">
+                                                                <p className="fw-bold mb-1 limitLineClassName">
+                                                                    {highlightKeyword(movie.title, searchTerm)}
+                                                                </p>
+                                                                <p className="mb-0">
+                                                                    {movie.genres
+                                                                        && movie.genres
+                                                                            .map((genre) => genre.name)
+                                                                            .join(", ")}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style={{textAlign: "center"}}>
+                                                        {formatReleaseDate(movie.release_date)}
+                                                    </td>
+                                                    <td>
+                                                        {movie.production_countries
+                                                            && movie.production_countries
+                                                                .map((country, index) => (
+                                                                    <MDBBadge
+                                                                        key={index}
+                                                                        pill
+                                                                        className={cx('badge-production-country', 'm-1')}
+                                                                    >
+                                                                        {country.name}
+                                                                    </MDBBadge>
+                                                                ))
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <div className="ms-3">
+                                                            <p
+                                                                className="fw-bold mb-1"
+                                                                style={{
+                                                                    overflow: "hidden",
+                                                                    textOverflow: "ellipsis",
+                                                                    display: "-webkit-box",
+                                                                    WebkitLineClamp: "3",
+                                                                    WebkitBoxOrient: "vertical",
+                                                                }}
 
-                                        >
-                                            {highlightKeyword(movie.overview, searchTerm)}
-                                        </p>
-                                    </div>
-                                </td>
-                                <td>
-                                    {
-                                        movie.vote_count_user !== 0 ? (
-                                            <div className={cx('movie-rating')}>
-                                                <CircularProgressBarVote
-                                                    value={(movie.vote_average_user * 10)}
-                                                    text={`${(movie.vote_average_user * 10)}%`}
-                                                />
-                                                {/*<p className="fw-bold mb-1 limitLineClassName">*/}
-                                                {/*    {movie.vote_average_user}*/}
-                                                {/*</p>*/}
-                                                <p className="text-muted mb-0">
-                                                    {movie.vote_count_user} ratings
-                                                </p>
-                                            </div>
-                                        ) : (
-                                            <div className='d-flex justify-content-center'>
-                                                No ratings available
-                                            </div>
+                                                            >
+                                                                {highlightKeyword(movie.overview, searchTerm)}
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            movie.vote_count_user !== 0 ? (
+                                                                <div className={cx('movie-rating')}>
+                                                                    <div
+                                                                        style={{width: "45px", height: '45px'}}
+                                                                        className={'me-3'}
+                                                                    >
+                                                                        <CircularProgressBarVote
+                                                                            value={(movie.vote_average_user * 10)}
+                                                                            text={`${(movie.vote_average_user * 10)}%`}
+                                                                        />
+                                                                    </div>
+                                                                    <p className="text-muted mb-0">
+                                                                        {movie.vote_count_user} ratings
+                                                                    </p>
+                                                                </div>
+                                                            ) : (
+                                                                <div className='d-flex justify-content-center'>
+                                                                    No ratings available
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        {actionArray.map((action, index) => (
+                                                            <React.Fragment key={index}>
+                                                                {action.component(movie)}
+                                                            </React.Fragment>
+                                                        ))}
+                                                    </td>
+                                                </tr>
+                                            ) : (
+                                                <tr key="no-movies">
+                                                    <td colSpan="7">
+                                                        <h1 className="d-flex justify-content-center">
+                                                            Không có phim nào
+                                                        </h1>
+                                                    </td>
+                                                </tr>
+                                            )
                                         )
-                                    }
-                                </td>
-                                <td>
-                                    {actionArray.map((action, index) => (
-                                        <React.Fragment key={index}>
-                                            {action.component(movie)}
-                                        </React.Fragment>
-                                    ))}
-                                </td>
-                            </tr>
-                        ) : (
-                            <tr key="no-movies">
-                                <td colSpan="5">
-                                    <h1 className="d-flex justify-content-center">Không có phim nào</h1>
-                                </td>
-                            </tr>
-                        )
-                    )}
-                </tbody>
+                                )
+                                : (
+                                    <tr key="no-movies">
+                                        <td colSpan="7" className={cx('no-movies')}>
+                                            <h1>Không có phim nào được tìm thấy</h1>
+                                        </td>
+                                    </tr>
+                                )
 
-            </Table>
+                            : filteredMovies.length !== 0 ? (
+                                filteredMovies
+                                    .sort((a, b) => a.id - b.id)
+                                    .map((movie) =>
+                                        movie ? (
+                                            <tr key={movie._id}>
+                                                <td style={{textAlign: "center"}}>
+                                                    {highlightKeyword(movie.id, searchTerm)}
+                                                </td>
+                                                <td>
+                                                    <div className="d-flex align-items-center">
+                                                        <img
+                                                            src={
+                                                                movie.poster_path.startsWith("/")
+                                                                    ? `https://image.tmdb.org/t/p/w300_and_h450_bestv2${movie.poster_path}`
+                                                                    : movie.poster_path
+                                                            }
+                                                            alt="{user.title}"
+                                                            style={{width: "45px", height: "45px"}}
+                                                            className="rounded-circle"
+                                                        />
+                                                        <div className="ms-3">
+                                                            <p className="fw-bold mb-1 limitLineClassName">
+                                                                {highlightKeyword(movie.title, searchTerm)}
+                                                            </p>
+                                                            <p className="mb-0">
+                                                                {movie.genres
+                                                                    && movie.genres
+                                                                        .map((genre) => genre.name)
+                                                                        .join(", ")}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td style={{textAlign: "center"}}>
+                                                    {formatReleaseDate(movie.release_date)}
+                                                </td>
+                                                <td>
+                                                    {movie.production_countries
+                                                        && movie.production_countries
+                                                            .map((country, index) => (
+                                                                <MDBBadge
+                                                                    key={index}
+                                                                    pill
+                                                                    className={cx('badge-production-country', 'm-1')}
+                                                                >
+                                                                    {country.name}
+                                                                </MDBBadge>
+                                                            ))
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <div className="ms-3">
+                                                        <p
+                                                            className="fw-bold mb-1"
+                                                            style={{
+                                                                overflow: "hidden",
+                                                                textOverflow: "ellipsis",
+                                                                display: "-webkit-box",
+                                                                WebkitLineClamp: "3",
+                                                                WebkitBoxOrient: "vertical",
+                                                            }}
+
+                                                        >
+                                                            {highlightKeyword(movie.overview, searchTerm)}
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {
+                                                        movie.vote_count_user !== 0 ? (
+                                                            <div className={cx('movie-rating')}>
+                                                                <div
+                                                                    style={{width: "45px", height: '45px'}}
+                                                                    className={'me-3'}
+                                                                >
+                                                                    <CircularProgressBarVote
+                                                                        value={(movie.vote_average_user * 10)}
+                                                                        text={`${(movie.vote_average_user * 10)}%`}
+                                                                    />
+                                                                </div>
+                                                                <p className="text-muted mb-0">
+                                                                    {movie.vote_count_user} ratings
+                                                                </p>
+                                                            </div>
+                                                        ) : (
+                                                            <div className='d-flex justify-content-center'>
+                                                                No ratings available
+                                                            </div>
+                                                        )
+                                                    }
+                                                </td>
+                                                <td>
+                                                    {actionArray.map((action, index) => (
+                                                        <React.Fragment key={index}>
+                                                            {action.component(movie)}
+                                                        </React.Fragment>
+                                                    ))}
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            <tr key="no-movies">
+                                                <td colSpan="7">
+                                                    <h1 className="d-flex justify-content-center">
+                                                        Không có phim nào
+                                                    </h1>
+                                                </td>
+                                            </tr>
+                                        )
+                                    )
+                            )
+                                : (
+                                <tr key="no-movies">
+                                    <td colSpan="7" className={cx("no-movies")}>
+                                        <h1>Không có phim nào được tìm thấy</h1>
+                                    </td>
+                                </tr>
+                            )
+                    }
+                    </tbody>
+
+                </Table>
+
+                <div className={cx('ms-3', 'filter-movie')}>
+                    <div className={cx('m-3', 'filter-movie-title')}>
+                        <AiFillFilter/>
+                        <h3 className={'ms-3 mb-0'}>Filter</h3>
+                    </div>
+                    <FilterMovieGenre
+                        cx={cx}
+                        setGenreMovies={setGenreMovies}
+                        setShowGenreMovies={setShowGenreMovies}
+                    />
+                </div>
+            </div>
 
             <ToastContainer/>
         </>
@@ -279,6 +437,3 @@ function ListMovies() {
 }
 
 export default ListMovies;
-
-
-
