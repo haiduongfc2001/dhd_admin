@@ -8,7 +8,6 @@ $min-width: calc(#{$sidebar-width} - #{$default-margin} * 2);
 $min-width-close: calc(#{$sidebar-width-close} - #{$default-margin-close} * 2);
 
 .wrapper {
-
   width: $sidebar-width;
   //min-height: 1000px;
   background-color: antiquewhite;
@@ -49,10 +48,13 @@ $min-width-close: calc(#{$sidebar-width-close} - #{$default-margin-close} * 2);
         min-width: $min-width-close;
         font-size: $default-font-size;
         margin-right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       &.selected {
-        background-color: #031fc4 !important;
+        background-color: #031fc4;
       }
 
       .sidebar-category {
@@ -65,7 +67,7 @@ $min-width-close: calc(#{$sidebar-width-close} - #{$default-margin-close} * 2);
 
       .icon-sidebar {
         //font-size: var(--sidebar-font-size);
-        margin-right: 16px;
+        margin-right: calc(var(--default-margin-right) * 0.6);
 
         &.close {
           margin-right: 0;
