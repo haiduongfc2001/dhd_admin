@@ -234,6 +234,42 @@ const FilterMovie = async (req, res) => {
     }
 }
 
+const AllGenresOfMovies = async (req, res) => {
+    try {
+
+        const movies = await Movie.find();
+        const genres = movies.reduce((result, movie) => {
+            movie.genres.forEach((genre) => {
+                const { id, name } = genre;
+                const existingGenre = result.find((g) => g.id === id);
+                if (!existingGenre) {
+                    result.push({ id, name });
+                }
+            });
+            return result;
+        }, []);
+        res.json(genres);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+
+module.exports = {
+    AllMovies,
+    FindMovieById,
+    AddMovie,
+    EditMovie,
+    DeleteMovie,
+    AddMovieByLink,
+    RatingMovie,
+    // FilterActionMovie,
+    FilterMovie,
+    AllGenresOfMovies
+}
+
 // const FilterActionMovie = async (req, res) => {
 //     try {
 //
@@ -249,16 +285,3 @@ const FilterMovie = async (req, res) => {
 //         res.status(500).json({error: 'Server error'});
 //     }
 // }
-
-
-module.exports = {
-    AllMovies,
-    FindMovieById,
-    AddMovie,
-    EditMovie,
-    DeleteMovie,
-    AddMovieByLink,
-    RatingMovie,
-    // FilterActionMovie,
-    FilterMovie
-}
