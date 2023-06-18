@@ -1,17 +1,11 @@
 import {Button} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import api from "~/api/api";
+import {BsCheckAll} from "react-icons/bs";
 
 
 const FilterMovieGenre = ({cx, setGenreMovies, setShowGenreMovies}) => {
-    const [genresMovies, setGenresMovies] = useState([])
-
-    // const genreMovies = [
-    //     {name: "action",},
-    //     {name: "drama",},
-    //     {name: "romance",},
-    //     {name: "crime",},
-    // ]
+    const [genresMovies, setGenresMovies] = useState([]);
 
     useEffect(() => {
         api.get('/movies/genres')
@@ -51,26 +45,65 @@ const FilterMovieGenre = ({cx, setGenreMovies, setShowGenreMovies}) => {
 
     return (
         <div className={cx('filter-movie-body')}>
-            <div>
-                <Button onClick={handleAllMovies}>
-                    All Movies
-                </Button>
-            </div>
             <div className={cx('m-3', 'filter-movie-genre')}>
-                {
-                    genresMovies.map((genreMovie) => (
+                <p onClick={handleAllMovies}>
+                    Thể loại
+                    <span> > </span>
+                </p>
+                <ul>
+                    <li className={'mb-2'}>
                         <Button
-                            onClick={handleMovieGenre}
-                            key={genreMovie.name}
-                            className={'m-3'}
-                            value={genreMovie.name}
+                            onClick={handleAllMovies}
+                            value={'All Movies'}
                         >
-                            {genreMovie.name}
+                            All Movies
+                            {/*<BsCheckAll className={'ms-1'}/>*/}
                         </Button>
-                    ))
-                }
+                    </li>
+                    {
+                        genresMovies
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((genreMovie) => (
+                            <li
+                                key={genreMovie.id}
+                                className={'mb-2'}
+                            >
+                                <Button
+                                    onClick={handleMovieGenre}
+                                    value={genreMovie.name}
+                                >
+                                    {genreMovie.name}
+                                </Button>
+                            </li>
+                        ))
+                    }
+                </ul>
             </div>
         </div>
+
+
+        // <div className={cx('filter-movie-body')}>
+        //     <p>
+        //         <Button onClick={handleAllMovies}>
+        //             All Movies
+        //             <span> > </span>
+        //         </Button>
+        //     </p>
+        //     <div className={cx('m-3', 'filter-movie-genre')}>
+        //         {
+        //             genresMovies.map((genreMovie) => (
+        //                 <Button
+        //                     onClick={handleMovieGenre}
+        //                     key={genreMovie.name}
+        //                     className={'m-3'}
+        //                     value={genreMovie.name}
+        //                 >
+        //                     {genreMovie.name}
+        //                 </Button>
+        //             ))
+        //         }
+        //     </div>
+        // </div>
     )
 }
 
