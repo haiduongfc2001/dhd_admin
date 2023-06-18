@@ -57,7 +57,7 @@ const FilterMovieGenre = ({cx, setGenreMovies, setShowGenreMovies}) => {
                             value={'All Movies'}
                         >
                             All Movies
-                            {/*<BsCheckAll className={'ms-1'}/>*/}
+                            <BsCheckAll className={'ms-2'}/>
                         </Button>
                     </li>
                     {
