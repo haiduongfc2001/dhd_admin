@@ -26,7 +26,10 @@ movieRoute.post('/movie/add-link', MovieController.AddMovieByLink);
 movieRoute.post('/movie/:_id/rating', MovieController.RatingMovie);
 
 // movieRoute.get('/movie/genre/action', MovieController.FilterActionMovie);
-movieRoute.get('/movie/genre/:genre', MovieController.FilterMovie);
+movieRoute.get('/movie/genre/:genre', MovieController.FilterMoviesByGenre);
 movieRoute.get('/movies/genres', MovieController.AllGenresOfMovies);
+
+// movie.production_companies
+movieRoute.get('/movies/companies', MovieController.AllProductionCompanies);
 
 module.exports = movieRoute;
