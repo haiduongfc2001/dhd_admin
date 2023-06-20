@@ -1,6 +1,7 @@
 const Movie = require("../models/MovieModel/MovieModel");
 const User = require("../models/UserModel");
 const axios = require("axios");
+const {API_MOVIE_URL, API_MOVIE_KEY} = require("../config/movies/MovieConfig");
 
 // Tất cả movie
 const AllMovies = async (req, res) => {
@@ -28,10 +29,11 @@ const FindMovieById = async (req, res) => {
         if (movie) {
             res.json(movie);
         } else {
-            res.sendStatus(404);
+            res.status(404).json({ message: 'Movie not found!'});
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        console.error(error);
+        res.status(500).json({message: 'Internal Server Error'});
     }
 };
 
@@ -51,18 +53,18 @@ const AddMovie = async (req, res) => {
 // Sửa thông tin movie
 const EditMovie = async (req, res) => {
     try {
-        const {title, overview, poster_path} = req.body;
+        const {title, overview, poster_path, production_countries, production_companies} = req.body;
 
         const movieId = req.params._id;
-        const movie = await Movie.findById(movieId);
+        const existingMovie = await Movie.findById(movieId);
 
-        if (!movie) {
+        if (!existingMovie) {
             return res.status(404).json({message: 'Movie not found'});
         }
 
         const updatedMovie = await Movie.findByIdAndUpdate(
             movieId,
-            {title, overview, poster_path},
+            {title, overview, poster_path, production_countries, production_companies},
             {new: true});
 
         res.status(200).json(updatedMovie);
@@ -88,20 +90,6 @@ const DeleteMovie = async (req, res) => {
     }
 };
 
-// // Delete a movie
-// app.delete('/movie/:_id', (req, res) => {
-//     Movie.findOneAndRemove({_id: req.params._id}).then((movie) => {
-//         if (movie) {
-//             res.send(`Movie ${req.params._id} deleted successfully!`);
-//         } else {
-//             res.send(`Movie ${req.params._id} not found!`);
-//         }
-//     }).catch((err) => {
-//         console.error(err);
-//         res.status(500).send('Error deleting movie');
-//     });
-// });
-
 const AddMovieByLink = async (req, res) => {
     try {
         // const movie = new Movie(req.body);
@@ -112,7 +100,7 @@ const AddMovieByLink = async (req, res) => {
         const {link} = req.body;
 
         // Make a request to fetch the movie data based on the provided link
-        const response = await axios.get(`https://api.themoviedb.org/3/movie/${link}?api_key=043ea53b0f115cd3997dcbb3f8a46a1a`);
+        const response = await axios.get(`${API_MOVIE_URL}${link}?api_key=${API_MOVIE_KEY}`);
         const movieData = response.data;
 
         // Process the movie data and add it to your database or perform any other necessary operations
@@ -210,7 +198,7 @@ const RatingMovie = async (req, res) => {
     }
 };
 
-const FilterMovie = async (req, res) => {
+const FilterMoviesByGenre = async (req, res) => {
     try {
 
         const { genre } = req.params;
@@ -256,6 +244,49 @@ const AllGenresOfMovies = async (req, res) => {
     }
 };
 
+const AllProductionCompanies = async (req, res) => {
+    try {
+
+        const movies = await Movie.find();
+        const productionCompanies = movies.reduce((result, movie) => {
+            movie.production_companies.forEach((company) => {
+                const { _id, id, name, logo_path, origin_country } = company;
+                const existingCompany = result.find((c) => (c.id === id || c.name === name));
+                if (!existingCompany) {
+                    result.push({ _id, id, name, logo_path, origin_country });
+                }
+            });
+            return result;
+        }, []);
+
+        res.json(productionCompanies);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
+
+// const AllProductionCompanies = async (req, res) => {
+//     try {
+//         const movies = await Movie.find();
+//         const productionCompanies = Array.from(new Set(movies.flatMap(movie => movie.production_companies.map(company => ({
+//             _id: company._id,
+//             id: company.id,
+//             name: company.name,
+//             logo_path: company.logo_path,
+//             origin_country: company.origin_country
+//         })))));
+//
+//         res.json(productionCompanies);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Server error' });
+//     }
+// }
+
+
+
 
 module.exports = {
     AllMovies,
@@ -266,8 +297,9 @@ module.exports = {
     AddMovieByLink,
     RatingMovie,
     // FilterActionMovie,
-    FilterMovie,
-    AllGenresOfMovies
+    FilterMoviesByGenre,
+    AllGenresOfMovies,
+    AllProductionCompanies
 }
 
 // const FilterActionMovie = async (req, res) => {
