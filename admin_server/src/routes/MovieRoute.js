@@ -32,4 +32,6 @@ movieRoute.get('/movies/genres', MovieController.AllGenresOfMovies);
 // movie.production_companies
 movieRoute.get('/movies/companies', MovieController.AllProductionCompanies);
 
+movieRoute.get('/movies/ratings', MovieController.ListUsersRatingMovie);
+
 module.exports = movieRoute;
