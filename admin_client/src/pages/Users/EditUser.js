@@ -9,7 +9,7 @@ const EditUser = ({cx, user}) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [image, setImage] = useState(null);
+    // const [image, setImage] = useState(null);
 
     const nameInputRef = useRef(null);
 
@@ -27,14 +27,17 @@ const EditUser = ({cx, user}) => {
         setPhone(e.target.value);
     };
 
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
-    };
+    // const handleImageChange = (e) => {
+    //     const file = e.target.files[0];
+    //     setImage(file);
+    //     setImageName(file.name); // Set the file name
+    // };
 
     const handleShow = () => {
         setName(user.name);
         setEmail(user.email);
         setPhone(user.phone);
+        // setImage(user.image);
         setShow(true);
     };
 
@@ -46,24 +49,15 @@ const EditUser = ({cx, user}) => {
     const handleEditUser = async (e) => {
         e.preventDefault();
 
-        // Tạo một đối tượng FormData để gửi dữ liệu
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("email", email);
-        formData.append("phone", phone);
-        formData.append("image", image);
-
-        if (!name || !email || !phone || !image) {
+        if (!name || !email || !phone ) {
             setErrorMessage('Please enter all information!');
             return;
         }
 
         try {
 
-            const response = await api.put(`/user/${user._id}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+            const response = await api.put(`/user/${user._id}`, {
+                name, email, phone,
             });
             const updatedUser = response.data;
 
@@ -145,20 +139,21 @@ const EditUser = ({cx, user}) => {
             value: phone,
             onChange: handlePhoneChange,
         },
-        {
-            label: (
-                <>
-                    Avatar{" "}
-                    <span
-                        style={{color: "red"}}
-                        dangerouslySetInnerHTML={{__html: "*"}}
-                    />
-                </>
-            ),
-            type: "file",
-            id: "image",
-            onChange: handleImageChange,
-        },
+        // {
+        //     label: (
+        //         <>
+        //             Avatar{" "}
+        //             <span
+        //                 style={{color: "red"}}
+        //                 dangerouslySetInnerHTML={{__html: "*"}}
+        //             />
+        //         </>
+        //     ),
+        //     type: "file",
+        //     id: "image",
+        //     value: imageName,
+        //     onChange: handleImageChange,
+        // },
     ]
 
     return (
@@ -199,7 +194,16 @@ const EditUser = ({cx, user}) => {
                                     required
                                 />
                             </FloatingLabel>
-                        ))}
+                            ))}
+                        {
+                            user.image && (
+                                <img
+                                    src={`${api.defaults.baseURL}/userImages/${user.image}`}
+                                    alt={user.email}
+                                    style={{width: "125px", height: "125px", borderRadius: "10px"}}
+                                />
+                            )
+                        }
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
