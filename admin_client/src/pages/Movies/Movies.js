@@ -194,7 +194,17 @@ function ListMovies() {
                                                     {highlightKeyword(movie.title, searchTerm)}
                                                 </p>
                                                 <p className="mb-0">
-                                                    {movie.genres && movie.genres.map((genre) => genre.name).join(", ")}
+                                                    {/*{movie.genres && movie.genres.map((genre) => genre.name).join(", ")}*/}
+
+                                                    {movie.genres && movie.genres.map((genre, index) => (
+                                                        <MDBBadge
+                                                            key={index}
+                                                            pill
+                                                            className={cx('badge-genre-movie', 'm-1')}
+                                                        >
+                                                            {genre.name}
+                                                        </MDBBadge>
+                                                    ))}
                                                 </p>
                                             </div>
                                         </div>

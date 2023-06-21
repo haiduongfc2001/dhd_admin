@@ -10,6 +10,7 @@ function Home() {
         <div className={cx('wrapper')}>
             {/*<BreadcrumbExample />*/}
             <ListMovies />
+
         </div>
     )
 }
