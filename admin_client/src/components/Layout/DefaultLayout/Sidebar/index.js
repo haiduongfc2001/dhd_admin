@@ -6,6 +6,7 @@ import {BsFillCartCheckFill} from "react-icons/bs";
 import {NavLink} from "react-router-dom";
 import {MDBBtn} from "mdb-react-ui-kit";
 import {BiMoviePlay} from "react-icons/bi";
+import {AiFillStar} from "react-icons/ai";
 
 const cx = classNames.bind(styles)
 const Sidebar = () => {
@@ -34,14 +35,19 @@ const Sidebar = () => {
         },
         {
             icon: <BsFillCartCheckFill {...iconStyle}/>,
-            text: "Orders",
-            link: "/orders"
+            text: "Companies",
+            link: "/companies"
         },
         {
-            icon: <FaUserPlus {...iconStyle}/>,
-            text: "Supplier",
-            link: "/supplier"
+            icon: <AiFillStar {...iconStyle}/>,
+            text: "Ratings",
+            link: "/ratings"
         }
+        // {
+        //     icon: <FaUserPlus {...iconStyle}/>,
+        //     text: "Supplier",
+        //     link: "/supplier"
+        // }
     ];
 
     return (
