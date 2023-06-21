@@ -69,7 +69,7 @@ const upload = multer({storage: storage});
 user_route.get('/users', UserController.AllUsers);
 user_route.get('/user/:_id', UserController.FindUserById);
 // user_route.post('/user/:_id', UserController.FindUserById);
-user_route.put('/user/:_id', upload.single('image'), AdminController.AdminEditUser)
+user_route.put('/user/:_id', AdminController.AdminEditUser)
 user_route.delete('/user/:_id', AdminController.AdminDeleteUser);
 
 user_route.post('/register', upload.single('image'), UserController.UserRegister);
