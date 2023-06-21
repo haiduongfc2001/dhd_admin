@@ -1,74 +1,145 @@
-// import {Button} from "react-bootstrap";
-// import React, {useEffect, useState} from "react";
+// import {Button, Modal, Form, ModalTitle, FloatingLabel} from "react-bootstrap";
+// import {useState} from "react";
 // import api from "~/api/api";
 //
+// const EditUser = ({cx, user}) => {
+//     const [show, setShow] = useState(false);
+//     const [name, setName] = useState("");
+//     const [email, setEmail] = useState("");
+//     const [phone, setPhone] = useState("");
+//     const [image, setImage] = useState(null);
 //
-// const FilterMovieGenre = ({cx, setGenreMovies, setShowGenreMovies}) => {
-//     const [genresMovies, setGenresMovies] = useState([]);
-//
-//     useEffect(() => {
-//         api.get('/movies/genres')
-//             .then((response) => {
-//                 setGenresMovies(response.data)
-//             })
-//             .catch((error) => {
-//                 console.error(error);
-//             })
-//     })
-//
-//     const handleMovieGenre = (e) => {
-//         e.preventDefault();
-//         setShowGenreMovies(true);
-//
-//         const genre = e.target.value; // Lấy giá trị của thẻ Button được click
-//         api.get(`/movie/genre/${genre}`)
-//             .then(response => {
-//                 setGenreMovies(response.data);
-//             })
-//             .catch(error => {
-//                 console.log(error);
-//             });
+//     const handleNameChange = (e) => {
+//         setName(e.target.value);
 //     };
 //
-//     const handleAllMovies = (e) => {
+//     const handleEmailChange = (e) => {
+//         setEmail(e.target.value);
+//     };
+//
+//     const handlePhoneChange = (e) => {
+//         setPhone(e.target.value);
+//     };
+//
+//     const handleImageChange = (e) => {
+//         setImage(e.target.files[0]);
+//     };
+//
+//     const handleShow = () => {
+//         setName(user.name);
+//         setEmail(user.email);
+//         setPhone(user.phone);
+//         setShow(true);
+//     };
+//
+//     const handleClose = () => {
+//         setShow(false);
+//     };
+//
+//     const handleEditUser = async (e) => {
 //         e.preventDefault();
 //
-//         api.get('/movies')
-//             .then(response => {
-//                 setGenreMovies(response.data);
-//             })
-//             .catch(error => {
-//                 console.log(error);
+//         // Tạo một đối tượng FormData để gửi dữ liệu
+//         const formData = new FormData();
+//         formData.append("name", name);
+//         formData.append("email", email);
+//         formData.append("phone", phone);
+//         formData.append("image", image);
+//
+//         if (!name || !email || !phone || !image) {
+//             return;
+//         }
+//
+//         try {
+//
+//             const response = await api.put(`/user/${user._id}`, formData, {
+//                 headers: {
+//                     'Content-Type': 'multipart/form-data',
+//                 },
 //             });
+//             const updatedUser = response.data;
+//             handleClose();
+//         } catch (error) {
+//             console.log(error);
+//         }
 //     };
+//
+//     const editUserForm = [
+//         {
+//             label: "User Name",
+//             type: "text",
+//             id: "name",
+//             value: name,
+//             onChange: handleNameChange,
+//         },
+//         {
+//             label: "User Email",
+//             type: "email",
+//             id: "email",
+//             value: email,
+//             onChange: handleEmailChange,
+//         },
+//         {
+//             label: "User Phone Number",
+//             type: "number",
+//             id: "phone",
+//             value: phone,
+//             onChange: handlePhoneChange,
+//         },
+//         {
+//             label: "Avatar",
+//             type: "file",
+//             id: "image",
+//             onChange: handleImageChange,
+//         },
+//     ]
 //
 //     return (
-//         <div className={cx('filter-movie-body')}>
-//             <div className={cx('m-3', 'filter-movie-genre')}>
-//                 <p onClick={handleAllMovies}>
-//                     All Movies
-//                     <span> > </span>
-//                 </p>
-//                 <ul>
-//                     {
-//                         genresMovies.map((genreMovie) => (
-//                             <li
-//                                 key={genreMovie.id}
-//                                 className={'mb-2'}
-//                             >
-//                                 <Button
-//                                     onClick={handleMovieGenre}
-//                                     value={genreMovie.name}
-//                                 >
-//                                     {genreMovie.name}
-//                                 </Button>
-//                             </li>
-//                         ))
-//                     }
-//                 </ul>
-//             </div>
-//         </div>
-//     )
-// }
+//         <>
+//             <Button onClick={handleShow}>
+//                 Edit
+//             </Button>
 //
-// export default FilterMovieGenre;
+//             <Modal show={show} centered onHide={handleClose}>
+//                 <Modal.Header closeButton>
+//                     <ModalTitle>Edit User</ModalTitle>
+//                 </Modal.Header>
+//                 <Modal.Body>
+//                     <Form inline="true" className={cx('form-user')}>
+//                         {editUserForm.map((form, index) => (
+//                             <FloatingLabel
+//                                 key={index}
+//                                 label={form.label}
+//                             >
+//                                 <Form.Control
+//                                     type={form.type}
+//                                     id={form.id}
+//                                     value={form.value}
+//                                     onChange={form.onChange}
+//                                 />
+//                             </FloatingLabel>
+//                         ))}
+//                         {
+//                             user.image && (
+//                                 <img
+//                                     src={user.image}
+//                                     alt={user.email}
+//                                 />
+//                             )
+//                         }
+//                     </Form>
+//                 </Modal.Body>
+//                 <Modal.Footer>
+//                     <Button onClick={handleClose}>
+//                         Close
+//                     </Button>
+//                     <Button onClick={handleEditUser}>
+//                         Save
+//                     </Button>
+//                 </Modal.Footer>
+//             </Modal>
+//         </>
+//     );
+// };
+//
+// export default EditUser;
