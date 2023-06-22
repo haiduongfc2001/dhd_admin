@@ -297,6 +297,27 @@ const ListUsersRatingMovie = async (req, res) => {
     }
 };
 
+const CountRatings = async (req, res) => {
+    try {
+        const movies = await Movie.find();
+
+        if (!movies) {
+            res.status(404).json({message: 'No movies!'});
+        }
+
+        let countVote = 0;
+        for (const movie of movies) {
+            countVote += movie.vote_count_user;
+        }
+
+        res.json({ countVote });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({error: "Server error"});
+    }
+}
+
 
 module.exports = {
     AllMovies,
@@ -310,7 +331,8 @@ module.exports = {
     FilterMoviesByGenre,
     AllGenresOfMovies,
     AllProductionCompanies,
-    ListUsersRatingMovie
+    ListUsersRatingMovie,
+    CountRatings
 }
 
 // const FilterActionMovie = async (req, res) => {
