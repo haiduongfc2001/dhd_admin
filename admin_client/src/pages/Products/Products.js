@@ -9,7 +9,7 @@ import DeleteProduct from "./DeleteProduct";
 import classNames from "classnames/bind"
 import styles from "./Product.module.scss"
 import BreadcrumbExample from "~/components/Layout/components/BreadcrumbExample/BreadcrumbExample";
-import EditProduct from "~/pages/Home/Products/EditProduct";
+import EditProduct from "~/pages/Products/EditProduct";
 import formatPrice from "~/hooks/formatPrice";
 
 const cx = classNames.bind(styles)
