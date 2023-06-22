@@ -13,6 +13,10 @@
         background-color: #b2cceb;
         color: #103995;
       }
+
+      .card-movies-text {
+        color: #051c64;
+      }
     }
 
     .card-users {
@@ -22,13 +26,22 @@
         background-color: #b0d7f3;
         color: #0c53b7;
       }
+
+      .card-users-text {
+        color: #042979;
+      }
     }
+
     .card-companies {
       background-color: #fff7cc;
 
       .card-companies-icon {
         background-color: #f4e5b3;
         color: #b78104;
+      }
+
+      .card-companies-text {
+        color: #7a5002;
       }
     }
     .card-ratings {
@@ -37,6 +50,10 @@
       .card-ratings-icon {
         background-color: #f4c8bf;
         color: #b72135;
+      }
+
+      .card-ratings-text {
+        color: #7a0b2e;
       }
     }
 
@@ -60,6 +77,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
+
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.4); /* Đổ bóng */
+      transform: scale(1.1); /* Lồi lên */
+      //box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      //transform: translateY(-10%);
     }
   }
 }

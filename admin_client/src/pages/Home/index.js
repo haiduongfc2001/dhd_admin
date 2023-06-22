@@ -9,6 +9,7 @@ import {BsFillCartCheckFill} from "react-icons/bs";
 import {AiFillStar} from "react-icons/ai";
 import {useEffect, useState} from "react";
 import api from "~/api/api";
+import {Link} from "react-router-dom";
 
 const cx = classNames.bind(styles)
 
@@ -61,6 +62,8 @@ function Home() {
             icon: <BiMoviePlay/>,
             cardText: 'card-movies-text',
             count: countMovies,
+            text: 'Movies',
+            cardLink: '/movies'
         },
         {
             card: 'card-users',
@@ -68,7 +71,8 @@ function Home() {
             icon: <FaUserAlt/>,
             cardText: 'card-users-text',
             count: countUsers,
-            text: 'Movies'
+            text: 'Users',
+            cardLink: '/users'
         },
         {
             card: 'card-companies',
@@ -76,7 +80,8 @@ function Home() {
             icon: <BsFillCartCheckFill/>,
             cardText: 'card-companies-text',
             count: countCompanies,
-            text: 'Companies'
+            text: 'Companies',
+            cardLink: '/companies'
         },
         {
             card: 'card-ratings',
@@ -84,7 +89,8 @@ function Home() {
             icon: <AiFillStar/>,
             cardText: 'card-ratings-text',
             count: countRatings,
-            text: 'Ratings'
+            text: 'Ratings',
+            cardLink: '/ratings'
         },
     ]
 
@@ -98,7 +104,9 @@ function Home() {
                         <Card className={cx(`${c.card}`)} key={index}>
                             <div className={cx(`${c.cardIcon}`, 'm-3')}>{c.icon}</div>
                             <div className={cx('m-3', `${c.cardText}`)}>
-                                <h2>{c.count} {c.text}</h2>
+                                <Link to={`${c.cardLink}`}>
+                                    <h2>{c.count} {c.text}</h2>
+                                </Link>
                             </div>
                         </Card>
                     ))
