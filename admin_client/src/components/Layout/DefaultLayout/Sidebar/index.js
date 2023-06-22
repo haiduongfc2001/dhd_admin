@@ -6,7 +6,7 @@ import {BsFillCartCheckFill} from "react-icons/bs";
 import {NavLink} from "react-router-dom";
 import {MDBBtn} from "mdb-react-ui-kit";
 import {BiMoviePlay} from "react-icons/bi";
-import {AiFillStar} from "react-icons/ai";
+import {AiFillDashboard, AiFillStar} from "react-icons/ai";
 
 const cx = classNames.bind(styles)
 const Sidebar = () => {
@@ -18,11 +18,16 @@ const Sidebar = () => {
     }
 
     const iconStyle = {
-        className: cx('icon-sidebar', { close: !isOpen }),
+        className: cx('icon-sidebar', {close: !isOpen}),
         // style: {marginRight: isOpen ? '16px' : '0px'}
     };
 
     const buttons = [
+        {
+            icon: <AiFillDashboard {...iconStyle} />,
+            text: "Dashboard",
+            link: "/"
+        },
         {
             icon: <BiMoviePlay {...iconStyle}/>,
             text: "Movies",
@@ -52,21 +57,21 @@ const Sidebar = () => {
 
     return (
         <div
-            className={cx('wrapper', { close: !isOpen })}
+            className={cx('wrapper', {close: !isOpen})}
         >
-            <div className={cx('inner', { close: !isOpen })}>
+            <div className={cx('inner', {close: !isOpen})}>
                 <div className={cx('toggle-bar', 'mb-3')}>
                     <FaBars onClick={toggle}/>
                 </div>
                 {buttons.map((button, index) => (
                     <NavLink to={button.link} key={index}>
                         <MDBBtn
-                            className={cx('sidebar-menu', { close: !isOpen }, {'selected': selectedButton === index})}
+                            className={cx('sidebar-menu', {close: !isOpen}, {'selected': selectedButton === index})}
                             onClick={() => setSelectedButton(index)}
                         >
                             {button.icon}
                             <div
-                                className={cx('sidebar-category', { close: !isOpen })}
+                                className={cx('sidebar-category', {close: !isOpen})}
                             >
                                 {button.text}
                             </div>

@@ -3,7 +3,7 @@ import Home from "~/pages/Home";
 import CreateDefaultAdmin from "~/components/CreateAccountAdmin/CreateAccountAdmin";
 import SignIn from "~/pages/SignIn/SignIn";
 // import Test from "~/test";
-import Products from "~/pages/Home/Products/Products";
+import Products from "~/pages/Products/Products";
 import Users from "~/pages/Users/Users";
 import Companies from "~/pages/Companies/Companies";
 import NotFound from "~/components/NotFound/NotFound";
