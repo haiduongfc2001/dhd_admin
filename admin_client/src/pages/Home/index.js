@@ -10,6 +10,8 @@ import {AiFillStar} from "react-icons/ai";
 import {useEffect, useState} from "react";
 import api from "~/api/api";
 import {Link} from "react-router-dom";
+import PieChartUsers from "~/components/PieChart/PieChartUsers";
+import LineChart from "~/components/LineChart/LineChart";
 
 const cx = classNames.bind(styles)
 
@@ -41,19 +43,15 @@ function Home() {
     }, []);
 
     useEffect(() => {
-        getCountFromAPI('/movies/user-vote', setCountRatings);
-    }, []);
-
-    useEffect(() => {
         api.get('/movies/user-vote')
             .then(response => {
-                const { countVote } = response.data;
+                const {countVote} = response.data;
                 setCountRatings(countVote);
             })
             .catch(err => {
                 console.error(err);
             })
-    }, [])
+    }, []);
 
     const cardsData = [
         {
@@ -120,6 +118,19 @@ function Home() {
                 {/*</Card>*/}
 
             </div>
+
+            <div className={cx('users-chart')}>
+                <div className={cx('users-chart-column')}>
+                    <h1>Biểu đồ số người dùng đăng ký theo ngày</h1>
+                    <LineChart/>
+                </div>
+
+                <div className={cx('users-chart-pie')}>
+                    <h1>My Pie Chart</h1>
+                    <PieChartUsers/>
+                </div>
+            </div>
+
         </div>
     )
 }
