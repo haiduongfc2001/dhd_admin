@@ -87,5 +87,7 @@ user_route.post('/forget-password', UserController.UserResetPassword);
 
 user_route.put('/edit-profile/:_id', UserController.UserEditProfile);
 
+user_route.get('/users/count-status', UserController.UserCountStatus);
+
 
 module.exports = user_route;

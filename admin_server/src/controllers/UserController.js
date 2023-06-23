@@ -465,7 +465,12 @@ const UserVerifyLogin = async (req, res) => {
 
                     res.status(200)
                         .header('Authorization', `Bearer ${token}`)
-                        .status(200).json({message: 'Logged in successfully', token, user_id: userData._id, user: userData});
+                        .status(200).json({
+                        message: 'Logged in successfully',
+                        token,
+                        user_id: userData._id,
+                        user: userData
+                    });
 
                     // return res.status(200)
                     //     .json({message: 'Logged in successfully', token, user_id: userData._id, user: userData});
@@ -623,6 +628,41 @@ const UserEditProfile = async (req, res) => {
     }
 }
 
+const UserCountStatus = async (req, res) => {
+    try {
+
+        const users = await User.find();
+
+        if (!users.length) {
+            res.status(404).json({message: 'No users found!'})
+        }
+
+        let adminCount = 0;
+        let usersCount = 0;
+        let notVerifiedCount = 0;
+
+        for (const user of users) {
+            if (user.is_admin === 1) {
+                adminCount += 1;
+            } else if (user.is_admin === 0 && user.is_verified === 1) {
+                usersCount += 1;
+            } else {
+                notVerifiedCount += 1;
+            }
+        }
+
+        const userCount = {
+            adminCount, usersCount, notVerifiedCount
+        }
+
+        res.json(userCount);
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({message: 'Server error'});
+    }
+}
+
 
 module.exports = {
     LoadRegister,
@@ -650,5 +690,6 @@ module.exports = {
     UserForgetVerify,
     UserForgetPassword,
     UserResetPassword,
-    UserEditProfile
+    UserEditProfile,
+    UserCountStatus
 }
