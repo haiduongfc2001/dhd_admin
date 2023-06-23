@@ -69,7 +69,7 @@ function Companies() {
                 </tr>
                 </thead>
                 <tbody>
-                {companies.length && companies.map((company, index) => (
+                {companies.length > 0 && companies.map((company, index) => (
                     <tr key={index}>
                         <td style={{textAlign: "center"}}>{company.id}</td>
                         <td  style={{textAlign: "center"}}>
