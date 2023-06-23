@@ -119,14 +119,14 @@ function Home() {
 
             </div>
 
-            <div className={cx('users-chart')}>
+            <div className={cx('users-chart', 'mt-5', 'mb-5')}>
                 <div className={cx('users-chart-column')}>
-                    <h1>Biểu đồ số người dùng đăng ký theo ngày</h1>
+                    <h1>Số người dùng đăng ký theo ngày</h1>
                     <LineChart/>
                 </div>
 
                 <div className={cx('users-chart-pie')}>
-                    <h1>My Pie Chart</h1>
+                    <h1>Thống kê tài khoản</h1>
                     <PieChartUsers/>
                 </div>
             </div>
