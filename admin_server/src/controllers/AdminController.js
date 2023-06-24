@@ -55,6 +55,7 @@ const sendResetPasswordMail = async (name, email, token) => {
                     Reset Password
                     </a>
                   </p>
+                </div>
               `,
         };
 
