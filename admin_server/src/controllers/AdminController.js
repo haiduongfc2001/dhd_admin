@@ -39,13 +39,25 @@ const sendResetPasswordMail = async (name, email, token) => {
         });
 
         const MailOptions = {
-            from: USERNAME, // Use the same email username as the sender
+            from: USERNAME,
             to: email,
-            subject: 'For Reset Password',
-            html: '<p>Hi <b>' + name + '</b>, please click here to ' +
-                '<a href="' + resetPasswordLink + '"> Reset </a> ' +
-                'your password.</p>',
-        }
+            subject: 'For Reset Password Admin',
+            html: `
+                <div style="font-family: Arial, sans-serif; font-size: 16px;">
+                  <p>Hi <b>${name}</b>,</p>
+                  <p>Please click the link below to reset your password:</p>
+                  <p>
+                    <a 
+                        href="${resetPasswordLink}" 
+                        style="display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #0d6efd; 
+                        color: #FFFFFF; text-decoration: none; border-radius: 5px;"
+                    >
+                    Reset Password
+                    </a>
+                  </p>
+              `,
+        };
+
 
         transporter.sendMail(MailOptions, function (error, info) {
             if (error) {
@@ -76,17 +88,32 @@ const addUserMail = async (name, email, password, user_id) => {
         });
 
         const MailOptions = {
-            from: USERNAME, // Use the same email username as the sender
+            from: USERNAME,
             to: email,
             subject: 'Admin add you and verify your email',
-            html: '<p>Hi ' + name + ', please click here to ' +
-                '<a href="' + userVerificationLink + '">Verify</a> ' +
-                'your mail.</p>' +
-                '<br>' +
-                'Email: <b>' + email + '</b>' +
-                '<br>' +
-                'Password: <b>' + password + '</b>',
-        }
+            html: `
+                <div style="font-family: Arial, sans-serif; font-size: 16px;">
+                  <p>Hi ${name},</p>
+                  <p>Please click the link below to verify your email:</p>
+                  <p>
+                    <a 
+                        href="${userVerificationLink}" 
+                        style="display: inline-block; margin-top: 10px; padding: 10px 20px; 
+                        background-color: #0d6efd; color: #FFFFFF; text-decoration: none; border-radius: 5px;"
+                    >
+                        Verify Email
+                    </a>
+                  </p>
+                  <br>
+                  <p>Here are your login credentials:</p>
+                  <ul style="list-style: none; padding: 0;">
+                    <li><strong>Email:</strong> ${email}</li>
+                    <li><strong>Password:</strong> ${password}</li>
+                  </ul>
+                </div>
+              `,
+        };
+
 
         transporter.sendMail(MailOptions, function (error, info) {
             if (error) {
@@ -504,13 +531,26 @@ const sendResetPasswordMailAdmin = async (name, email, token) => {
         });
 
         const MailOptions = {
-            from: USERNAME, // Use the same email username as the sender
+            from: USERNAME,
             to: email,
             subject: 'For Reset Password Admin',
-            html: '<p>Hi <b>' + name + '</b>, please click here to ' +
-                '<a href="' + resetPasswordLink + '"> Reset </a> ' +
-                'your password.</p>',
-        }
+            html: `
+                <div style="font-family: Arial, sans-serif; font-size: 16px;">
+                  <p>Hi <b>${name}</b>,</p>
+                  <p>Please click the link below to reset your password:</p>
+                  <p>
+                    <a 
+                        href="${resetPasswordLink}" 
+                        style="display: inline-block; margin-top: 10px; padding: 10px 20px; 
+                        background-color: #0d6efd; color: #FFFFFF; text-decoration: none; border-radius: 5px;"
+                    >
+                        Reset Password
+                    </a>
+                  </p>
+                </div>
+              `,
+        };
+
 
         transporter.sendMail(MailOptions, function (error, info) {
             if (error) {

@@ -39,9 +39,15 @@ const sendVerifyMail = async (name, email, user_id) => {
             subject: 'For Verification Mail',
             text: "Plaintext version of the message",
             // html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:5000/verify?id=' + user_id + '"> Verify </a> your mail.</p>',
-            html: '<p>Hi <b>' + name + '</b>, please click here to ' +
-                '<a href="' + userVerificationLink + '">Verify</a>' +
-                ' your mail.</p>',
+
+            html: `
+                <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5;">
+                  Hi <strong style="color: #0000FF;">${name}</strong>, please click here to verify your mail.
+                </p>
+                <p style="text-align: center;">
+                  <a href="${userVerificationLink}" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #0d6efd; color: #FFFFFF; text-decoration: none; border-radius: 5px;">Verify</a>
+                </p>
+              `,
         }
 
         transporter.sendMail(MailOptions, function (error, info) {
@@ -74,14 +80,31 @@ const sendResetPasswordMail = async (name, email, token) => {
         });
 
         const MailOptions = {
-            from: USERNAME, // Use the same email username as the sender
+            from: USERNAME,
             to: email,
-            subject: 'For Reset Password',
-            // html: '<p>Hi <b>'+name+'</b>, please click here to <a href="http://127.0.0.1:5000/forget-password?token=' + token + '"> Reset </a> your password.</p>',
-            html: '<p>Hi <b>' + name + '</b>, please click here to ' +
-                '<a href="' + resetPasswordLink + '"> Reset </a>' +
-                ' your password.</p>',
-        }
+            subject: 'For Reset Password Admin',
+            html: `
+                <div style="font-family: Arial, sans-serif; font-size: 16px;">
+                  <p style="margin-bottom: 20px;">Hi <b>${name}</b>,</p>
+                  <p style="margin-bottom: 20px;">
+                    Please click the link below to reset your password:
+                  </p>
+                  <p style="margin-bottom: 20px;">
+                    <a 
+                        href="${resetPasswordLink}" 
+                        style="display: inline-block; padding: 10px 20px; background-color: #0d6efd; 
+                        color: #FFFFFF; text-decoration: none; border-radius: 5px;"
+                    >
+                        Reset Password
+                    </a>
+                  </p>
+                  <p style="margin-bottom: 0;">
+                    If you did not request a password reset, please ignore this email.
+                  </p>
+                </div>
+              `,
+        };
+
 
         transporter.sendMail(MailOptions, function (error, info) {
             if (error) {
