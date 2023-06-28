@@ -503,11 +503,18 @@ const AdminEditUser = async (req, res) => {
         //     });
         // }
 
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            {name, email, phone},
-            {new: true}
-        );
+        // const updatedUser = await User.findByIdAndUpdate(
+        //     userId,
+        //     {name, email, phone},
+        //     {new: true}
+        // );
+
+        existingUser.name = name;
+        existingUser.email = email;
+        existingUser.phone = phone;
+        existingUser.updatedAt = new Date();
+
+        const updatedUser = await existingUser.save();
 
         res.status(200).json(updatedUser);
 
