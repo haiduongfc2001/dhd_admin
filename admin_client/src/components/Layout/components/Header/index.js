@@ -42,30 +42,30 @@ function Header(props) {
                         className={cx('logoadmin')}
                     />
                 </NavLink>
-                <Tippy
-                    visible={searchResult.length > 0}
-                    render={attrs => (
-                        <div className={cx('search-results')} tabIndex={-1} {...attrs}>
-                            Kết quả
-                        </div>
-                    )}
-                >
-                    <div className={cx('search')}>
-                        <input
-                            placeholder="Search ..."
-                            spellCheck={false}
-                        />
-                        <button className={cx('clear')}>
-                            <FontAwesomeIcon icon={faCircleXmark}/>
-                        </button>
-                        {/*Loading*/}
-                        <FontAwesomeIcon className={cx('loading')} icon={faSpinner}/>
+                {/*<Tippy*/}
+                {/*    visible={searchResult.length > 0}*/}
+                {/*    render={attrs => (*/}
+                {/*        <div className={cx('search-results')} tabIndex={-1} {...attrs}>*/}
+                {/*            Kết quả*/}
+                {/*        </div>*/}
+                {/*    )}*/}
+                {/*>*/}
+                {/*    <div className={cx('search')}>*/}
+                {/*        <input*/}
+                {/*            placeholder="Search ..."*/}
+                {/*            spellCheck={false}*/}
+                {/*        />*/}
+                {/*        <button className={cx('clear')}>*/}
+                {/*            <FontAwesomeIcon icon={faCircleXmark}/>*/}
+                {/*        </button>*/}
+                {/*        /!*Loading*!/*/}
+                {/*        <FontAwesomeIcon className={cx('loading')} icon={faSpinner}/>*/}
 
-                        <button className={cx('search-btn')}>
-                            <FontAwesomeIcon icon={faMagnifyingGlass}/>
-                        </button>
-                    </div>
-                </Tippy>
+                {/*        <button className={cx('search-btn')}>*/}
+                {/*            <FontAwesomeIcon icon={faMagnifyingGlass}/>*/}
+                {/*        </button>*/}
+                {/*    </div>*/}
+                {/*</Tippy>*/}
 
 
                 <div className={cx('')}>
