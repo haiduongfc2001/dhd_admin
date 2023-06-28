@@ -14,6 +14,7 @@ import styles from "./Users.module.scss";
 import formatTime from "~/hooks/formatTime";
 import SearchInput from "~/components/SearchInput/SearchInput";
 import {Button, Form} from "react-bootstrap";
+import highlightKeyword from "~/components/highlightKeyword";
 const cx = classNames.bind(styles);
 
 export default function Users() {
@@ -25,6 +26,12 @@ export default function Users() {
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
     }
+
+    const filteredUsers = users.filter((user) => {
+        const nameMatch = user.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const emailMatch = user.email.toLowerCase().includes(searchTerm.toLowerCase());
+        return nameMatch || emailMatch;
+    })
 
     const tableArray = ['User', 'UserID', 'Phone', 'Status','Creat Time', 'Actions'];
     const actionArray = [
@@ -62,7 +69,6 @@ export default function Users() {
             })
     });
 
-
     return (
         <div
             style={{fontSize: 'var(--default-font-size'}}
@@ -92,7 +98,7 @@ export default function Users() {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {users.map((user) => (
+                    {filteredUsers.map((user) => (
                         <tr key={user._id}>
                             <td>
                                 <div className='d-flex align-items-center'>
@@ -103,8 +109,12 @@ export default function Users() {
                                         className='rounded-circle'
                                     />
                                     <div className='ms-3'>
-                                        <p className='fw-bold mb-1'>{user.name}</p>
-                                        <p className='text-muted mb-0'>{user.email}</p>
+                                        <p className='fw-bold mb-1'>
+                                            {highlightKeyword(user.name, searchTerm)}
+                                        </p>
+                                        <p className='text-muted mb-0'>
+                                            {highlightKeyword(user.email, searchTerm)}
+                                        </p>
                                     </div>
                                 </div>
                             </td>
