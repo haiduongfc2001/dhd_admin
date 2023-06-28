@@ -42,10 +42,17 @@ const sendVerifyMail = async (name, email, user_id) => {
 
             html: `
                 <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5;">
-                  Hi <strong style="color: #0000FF;">${name}</strong>, please click here to verify your mail.
+                  Xin chào <strong style="color: #0000FF;">${name}</strong>, xin vui lòng nhấp vào ô bên dưới 
+                  để xác thực tài khoản của bạn.
                 </p>
-                <p style="text-align: center;">
-                  <a href="${userVerificationLink}" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #0d6efd; color: #FFFFFF; text-decoration: none; border-radius: 5px;">Verify</a>
+                <p>
+                  <a 
+                      href="${userVerificationLink}" 
+                      style="display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #0d6efd; 
+                      color: #FFFFFF; text-decoration: none; border-radius: 5px;"
+                  >
+                    Verify
+                  </a>
                 </p>
               `,
         }

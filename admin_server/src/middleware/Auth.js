@@ -11,6 +11,29 @@
 //     }
 // };
 
+const jwt = require('jsonwebtoken');
+
+const authMiddleware = (req, res, next) => {
+    // Get the token from the request header
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ message: 'No token provided' });
+    }
+
+    try {
+        // Verify the token
+        const decodedToken = jwt.verify(token, 'your-secret-key');
+
+        // Add the decoded user ID to the request object
+        req.userId = decodedToken.userId;
+
+        next();
+    } catch (error) {
+        return res.status(401).json({ message: 'Invalid token' });
+    }
+};
+
 const isLogin = (req, res, next) => {
     // Check if user is logged in
     if (req.session && req.session.user) {
@@ -60,5 +83,6 @@ const isLogout = (req, res) => {
 module.exports = {
     isLogin,
     isAdminLogin,
-    isLogout
+    isLogout,
+    authMiddleware
 }
