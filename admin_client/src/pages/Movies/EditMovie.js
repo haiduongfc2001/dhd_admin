@@ -115,7 +115,7 @@ const EditMovie = ({cx, movie}) => {
                     />
                 </>
             ),
-            type: "text",
+            type: "textarea",
             id: "overview",
             value: overview,
             onChange: handleOverviewChange,
@@ -164,15 +164,16 @@ const EditMovie = ({cx, movie}) => {
                             >
                                 <Form.Control
                                     autoFocus={form.id === 'title'}
-                                    type={form.type}
+                                    as={form.type === 'textarea' ? 'textarea' : undefined}
                                     id={form.id}
                                     value={form.value}
                                     onChange={form.onChange}
                                     size="lg"
-                                    style={{minHeight: "40px"}}
+                                    style={{ minHeight: form.type === 'textarea' ? "100px" : "40px" }}
                                     required
                                 />
                             </FloatingLabel>
+
                         ))}
                         {movie.poster_path  ? (
                             <img
@@ -182,7 +183,13 @@ const EditMovie = ({cx, movie}) => {
                                         : movie.poster_path
                                 }
                                 alt={movie.title}
-                                style={{width: "125px", height: "80px"}}
+                                style={{
+                                    width: "150px",
+                                    height: "225px",
+                                    objectFit: "cover",
+                                    borderRadius: "10px",
+                                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                }}
                             />
                         ) : (
                             <span>Không có ảnh</span>
