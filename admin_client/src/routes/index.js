@@ -33,13 +33,13 @@ export const privateRoutes = [
     { path: '/ratings', component: Ratings },
 ]
 
-const errorRoutes = [
+export const errorRoutes = [
     { path: '/not-found', component: NotFound },
     // ... other error routes
 ];
 
-export default [
-    publicRoutes,
-    privateRoutes,
-    errorRoutes
-];
+// export default [
+//     publicRoutes,
+//     privateRoutes,
+//     errorRoutes
+// ];
