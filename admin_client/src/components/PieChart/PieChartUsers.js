@@ -27,7 +27,7 @@ const PieChartUsers = () => {
     });
 
     const dataUsers = {
-        labels: ['Admin', 'User', 'Not Verified'],
+        labels: ['Admin', 'Đã xác thực', 'Chưa xác thực'],
         datasets: [
             {
                 data: [`${adminCount}`, `${usersCount}`, `${notVerifiedCount}`],
