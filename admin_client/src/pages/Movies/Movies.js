@@ -19,6 +19,7 @@ import CircularProgressBarVote from "~/components/CircularProgressBar";
 import SearchInput from "~/components/SearchInput/SearchInput";
 import {AiFillFilter} from "react-icons/ai";
 import FilterMovieGenre from "~/pages/Movies/FilterMovieGenre";
+import DetailsMovie from "~/pages/Movies/DetailsMovie";
 
 const cx = classNames.bind(styles)
 
@@ -121,6 +122,7 @@ function ListMovies() {
             >
                 <SearchInput
                     searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
                     handleSearch={handleSearch}
                 />
 
@@ -190,9 +192,11 @@ function ListMovies() {
                                                 className="rounded-circle"
                                             />
                                             <div className="ms-3">
-                                                <p className="fw-bold mb-1 limitLineClassName">
-                                                    {highlightKeyword(movie.title, searchTerm)}
-                                                </p>
+                                                <DetailsMovie
+                                                    cx={cx}
+                                                    movie={movie}
+                                                    searchTerm={searchTerm}
+                                                />
                                                 <p className="mb-0">
                                                     {/*{movie.genres && movie.genres.map((genre) => genre.name).join(", ")}*/}
 
