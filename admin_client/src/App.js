@@ -16,7 +16,7 @@ function App() {
         if (token) {
             setIsLoggedIn(true);
         }
-    }, []);
+    }, [setIsLoggedIn]);
 
     return (
         <Router>
