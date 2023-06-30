@@ -389,6 +389,7 @@ const AdminLogin = async (req, res) => {
 
                 // Lưu thông tin người dùng trong session
                 req.session.adminId = admin._id;
+                req.session.cookie.expires = new Date(Date.now() + 60 * 60 * 1000);
 
                 res.json({token});
             }
@@ -410,19 +411,23 @@ const AdminLogout = async (req, res) => {
     //     }
     // });
 
-    const {token} = req.body;
+    // const {token} = req.body;
+    //
+    // // Verify the token
+    // jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    //     if (err) {
+    //         return res.status(401).json({message: 'Invalid token'});
+    //     }
+    //
+    //     // Perform any necessary logout logic (e.g., removing tokens from the database, etc.)
+    //
+    //     // Return a success message
+    //     res.status(200).json({message: 'Logged out successfully'});
+    // });
 
-    // Verify the token
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({message: 'Invalid token'});
-        }
-
-        // Perform any necessary logout logic (e.g., removing tokens from the database, etc.)
-
-        // Return a success message
-        res.status(200).json({message: 'Logged out successfully'});
-    });
+    // Xóa token khỏi session để đăng xuất
+    delete req.session.token;
+    res.status(200).json({message: 'Logged out successfully'});
 };
 
 const AdminAddUser = async (req, res) => {

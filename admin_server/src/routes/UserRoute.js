@@ -77,7 +77,7 @@ user_route.post('/register', upload.single('image'), UserController.UserRegister
 user_route.get('/verify', UserController.VerifyMail);
 
 // user_route.get('/login', UserController.UserVerifyLogin);
-user_route.post('/login', authMiddleware, UserController.UserVerifyLogin);
+user_route.post('/login', UserController.UserVerifyLogin);
 
 user_route.get('/logout', UserController.Logout);
 
