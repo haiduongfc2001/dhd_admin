@@ -66,8 +66,6 @@ function SignIn() {
             // setEmail('');
             // setPassword('');
             // setSuccess(true);
-            // Redirect to the desired page after successful login
-            // You can replace the URL below with the appropriate route
             // window.location.href = 'http://localhost:3000/';
             navigate('/');
             toast.success('Logged in successfully!', {
@@ -95,16 +93,6 @@ function SignIn() {
             toast.error('Login failed!');
         }
     };
-
-    // useEffect(() => {
-    //     api.get('/admin/dashboard')
-    //         .then(response => {
-    //
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         })
-    // })
 
     // return (
     //     <div>
