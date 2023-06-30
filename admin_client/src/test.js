@@ -1,80 +1,77 @@
-// import {Modal, Form, FloatingLabel} from "react-bootstrap";
-// import React, {useState} from "react";
+// import React, {useContext, useEffect, useState} from 'react';
+// import {
+//     MDBBtn,
+//     MDBCard,
+//     MDBCardBody,
+//     MDBInput,
+// }
+//     from 'mdb-react-ui-kit';
+// import {useNavigate} from 'react-router-dom';
+// import api from "~/api/api";
+// import { AuthContext } from '~/context/AuthContext';
 //
-// const EditMovie = ({cx, movie}) => {
-//     const [show, setShow] = useState(false);
 //
-//     const [title, setTitle] = useState("");
-//     const [overview, setOverview] = useState('');
+// function SignIn() {
+//     const { setIsLoggedIn } = useContext(AuthContext);
+//     const navigate = useNavigate();
 //
-//     const [errorMessage, setErrorMessage] = useState('');
+//     const [email, setEmail] = useState('');
+//     const [password, setPassword] = useState('');
+//     const [errMsg, setErrMsg] = useState('');
 //
-//     const handleTitleChange = (e) => {
-//         setTitle(e.target.value);
-//     };
 //
-//     const handleOverviewChange = (e) => {
-//         setOverview(e.target.value);
-//     };
+//     useEffect(() => {
+//         setErrMsg('');
+//     }, [email, password]);
 //
-//     const handleClose = () => {
-//         setShow(false);
-//         setErrorMessage('');
-//     };
-//
-//     const editMovieForm = [
-//         {
-//             label: (
-//                 <>
-//                     Movie Name{" "}
-//                     <span style={{color: "red"}} dangerouslySetInnerHTML={{__html: "*"}}/>
-//                 </>
-//             ),
-//             type: "text",
-//             id: "title",
-//             value: title,
-//             onChange: handleTitleChange,
-//         },
-//         {
-//             label: (
-//                 <>
-//                     Movie Overview{" "}
-//                     <span
-//                         style={{color: "red"}}
-//                         dangerouslySetInnerHTML={{__html: "*"}}
-//                     />
-//                 </>
-//             ),
-//             type: "text",
-//             id: "overview",
-//             value: overview,
-//             onChange: handleOverviewChange,
+//     useEffect(() => {
+//         setErrMsg('');
+//         const token = localStorage.getItem('token');
+//         if (token) {
+//             setIsLoggedIn(true);
+//             navigate('/');
 //         }
-//     ]
+//     }, [setIsLoggedIn, navigate]);
+//
+//     const handleLogin = async (e) => {
+//         e.preventDefault();
+//
+//         try {
+//             const response = await api.post('/admin/login', {
+//                     email,
+//                     password
+//                 }
+//             );
+//             const token = response.data.token;
+//             localStorage.setItem('token', token);
+//
+//             setIsLoggedIn(true);
+//             navigate('/');
+//
+//         } catch (err) {
+//                 setErrMsg('Login Failed');
+//         }
+//     };
 //
 //     return (
-//         <>
-//             <Modal show={show} backdrop="static" centered onHide={handleClose}>
-//                 <Modal.Body>
-//                     <Form inline='true' className={cx('form-movie')}>
-//                         {editMovieForm.map((form, index) => (
-//                             <FloatingLabel
-//                                 key={index}
-//                                 label={form.label}
-//                             >
-//                                 <Form.Control
-//                                     type={form.type}
-//                                     id={form.id}
-//                                     value={form.value}
-//                                     onChange={form.onChange}
-//                                 />
-//                             </FloatingLabel>
-//                         ))}
-//                     </Form>
-//                 </Modal.Body>
-//             </Modal>
-//         </>
+//         <MDBCard>
+//             <MDBCardBody>
+//                 <MDBInput
+//                     type='email'
+//                     value={email}
+//                     onChange={(e) => setEmail(e.target.value)}
+//                 />
+//                 <MDBInput
+//                     type={password}
+//                     value={password}
+//                     onChange={(e) => setPassword(e.target.value)}
+//                 />
+//                 <MDBBtn onClick={handleLogin}>
+//                     Login
+//                 </MDBBtn>
+//             </MDBCardBody>
+//         </MDBCard>
 //     );
-// };
+// }
 //
-// export default EditMovie;
+// export default SignIn;
