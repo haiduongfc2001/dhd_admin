@@ -318,6 +318,27 @@ const CountRatings = async (req, res) => {
     }
 }
 
+const SearchMovies = async (req, res) => {
+    try {
+        const movies = await Movie.find();
+
+        if (!movies) {
+            res.status(404).json({message: 'No movies!'});
+        }
+
+        const searchTerm = req.query.query;
+        const searchResults = movies.filter((movie) =>
+            movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        res.json(searchResults);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({error: "Server error"});
+    }
+}
+
 
 module.exports = {
     AllMovies,
@@ -332,7 +353,8 @@ module.exports = {
     AllGenresOfMovies,
     AllProductionCompanies,
     ListUsersRatingMovie,
-    CountRatings
+    CountRatings,
+    SearchMovies
 }
 
 // const FilterActionMovie = async (req, res) => {

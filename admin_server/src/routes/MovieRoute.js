@@ -34,5 +34,6 @@ movieRoute.get('/movies/companies', MovieController.AllProductionCompanies);
 movieRoute.get('/movies/user-vote', MovieController.CountRatings);
 
 movieRoute.get('/movies/ratings', MovieController.ListUsersRatingMovie);
+movieRoute.get('/movies/search', MovieController.SearchMovies);
 
 module.exports = movieRoute;
