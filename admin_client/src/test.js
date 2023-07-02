@@ -1,77 +1,77 @@
-// import React, {useContext, useEffect, useState} from 'react';
-// import {
-//     MDBBtn,
-//     MDBCard,
-//     MDBCardBody,
-//     MDBInput,
-// }
-//     from 'mdb-react-ui-kit';
-// import {useNavigate} from 'react-router-dom';
-// import api from "~/api/api";
-// import { AuthContext } from '~/context/AuthContext';
+// import {Button, FloatingLabel, Form, Modal} from "react-bootstrap";
+// import React, {useState} from "react";
 //
 //
-// function SignIn() {
-//     const { setIsLoggedIn } = useContext(AuthContext);
-//     const navigate = useNavigate();
+// const DetailsMovie = ({cx, movie}) => {
+//     const [show, setShow] = useState(false);
 //
-//     const [email, setEmail] = useState('');
-//     const [password, setPassword] = useState('');
-//     const [errMsg, setErrMsg] = useState('');
+//     const handleShow = () => {
+//         setShow(true);
+//     }
 //
+//     const handleClose = () => {
+//         setShow(false);
+//     }
 //
-//     useEffect(() => {
-//         setErrMsg('');
-//     }, [email, password]);
-//
-//     useEffect(() => {
-//         setErrMsg('');
-//         const token = localStorage.getItem('token');
-//         if (token) {
-//             setIsLoggedIn(true);
-//             navigate('/');
-//         }
-//     }, [setIsLoggedIn, navigate]);
-//
-//     const handleLogin = async (e) => {
-//         e.preventDefault();
-//
-//         try {
-//             const response = await api.post('/admin/login', {
-//                     email,
-//                     password
-//                 }
-//             );
-//             const token = response.data.token;
-//             localStorage.setItem('token', token);
-//
-//             setIsLoggedIn(true);
-//             navigate('/');
-//
-//         } catch (err) {
-//                 setErrMsg('Login Failed');
-//         }
-//     };
+//     const infoMovie = [
+//         {
+//             label: "ID",
+//             type: "text",
+//             id: "id",
+//             value: movie.id,
+//         },
+//         {
+//             label: "Tên phim",
+//             type: "text",
+//             id: "title",
+//             value: movie.title,
+//         },
+//         {
+//             label: "Số lượt đánh giá",
+//             type: "text",
+//             id: "vote_count_user",
+//             value: movie.vote_count_user,
+//         },
+//         {
+//             label: "Điểm trung bình",
+//             type: "text",
+//             id: "vote_average_user",
+//             value: movie.vote_average_user,
+//         },
+//     ]
 //
 //     return (
-//         <MDBCard>
-//             <MDBCardBody>
-//                 <MDBInput
-//                     type='email'
-//                     value={email}
-//                     onChange={(e) => setEmail(e.target.value)}
-//                 />
-//                 <MDBInput
-//                     type={password}
-//                     value={password}
-//                     onChange={(e) => setPassword(e.target.value)}
-//                 />
-//                 <MDBBtn onClick={handleLogin}>
-//                     Login
-//                 </MDBBtn>
-//             </MDBCardBody>
-//         </MDBCard>
+//         <>
+//             <p onClick={handleShow}>
+//                 {movie.title}
+//             </p>
+//
+//             <Modal show={show} centered onHide={handleClose}>
+//                 <Modal.Body className={cx('modal-body')}>
+//                     <Form inline='true' className={cx('form-movie')}>
+//                         {infoMovie.map((form, index) => (
+//                             <FloatingLabel
+//                                 key={index}
+//                                 label={form.label}
+//                             >
+//                                 <Form.Control
+//                                     autoFocus={form.id === 'title'}
+//                                     as={form.type === 'textarea' ? 'textarea' : undefined}
+//                                     id={form.id}
+//                                     value={form.value}
+//                                 />
+//                             </FloatingLabel>
+//                         ))}
+//                     </Form>
+//                 </Modal.Body>
+//                 <Modal.Footer>
+//                     <Button onClick={handleClose}>
+//                         Close
+//                     </Button>
+//                 </Modal.Footer>
+//             </Modal>
+//         </>
 //     );
 // }
 //
-// export default SignIn;
+// export default DetailsMovie;
