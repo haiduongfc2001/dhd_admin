@@ -7,23 +7,9 @@ import formatReleaseDate from "~/components/formatReleaseDate";
 
 const DetailsMovie = ({cx, movie, searchTerm}) => {
     const [show, setShow] = useState(false);
-    // const [id, setId] = useState("");
-    // const [title, setTitle] = useState("");
-    // const [overview, setOverview] = useState('');
-    // const [poster_path, setPoster_Path] = useState('');
-    // const [genres, setGenres] = useState([]);
-    // const [production_companies, setProduction_companies] = useState([]);
-    // const [production_countries, setProduction_countries] = useState([]);
 
     const handleShow = () => {
         setShow(true);
-        // setId(movie.id);
-        // setTitle(movie.title);
-        // setOverview(movie.overview);
-        // setPoster_Path(movie.poster_path);
-        // setGenres(movie.genres);
-        // setProduction_companies(movie.production_companies);
-        // setProduction_countries(movie.production_countries);
     }
 
     const handleClose = () => {
@@ -129,27 +115,56 @@ const DetailsMovie = ({cx, movie, searchTerm}) => {
                             <span>Không có ảnh</span>
                         )
                         }
-                        {infoMovie.map((form, index) => (
-                            <FloatingLabel
-                                key={index}
-                                label={form.label}
-                                className="mr-sm-2 mb-3"
-                            >
-                                <Form.Control
-                                    autoFocus={form.id === 'title'}
-                                    as={form.type === 'textarea' ? 'textarea' : undefined}
-                                    id={form.id}
-                                    value={form.value}
-                                    size="lg"
-                                    style={{
-                                        minHeight: form.type === 'textarea' ? "100px" : "40px",
-                                        borderRadius: 'var(--default-border-radius)'
-                                    }}
-                                    readOnly={true}
-                                    required
-                                />
-                            </FloatingLabel>
-                        ))}
+                        {infoMovie
+                            .slice(0, 8)
+                            .map((form, index) => (
+                                <FloatingLabel
+                                    key={index}
+                                    label={form.label}
+                                    className="mr-sm-2 mb-3"
+                                >
+                                    <Form.Control
+                                        autoFocus={form.id === 'title'}
+                                        as={form.type === 'textarea' ? 'textarea' : undefined}
+                                        id={form.id}
+                                        value={form.value}
+                                        size="lg"
+                                        style={{
+                                            minHeight: form.type === 'textarea' ? "100px" : "40px",
+                                            borderRadius: 'var(--default-border-radius)'
+                                        }}
+                                        readOnly={true}
+                                        required
+                                    />
+                                </FloatingLabel>
+                            ))}
+                        <div className="row">
+                            {infoMovie
+                                .slice(8, 10)
+                                .map((form, index) => (
+                                    <div className="col-sm-6">
+                                        <FloatingLabel
+                                            key={index}
+                                            label={form.label}
+                                            className="mr-sm-2 mb-3"
+                                        >
+                                            <Form.Control
+                                                autoFocus={form.id === 'title'}
+                                                as={form.type === 'textarea' ? 'textarea' : undefined}
+                                                id={form.id}
+                                                value={form.value}
+                                                size="lg"
+                                                style={{
+                                                    minHeight: form.type === 'textarea' ? "100px" : "40px",
+                                                    borderRadius: 'var(--default-border-radius)'
+                                                }}
+                                                readOnly={true}
+                                                required
+                                            />
+                                        </FloatingLabel>
+                                    </div>
+                                ))}
+                        </div>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
