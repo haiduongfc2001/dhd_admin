@@ -15,6 +15,8 @@ import formatTime from "~/hooks/formatTime";
 import SearchInput from "~/components/SearchInput/SearchInput";
 import {Button, Form} from "react-bootstrap";
 import highlightKeyword from "~/components/highlightKeyword";
+import DetailsUser from "~/pages/Users/DetailUser";
+
 const cx = classNames.bind(styles);
 
 export default function Users() {
@@ -33,7 +35,7 @@ export default function Users() {
         return nameMatch || emailMatch;
     })
 
-    const tableArray = ['User', 'UserID', 'Phone', 'Status','Creat Time', 'Actions'];
+    const tableArray = ['User', 'UserID', 'Phone', 'Status', 'Creat Time', 'Actions'];
     const actionArray = [
         {
             type: 'component',
@@ -109,9 +111,11 @@ export default function Users() {
                                         className='rounded-circle'
                                     />
                                     <div className='ms-3'>
-                                        <p className='fw-bold mb-1'>
-                                            {highlightKeyword(user.name, searchTerm)}
-                                        </p>
+                                        <DetailsUser
+                                            cx={cx}
+                                            user={user}
+                                            searchTerm={searchTerm}
+                                        />
                                         <p className='text-muted mb-0'>
                                             {highlightKeyword(user.email, searchTerm)}
                                         </p>
@@ -139,7 +143,7 @@ export default function Users() {
                                 {formatTime(user.createdAt)}
                                 <div>
                                     <span>Lần cập nhật gần nhất: </span>
-                                    <br />
+                                    <br/>
                                     {formatTime(user.updatedAt)};
                                 </div>
                             </td>
