@@ -6,6 +6,7 @@ import api from "~/api/api";
 import React, {useEffect, useState} from "react";
 import formatReleaseDate from "~/components/formatReleaseDate";
 import CircularProgressBarVote from "~/components/CircularProgressBar";
+import DetailsMovie from "~/pages/Movies/DetailsMovie";
 
 const cx = classNames.bind(styles);
 
@@ -55,7 +56,10 @@ const Ratings = () => {
                                             className="rounded-circle"
                                         />
                                         <div className='ms-3'>
-                                            <p className='fw-bold mb-1'>{movie.title}</p>
+                                            <DetailsMovie
+                                                cx={cx}
+                                                movie={movie}
+                                            />
                                             <p className='text-muted mb-0'>{formatReleaseDate(movie.release_date)}</p>
                                         </div>
                                     </div>
