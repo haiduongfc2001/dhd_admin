@@ -389,7 +389,10 @@ const UpdateProfile = async (req, res) => {
 // JSON - Connect to Client
 const AllUsers = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find().populate({
+            path: 'ratedMovies.movie',
+            select: 'id title'
+        });
         res.json(users);
     } catch (error) {
         res.send(error.message);
