@@ -113,13 +113,17 @@ tr td:nth-of-type(2) {
 
 .filter-movie {
   box-sizing: border-box;
-  border: 5px solid red;
   margin: var(--default-margin);
   position: relative;
   top: -20px;
   width: 200px;
   height: 300px;
   overflow: auto;
+
+  border: 1px solid #321fdb;
+  background-color: #ffffff;
+  border-radius: var(--default-border-radius);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
 
   .filter-movie-title {
     display: flex;
@@ -243,7 +247,11 @@ tr td:nth-of-type(2) {
 }
 
 .modal-body {
-  background-color: antiquewhite;
+  background-color: #dbdddf;
+
+  & input, textarea {
+    font-weight: 600;
+  }
 }
 
 

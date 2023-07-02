@@ -13,3 +13,29 @@
 .table-product-category th {
   font-size: var(--default-font-size)
 }
+
+.user-info {
+  cursor: pointer;
+  transition: all 0.5s ease-in;
+  z-index: 1;
+
+  &:hover {
+    color: var(--bs-link-hover-color);
+    z-index: 2;
+  }
+}
+
+.modal-body {
+  background-color: #dbdddf;
+
+  & input, textarea {
+    font-weight: 600;
+  }
+}
+
+.info-user-ratings {
+
+  & th:nth-child(2) {
+    width: 50px;
+  }
+}
