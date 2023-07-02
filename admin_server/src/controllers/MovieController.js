@@ -13,7 +13,7 @@ const AllMovies = async (req, res) => {
     // }
 
     try {
-        const movies = await Movie.find();
+        const movies = await Movie.find().populate('ratings.user', 'email');
         res.json(movies);
     } catch (error) {
         console.error(error);
@@ -331,7 +331,11 @@ const SearchMovies = async (req, res) => {
             movie.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
-        res.json(searchResults);
+        if (searchResults.length > 0) {
+            res.json(searchResults);
+        } else {
+            res.json({message: 'No movies found!'});
+        }
 
     } catch (error) {
         console.error(error);
