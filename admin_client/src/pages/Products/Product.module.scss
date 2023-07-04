@@ -1,0 +1,57 @@
+//.button-update,
+//.button-delete {
+//  margin: 0 20px;
+//  align-items: center;
+//  justify-content: center;
+//}
+
+td Button {
+  margin: 0 5px;
+}
+
+.icon-action {
+  font-size: 1.4rem;
+}
+
+td {
+  font-size: var(--default-font-size)
+}
+
+
+.form-product input {
+  caret-color: var(--primary);
+}
+
+.table-product-category th:nth-child(1),
+.table-product-category th:nth-child(3) {
+  width: var(--default-width-table);
+}
+
+.table-product-category th {
+  font-size: var(--default-font-size)
+}
+
+tr td {
+  height: 60px;
+
+  &:nth-of-type(2) {
+    min-width: 240px;
+  }
+}
+
+//tr td:nth-of-type(2) {
+//  min-width: 240px;
+//}
+
+.icon-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.limitLineClassName {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Số dòng tối đa hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
