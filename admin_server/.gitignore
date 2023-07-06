@@ -9,6 +9,7 @@
 /.vercel.json
 
 /src/config
+/test
 
 # testing
 /coverage
