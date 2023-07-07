@@ -9,7 +9,7 @@
 /.vercel.json
 
 /src/config
-/test
+/src/test.js
 
 # testing
 /coverage
