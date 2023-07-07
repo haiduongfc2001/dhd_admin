@@ -8,9 +8,7 @@ const app = express();
 
 require("dotenv").config();
 
-const ProductRoute = require("./routes/ProductRoute");
 const MovieRoute = require("./routes/MovieRoute");
-const UserRegisterRoute = require("./routes/UserRegisterRoute");
 const UserRoute = require("./routes/UserRoute");
 const AdminRoute = require("./routes/AdminRoute");
 const path = require("path");
@@ -29,9 +27,7 @@ app.get("/", function (req, res) {
 });
 
 // For user route
-app.use("/", ProductRoute);
 app.use("/", MovieRoute);
-app.use("/", UserRegisterRoute);
 app.use("/", UserRoute);
 app.use("/admin", AdminRoute);
 

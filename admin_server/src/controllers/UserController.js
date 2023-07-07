@@ -129,45 +129,6 @@ const sendResetPasswordMail = async (name, email, token) => {
   }
 };
 
-const LoadRegister = async (req, res) => {
-  try {
-    res.render("registration");
-  } catch (err) {
-    console.log(err.message);
-  }
-};
-
-const AddUser = async (req, res) => {
-  try {
-    const spassword = await securePassword(req.body.password);
-
-    const user = new User({
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-      image: req.file.filename,
-      password: spassword,
-      is_admin: 0,
-    });
-
-    const userData = await user.save();
-
-    if (userData) {
-      await sendVerifyMail(req.body.name, req.body.email, userData._id);
-      res.render("registration", {
-        message:
-          "Your registration has been successfully! Please check your email!",
-      });
-    } else {
-      res.render("registration", {
-        message: "Your registration has been failed!",
-      });
-    }
-  } catch (err) {
-    res.send(err.message);
-  }
-};
-
 const VerifyMail = async (req, res) => {
   try {
     const updateInfo = await User.updateOne(
@@ -180,225 +141,6 @@ const VerifyMail = async (req, res) => {
     console.log(err.message);
   }
 };
-
-// Login user method
-const LoginLoad = async (req, res) => {
-  try {
-    res.render("login");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const VerifyLogin = async (req, res) => {
-  try {
-    const email = req.body.email;
-    const password = req.body.password;
-
-    const userData = await User.findOne({ email: email });
-
-    if (userData) {
-      const passwordMatch = await bcrypt.compare(password, userData.password);
-      if (passwordMatch) {
-        if (userData.is_verified === 0) {
-          res.render("login", { message: "Please verify your mail!" });
-        } else {
-          req.session.user_id = userData._id;
-          res.redirect("/home");
-        }
-      } else {
-        res.render("login", { message: "Email and passsword is incorrect" });
-      }
-    } else {
-      res.render("login", { message: "Email and passsword is incorrect" });
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const LoadHome = async (req, res) => {
-  try {
-    const userData = await User.findById({ _id: req.session.user_id });
-    res.render("home", { user: userData });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const UserLogout = async (req, res) => {
-  try {
-    req.session.destroy();
-    res.redirect("/");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-// Forget Password
-const ForgetLoad = async (req, res) => {
-  try {
-    res.render("forget");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-// Forget Verify
-const ForgetVerify = async (req, res) => {
-  try {
-    const email = req.body.email;
-    const userData = await User.findOne({ email: email });
-
-    if (userData) {
-      if (userData.is_verified === 0) {
-        res.render("forget", {
-          message: "Xin check mail để xác thực đăng ký!",
-        });
-      } else {
-        const randomString = randomstring.generate();
-        const updatedData = await User.updateOne(
-          { email: email },
-          { $set: { token: randomString } }
-        );
-        await sendResetPasswordMail(
-          userData.name,
-          userData.email,
-          randomString
-        );
-        res.render("forget", {
-          message: "Xin vui lòng check mail để reset lại mật khẩu!",
-        });
-      }
-    } else {
-      res.render("forget", {
-        message: "Email của bạn chưa được đăng ký! Xin đăng ký tài khoản!",
-      });
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const ForgetPasswordLoad = async (req, res) => {
-  try {
-    const token = req.query.token;
-    const tokenData = await User.findOne({ token: token });
-    if (tokenData) {
-      // res.render('forget-password', {user_id: tokenData._id});
-      res.redirect("http://localhost:3000/reset-password", {
-        user_id: tokenData._id,
-      });
-    } else {
-      res.render("404", { message: "Token không đúng" });
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const ResetPassword = async (req, res) => {
-  try {
-    const password = req.body.password;
-    const user_id = req.body.user_id;
-
-    const secure_password = await securePassword(password);
-    const updatedData = await User.findByIdAndUpdate(
-      { _id: user_id },
-      {
-        $set: {
-          password: secure_password,
-          token: "",
-        },
-      }
-    );
-
-    res.redirect("/");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-// For verification send mail link
-const VerificationLoad = async (req, res) => {
-  try {
-    res.render("verification", { message: "Verification" });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const SendVerificationLink = async (req, res) => {
-  try {
-    const email = req.body.email;
-    const userData = await User.findOne({ email: email });
-    if (userData) {
-      sendVerifyMail(userData.name, userData.email, userData._id);
-      res.render("verification", {
-        message: "Reset verification mail sent your mail id, please check!",
-      });
-    } else {
-      res.render("verification", { message: "This email is not exist" });
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-// User profile edit & update
-const EditLoad = async (req, res) => {
-  try {
-    const id = req.query.id;
-    const userData = await User.findById({ _id: id });
-
-    if (userData) {
-      res.render("edit", { user: userData });
-    } else {
-      res.redirect("/home");
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const UpdateProfile = async (req, res) => {
-  try {
-    let updateData = {
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-    };
-
-    if (req.file) {
-      updateData.image = req.file.filename;
-    }
-
-    const userData = await User.findByIdAndUpdate(
-      { _id: req.body.user_id },
-      { $set: updateData }
-    );
-
-    res.redirect("/home");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-// const UpdateProfile = async (req, res) => {
-//     try {
-//
-//         if (req.file) {
-//             const userData = await User.findByIdAndUpdate({_id: req.body.user_id}, {$set: {name: req.body.name, email: req.body.email, phone: req.body.phone, image: req.file.filename}})
-//         } else {
-//             const userData = await User.findByIdAndUpdate({_id: req.body.user_id}, {$set: {name: req.body.name, email: req.body.email, phone: req.body.phone}})
-//         }
-//
-//         res.redirect('/home.ejs')
-//
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
 
 // ----------------------------------------------------------------
 // JSON - Connect to Client
@@ -453,12 +195,10 @@ const UserRegister = async (req, res) => {
       const userData = await user.save();
       if (userData) {
         await sendVerifyMail(req.body.name, req.body.email, userData._id);
-        return res
-          .status(200)
-          .json({
-            message:
-              "Xin vui lòng xác thực tài khoản trong tin nhắn được chúng tôi gửi trong email của bạn!",
-          });
+        return res.status(200).json({
+          message:
+            "Xin vui lòng xác thực tài khoản trong tin nhắn được chúng tôi gửi trong email của bạn!",
+        });
       } else {
         res.status(404).json({ message: "Đăng ký không thành công" });
       }
@@ -727,23 +467,9 @@ const UserCountStatus = async (req, res) => {
 };
 
 module.exports = {
-  LoadRegister,
   VerifyMail,
   AllUsers,
-  LoginLoad,
-  VerifyLogin,
-  LoadHome,
-  UserLogout,
-  ForgetLoad,
-  ForgetVerify,
-  ForgetPasswordLoad,
-  ResetPassword,
-  VerificationLoad,
-  SendVerificationLink,
-  EditLoad,
-  UpdateProfile,
   //----------------------------
-  AddUser,
   FindUserById,
   UserRegister,
   UserVerifyMail,

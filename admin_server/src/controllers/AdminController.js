@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 
 const fs = require("fs");
 
-require("dotenv").config(); // Add this line to load environment variables
+require("dotenv").config();
 const {
   HOST,
   PORT,
@@ -15,7 +15,7 @@ const {
   BASE_URL,
   BASE_ADMIN_URL,
 } = require("../config/MailConfig");
-const Product = require("../models/ProductModel/ProductModel");
+
 const path = require("path");
 
 // <a href="http://127.0.0.1:3000/verify?id=' + user_id + '"> Verify </a>
@@ -132,230 +132,6 @@ const addUserMail = async (name, email, password, user_id) => {
   }
 };
 
-const LoadLogin = async (req, res) => {
-  try {
-    res.render("login");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const VerifyLogin = async (req, res) => {
-  try {
-    const email = req.body.email;
-    const password = req.body.password;
-
-    const userData = await User.findOne({ email: email });
-
-    if (userData) {
-      const passwordMatch = await bcrypt.compare(password, userData.password);
-      if (passwordMatch) {
-        if (userData.is_admin === 0) {
-          res.render("login", { message: "Email and password is incorrect" });
-        } else {
-          req.session.user_id = userData._id;
-          res.redirect("/admin/home");
-        }
-      } else {
-        res.render("login", { message: "Email and password is incorrect" });
-      }
-    } else {
-      res.render("login", { message: "Email and password is incorrect" });
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const LoadDashboard = async (req, res) => {
-  try {
-    const userData = await User.findById({ _id: req.session.user_id });
-    res.render("home", { admin: userData });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const Logout = async (req, res) => {
-  try {
-    req.session.destroy();
-    res.redirect("/admin");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const ForgetLoad = async (req, res) => {
-  try {
-    res.render("forget");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const ForgetVerify = async (req, res) => {
-  try {
-    const email = req.body.email;
-    const userData = await User.findOne({ email: email });
-    if (userData) {
-      if (userData.is_admin === 0) {
-        res.render("forget", { message: "Email is incorrect" });
-      } else {
-        const randomString = randomstring.generate();
-        const updatedData = await User.updateOne(
-          { email: email },
-          { $set: { token: randomString } }
-        );
-        await sendResetPasswordMail(
-          userData.name,
-          userData.email,
-          randomString
-        );
-        res.render("forget", {
-          message: "Please check your email to reset your password!",
-        });
-      }
-    } else {
-      res.render("forget", { message: "Email is incorrect" });
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const ForgetPasswordLoad = async (req, res) => {
-  try {
-    const token = req.query.token;
-    const tokenData = await User.findOne({ token: token });
-
-    if (tokenData) {
-      res.render("forget-password", { user_id: tokenData._id });
-    } else {
-      res.render("404", { message: "Invalid link!" });
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const ResetPassword = async (req, res) => {
-  try {
-    const password = req.body.password;
-    const user_id = req.body.user_id;
-
-    const secure_password = await securePassword(password);
-    const updatedData = await User.findByIdAndUpdate(
-      { _id: user_id },
-      {
-        $set: {
-          password: secure_password,
-          token: "",
-        },
-      }
-    );
-
-    res.redirect("/admin");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const AdminDashboard = async (req, res) => {
-  try {
-    const userData = await User.find({ is_admin: 0 });
-    res.render("dashboard", { users: userData });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const NewUserLoad = async (req, res) => {
-  try {
-    res.render("new-user");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const AddUser = async (req, res) => {
-  try {
-    const name = req.body.name;
-    const email = req.body.email;
-    const phone = req.body.phone;
-    const image = req.file.filename;
-    const password = randomstring.generate(8);
-
-    const spassword = await securePassword(password);
-
-    const user = new User({
-      name: name,
-      email: email,
-      phone: phone,
-      image: image,
-      password: spassword,
-      is_admin: 0,
-    });
-
-    const userData = await user.save();
-
-    if (userData) {
-      await addUserMail(name, email, password, userData._id);
-      res.redirect("/admin/dashboard");
-    } else {
-      res.render("new-user", { message: "Something went wrong!" });
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-// edit user functionality
-const EditUserLoad = async (req, res) => {
-  try {
-    const id = req.query.id;
-    const userData = await User.findById({ _id: id });
-
-    if (userData) {
-      res.render("edit-user", { user: userData });
-    } else {
-      res.redirect("/admin/dashboard");
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const UpdateUser = async (req, res) => {
-  try {
-    const userData = await User.findByIdAndUpdate(
-      { _id: req.body.id },
-      {
-        $set: {
-          name: req.body.name,
-          email: req.body.email,
-          phone: req.body.phone,
-          is_verified: req.body.verify,
-        },
-      }
-    );
-
-    res.redirect("/admin/dashboard");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-// Delete User
-const DeleteUser = async (req, res) => {
-  try {
-    const id = req.query.id;
-    await User.deleteOne({ _id: id });
-    res.redirect("/admin/dashboard");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
 // ----------------------------------------------------------------
 //  JSON - Connect to Client
 const AllAdmins = async (req, res) => {
@@ -386,18 +162,36 @@ const AdminLogin = async (req, res) => {
           .status(401)
           .json({ message: "Email hoặc mật khẩu không hợp lệ!" });
       } else {
+        const payload = {
+          user: {
+            id: user.id,
+            is_admin: user.is_admin,
+          },
+        };
+
+        jwt.sign(
+          payload,
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" },
+          (err, token) => {
+            if (err) throw err;
+
+            res.json({ token });
+          }
+        );
+
         // Create a JWT token
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-          expiresIn: "1h",
-        });
-        user.token = token;
-        await user.save();
+        // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        //   expiresIn: "1h",
+        // });
+        // user.token = token;
+        // await user.save();
 
-        // Lưu thông tin người dùng trong session
-        req.session.id = user._id;
-        req.session.cookie.expires = new Date(Date.now() + 60 * 60 * 1000);
+        // // Lưu thông tin người dùng trong session
+        // req.session.id = user._id;
+        // req.session.cookie.expires = new Date(Date.now() + 60 * 60 * 1000);
 
-        res.status(200).json({ token });
+        // res.status(200).json({ token });
       }
     }
   } catch (error) {
@@ -656,20 +450,6 @@ const AdminResetPassword = async (req, res) => {
 };
 
 module.exports = {
-  LoadLogin,
-  VerifyLogin,
-  LoadDashboard,
-  Logout,
-  ForgetLoad,
-  ForgetVerify,
-  ForgetPasswordLoad,
-  ResetPassword,
-  AdminDashboard,
-  NewUserLoad,
-  AddUser,
-  EditUserLoad,
-  UpdateUser,
-  DeleteUser,
   // JSON - Connect to Client
   AllAdmins,
   AdminLogin,

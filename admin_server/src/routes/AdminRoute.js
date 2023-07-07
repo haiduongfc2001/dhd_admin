@@ -37,41 +37,8 @@ const upload = multer({ storage: storage });
 
 const AdminAuth = require("../middleware/AdminAuth");
 const AdminController = require("../controllers/AdminController");
-const UserController = require("../controllers/UserController");
-const User = require("../models/UserModel");
-const bcrypt = require("bcrypt");
 const { authAdmin } = require("../middleware/AdminAuth");
-const randomstring = require("randomstring");
-const nodemailer = require("nodemailer");
-const { HOST, PORT, USERNAME, PASSWORD } = require("../config/MailConfig");
 const Auth = require("../middleware/Auth");
-
-// admin_route.get('/', AdminAuth.isLogout, AdminController.LoadLogin);
-// admin_route.post('/', AdminController.VerifyLogin);
-//
-// admin_route.get('/home', AdminAuth.isLogin, AdminController.LoadDashboard);
-//
-// admin_route.get('/logout', AdminAuth.isLogin, AdminController.Logout);
-//
-// admin_route.get('/forget', AdminAuth.isLogout, AdminController.ForgetLoad);
-// admin_route.post('/forget', AdminController.ForgetVerify);
-//
-// admin_route.get('/forget-password', AdminAuth.isLogout, AdminController.ForgetPasswordLoad);
-// admin_route.post('/forget-password', AdminController.ResetPassword);
-//
-// admin_route.get('/dashboard', AdminAuth.isLogin, AdminController.AdminDashboard);
-//
-// admin_route.get('/new-user', AdminAuth.isLogin, AdminController.NewUserLoad);
-// admin_route.post('/new-user', upload.single('image'), AdminController.AddUser);
-//
-// admin_route.get('/edit-user', AdminAuth.isLogin, AdminController.EditUserLoad);
-// admin_route.post('/edit-user', AdminController.UpdateUser);
-//
-// admin_route.get('/delete-user', AdminAuth.isLogin, AdminController.DeleteUser);
-//
-// admin_route.get('*', (req, res) => {
-//     res.redirect('/admin');
-// });
 
 // ----------------------------------------------------------------
 // axios
