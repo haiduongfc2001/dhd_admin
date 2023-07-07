@@ -76,44 +76,52 @@ const authenticateUser = (req, res, next) => {
   if (!token) {
     return res
       .status(401)
-      .json({ message: "Không có token nào được cung cấp" });
+      .json({ message: "Truy cập bị từ chối. Thiếu token." });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Token không hợp lệ" });
-    }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.userId = decoded.user_id;
+    req.user = decoded.user;
     next();
-  });
+  } catch (err) {
+    res.status(401).json({ message: "Token không hợp lệ!" });
+  }
 };
 
 const authenticateAdmin = (req, res, next) => {
-  const token = req.headers.authorization;
-
-  if (!token) {
-    return res
-      .status(401)
-      .json({ message: "Không có token nào được cung cấp" });
+  if (req.user && req.user.is_admin) {
+    next();
+  } else {
+    res
+      .status(403)
+      .json({ message: "Access denied. Admin privileges required." });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Token không hợp lệ" });
-    }
+  // const token = req.headers.authorization;
 
-    req.userId = decoded.id;
+  // if (!token) {
+  //   return res
+  //     .status(401)
+  //     .json({ message: "Không có token nào được cung cấp" });
+  // }
 
-    // Kiểm tra nếu là admin
-    User.findById(req.userId, (error, user) => {
-      if (error || !user || user.is_admin !== 1) {
-        return res.status(401).json({ message: "Unauthorized" });
-      }
+  // jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  //   if (err) {
+  //     return res.status(401).json({ message: "Token không hợp lệ" });
+  //   }
 
-      next();
-    });
-  });
+  //   req.userId = decoded.id;
+
+  //   // Kiểm tra nếu là admin
+  //   User.findById(req.userId, (error, user) => {
+  //     if (error || !user || user.is_admin !== 1) {
+  //       return res.status(401).json({ message: "Unauthorized" });
+  //     }
+
+  //     next();
+  //   });
+  // });
 };
 
 module.exports = {
