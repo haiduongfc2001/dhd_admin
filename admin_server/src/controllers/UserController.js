@@ -245,35 +245,35 @@ const UserVerifyLogin = async (req, res) => {
           return res
             .status(401)
             .json({ message: "Email hoặc mật khẩu không đúng!" });
-        } else {
-          // Create a JWT token
-          const token = jwt.sign(
-            { user_id: userData._id, email: email },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: "1h",
-            }
-          );
-
-          // Lưu thông tin người dùng trong session
-          // req.session.adminId = userData._id;
-          req.session.token = token;
-          req.session.user_id = userData._id;
-
-          res
-            .status(200)
-            .header("Authorization", `Bearer ${token}`)
-            .status(200)
-            .json({
-              message: "Logged in successfully",
-              token,
-              user_id: userData._id,
-              user: userData,
-            });
-
-          // return res.status(200)
-          //     .json({message: 'Logged in successfully', token, user_id: userData._id, user: userData});
         }
+
+        // Create a JWT token
+        const token = jwt.sign(
+          { user_id: userData._id, email: email },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "1h",
+          }
+        );
+
+        // Lưu thông tin người dùng trong session
+        // req.session.adminId = userData._id;
+        req.session.token = token;
+        req.session.user_id = userData._id;
+
+        res
+          .status(200)
+          .header("Authorization", `Bearer ${token}`)
+          .status(200)
+          .json({
+            message: "Logged in successfully",
+            token,
+            user_id: userData._id,
+            user: userData,
+          });
+
+        // return res.status(200)
+        //     .json({message: 'Logged in successfully', token, user_id: userData._id, user: userData});
       }
     }
   } catch {
@@ -381,16 +381,16 @@ const UserEditProfile = async (req, res) => {
 
     const { name, phone } = req.body;
 
-    const userId = req.params._id;
+    const user_id = req.params._id;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(user_id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     const updatedUser = await User.findByIdAndUpdate(
-      userId,
+      user_id,
       { name, phone, updatedAt: Date.now() },
       { new: true }
     );
