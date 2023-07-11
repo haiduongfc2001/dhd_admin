@@ -176,7 +176,10 @@ const AdminLogin = async (req, res) => {
           (err, token) => {
             if (err) throw err;
 
-            res.header("Authorization", `Bearer ${token}`).status(200).json("");
+            res
+              .header("Authorization", `Bearer ${token}`)
+              .status(200)
+              .json(token);
           }
         );
 
