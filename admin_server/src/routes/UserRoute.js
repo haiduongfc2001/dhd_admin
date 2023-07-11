@@ -42,7 +42,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // axios
-user_route.get("/users", UserController.AllUsers);
+user_route.get("/users", Auth.authenticateAdmin, UserController.AllUsers);
 user_route.get("/user/:_id", UserController.FindUserById);
 // user_route.post('/user/:_id', UserController.FindUserById);
 user_route.put("/user/:_id", AdminController.AdminEditUser);
