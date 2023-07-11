@@ -23,7 +23,12 @@ function Home() {
 
   const getCountFromAPI = async (getAPI, setData) => {
     try {
-      const response = await api.get(getAPI);
+      const token = localStorage.getItem("token");
+      const response = await api.get(getAPI, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setData(response.data.length);
     } catch (error) {
       console.error(error);

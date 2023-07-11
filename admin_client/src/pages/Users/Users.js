@@ -71,16 +71,34 @@ export default function Users() {
     },
   ];
 
+  // useEffect(() => {
+  //   api
+  //     .get("/admin/admins")
+  //     .then((response) => {
+  //       setUsers(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, [setUsers]);
+
   useEffect(() => {
-    api
-      .get("/users")
-      .then((response) => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await api.get("/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setUsers(response.data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.log(error);
-      });
-  }, [setUsers]);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <div style={{ fontSize: "var(--default-font-size" }}>
