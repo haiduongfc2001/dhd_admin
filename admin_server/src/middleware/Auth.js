@@ -90,7 +90,11 @@ const authenticateUser = (req, res, next) => {
 };
 
 const authenticateAdmin = (req, res, next) => {
-  if (req.user && req.user.is_admin) {
+  const token = req.headers.authorization.split(" ")[1];
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  console.log(decoded);
+  const { user } = decoded;
+  if (user && user.is_admin === 1) {
     next();
   } else {
     res

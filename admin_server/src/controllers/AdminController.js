@@ -172,11 +172,11 @@ const AdminLogin = async (req, res) => {
         jwt.sign(
           payload,
           process.env.JWT_SECRET,
-          { expiresIn: "1h" },
+          { expiresIn: "1days" },
           (err, token) => {
             if (err) throw err;
 
-            res.json({ token });
+            res.header("Authorization", `Bearer ${token}`).status(200).json("");
           }
         );
 
@@ -188,8 +188,8 @@ const AdminLogin = async (req, res) => {
         // await user.save();
 
         // // Lưu thông tin người dùng trong session
-        // req.session.id = user._id;
-        // req.session.cookie.expires = new Date(Date.now() + 60 * 60 * 1000);
+        req.session.id = user._id;
+        req.session.cookie.expires = new Date(Date.now() + 60 * 60 * 1000);
 
         // res.status(200).json({ token });
       }

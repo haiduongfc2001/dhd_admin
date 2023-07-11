@@ -42,7 +42,7 @@ const Auth = require("../middleware/Auth");
 
 // ----------------------------------------------------------------
 // axios
-admin_route.get("/admins", AdminController.AllAdmins);
+admin_route.get("/admins", Auth.authenticateAdmin, AdminController.AllAdmins);
 admin_route.post("/login", AdminController.AdminLogin);
 admin_route.post(
   "/add-user",
