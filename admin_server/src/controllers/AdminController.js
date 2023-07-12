@@ -164,7 +164,7 @@ const AdminLogin = async (req, res) => {
       } else {
         const payload = {
           user: {
-            id: user.id,
+            user_id: user._id,
             is_admin: user.is_admin,
           },
         };
@@ -172,9 +172,13 @@ const AdminLogin = async (req, res) => {
         jwt.sign(
           payload,
           process.env.JWT_SECRET,
-          { expiresIn: "1days" },
-          (err, token) => {
+          { expiresIn: "30days" },
+          async (err, token) => {
             if (err) throw err;
+
+            // Cập nhật lại token trong cơ sở dữ liệu
+            user.token = token;
+            await user.save();
 
             res
               .header("Authorization", `Bearer ${token}`)
@@ -191,7 +195,7 @@ const AdminLogin = async (req, res) => {
         // await user.save();
 
         // // Lưu thông tin người dùng trong session
-        req.session.id = user._id;
+        req.session.user_id = user._id;
         req.session.cookie.expires = new Date(Date.now() + 60 * 60 * 1000);
 
         // res.status(200).json({ token });
@@ -232,7 +236,7 @@ const AdminLogout = async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 
   //   try {
-  //     const user = await User.findById(req.userId);
+  //     const user = await User.findById(req.user_id);
   //     if (!user) {
   //       return res.status(404).json({ message: "User not found" });
   //     }
@@ -315,8 +319,8 @@ const AdminEditUser = async (req, res) => {
     const { name, email, phone } = req.body;
     // const image = req.file.filename;
 
-    const userId = req.params._id;
-    const existingUser = await User.findById(userId);
+    const user_id = req.params._id;
+    const existingUser = await User.findById(user_id);
 
     if (!existingUser) {
       return res.status(404).json({ message: "User not found" });
@@ -333,14 +337,30 @@ const AdminEditUser = async (req, res) => {
     // }
 
     // const updatedUser = await User.findByIdAndUpdate(
-    //     userId,
+    //     user_id,
     //     {name, email, phone},
     //     {new: true}
     // );
 
-    existingUser.name = name;
-    existingUser.email = email;
-    existingUser.phone = phone;
+    // existingUser.name = name;
+    // existingUser.email = email;
+    // existingUser.phone = phone;
+    // existingUser.updatedAt = new Date();
+
+    // const updatedUser = await existingUser.save();
+
+    if (name) {
+      existingUser.name = name;
+    }
+
+    if (email) {
+      existingUser.email = email;
+    }
+
+    if (phone) {
+      existingUser.phone = phone;
+    }
+
     existingUser.updatedAt = new Date();
 
     const updatedUser = await existingUser.save();

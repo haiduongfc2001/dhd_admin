@@ -94,7 +94,7 @@ const sendResetPasswordMail = async (name, email, token) => {
     const MailOptions = {
       from: USERNAME,
       to: email,
-      subject: "For Reset Password Admin",
+      subject: "For Reset Password",
       html: `
                 <div style="font-family: Arial, sans-serif; font-size: 16px;">
                   <p style="margin-bottom: 20px;">Hi <b>${name}</b>,</p>
@@ -146,10 +146,12 @@ const VerifyMail = async (req, res) => {
 // JSON - Connect to Client
 const AllUsers = async (req, res) => {
   try {
-    const users = await User.find().populate({
-      path: "ratedMovies.movie",
-      select: "id title",
-    });
+    const users = await User.find()
+      .populate({
+        path: "ratedMovies.movie",
+        select: "id title",
+      })
+      .select("-password"); // loại bỏ trường "password"
     res.json(users);
   } catch (error) {
     res.send(error.message);
@@ -223,59 +225,63 @@ const UserVerifyMail = async (req, res) => {
 };
 
 const UserVerifyLogin = async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const { email, password } = req.body;
+    const user = await User.findOne({ email });
 
-    const userData = await User.findOne({ email });
-
-    if (!userData) {
+    if (!user) {
       return res.status(401).json({ message: "Bạn chưa đăng ký tài khoản" });
-    } else {
-      if (userData.is_verified === 0) {
-        return res.status(401).json({
-          message:
-            "Bạn chưa xác thực tài khoản. " +
-            "Xin check mail được gửi đến để xác thực tài khoản",
-        });
-      } else {
-        // So sánh mật khẩu được cung cấp với mật khẩu băm được lưu trữ trong cơ sở dữ liệu
-        const passwordMatch = await bcrypt.compare(password, userData.password);
-
-        if (!passwordMatch) {
-          return res
-            .status(401)
-            .json({ message: "Email hoặc mật khẩu không đúng!" });
-        }
-
-        // Create a JWT token
-        const token = jwt.sign(
-          { user_id: userData._id, email: email },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: "1h",
-          }
-        );
-
-        // Lưu thông tin người dùng trong session
-        // req.session.adminId = userData._id;
-        req.session.token = token;
-        req.session.user_id = userData._id;
-
-        res
-          .status(200)
-          .header("Authorization", `Bearer ${token}`)
-          .status(200)
-          .json({
-            message: "Logged in successfully",
-            token,
-            user_id: userData._id,
-            user: userData,
-          });
-
-        // return res.status(200)
-        //     .json({message: 'Logged in successfully', token, user_id: userData._id, user: userData});
-      }
     }
+
+    if (user.is_verified === 0) {
+      return res.status(401).json({
+        message:
+          "Bạn chưa xác thực tài khoản. " +
+          "Xin check mail được gửi đến để xác thực tài khoản",
+      });
+    }
+
+    // So sánh mật khẩu được cung cấp với mật khẩu băm được lưu trữ trong cơ sở dữ liệu
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res
+        .status(401)
+        .json({ message: "Email hoặc mật khẩu không đúng!" });
+    }
+
+    const payload = {
+      user: {
+        user_id: user._id,
+        email: email,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: "30days" },
+      async (err, token) => {
+        if (err) throw err;
+
+        // Cập nhật lại token trong cơ sở dữ liệu
+        user.token = token;
+        await user.save();
+
+        res.header("Authorization", `Bearer ${token}`).json({
+          message: "Logged in successfully",
+          token,
+          user_id: user._id,
+          user: user,
+        });
+      }
+    );
+
+    // Lưu thông tin người dùng trong session
+    req.session.token = user.token;
+    req.session.user_id = user._id;
+    req.session.cookie.expires = new Date(Date.now() + 60 * 60 * 1000);
   } catch {
     return res.status(500).json({ message: "Server error" });
   }
@@ -431,6 +437,42 @@ const UserEditProfile = async (req, res) => {
   }
 };
 
+const UserEditImage = async (req, res) => {
+  try {
+    const user_id = req.params._id;
+    const image = req.file.filename;
+
+    const user = await User.findById(user_id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Xóa ảnh cũ nếu người dùng update ảnh mới
+    if (user.image) {
+      const imagePath = path.join(
+        __dirname,
+        "../public/userImages",
+        user.image
+      );
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+
+    user.image = image;
+    user.updatedAt = Date.now();
+
+    const updatedUser = await user.save();
+
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const UserCountStatus = async (req, res) => {
   try {
     const users = await User.find();
@@ -479,5 +521,6 @@ module.exports = {
   UserForgetPassword,
   UserResetPassword,
   UserEditProfile,
+  UserEditImage,
   UserCountStatus,
 };

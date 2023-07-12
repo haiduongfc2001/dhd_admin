@@ -42,7 +42,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // axios
-user_route.get("/users", Auth.authenticateAdmin, UserController.AllUsers);
+user_route.get(
+  "/users",
+  //  Auth.authenticateAdmin,
+  UserController.AllUsers
+);
 user_route.get("/user/:_id", UserController.FindUserById);
 // user_route.post('/user/:_id', UserController.FindUserById);
 user_route.put("/user/:_id", AdminController.AdminEditUser);
@@ -65,6 +69,11 @@ user_route.post("/forget", UserController.UserForgetVerify);
 user_route.get("/forget-password", UserController.UserForgetPassword);
 user_route.post("/forget-password", UserController.UserResetPassword);
 
+user_route.put(
+  "/edit-profile/:_id/image",
+  upload.single("image"),
+  UserController.UserEditImage
+);
 user_route.put("/edit-profile/:_id", UserController.UserEditProfile);
 
 user_route.get("/users/count-status", UserController.UserCountStatus);
