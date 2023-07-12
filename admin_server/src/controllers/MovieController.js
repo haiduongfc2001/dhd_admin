@@ -243,6 +243,19 @@ const FilterMoviesByGenre = async (req, res) => {
   }
 };
 
+const FilterMoviesByGenres = async (req, res) => {
+  const { genres } = req.query;
+  const genreArray = genres.split(",");
+
+  try {
+    const movies = await Movie.find({ "genres.name": { $all: genreArray } });
+    res.json(movies);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 const AllGenresOfMovies = async (req, res) => {
   try {
     const movies = await Movie.find();
@@ -368,6 +381,7 @@ module.exports = {
   RatingMovie,
   // FilterActionMovie,
   FilterMoviesByGenre,
+  FilterMoviesByGenres,
   AllGenresOfMovies,
   AllProductionCompanies,
   ListUsersRatingMovie,
