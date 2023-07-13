@@ -9,7 +9,11 @@ admin_route.use(
     secret: SessionSecret.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    // cookie: { secure: true },
+    cookie: {
+      secure: true,
+      maxAge: 15 * 60 * 1000, // 15 phút
+    },
   })
 );
 
