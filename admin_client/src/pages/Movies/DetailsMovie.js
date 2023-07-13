@@ -44,11 +44,9 @@ const DetailsMovie = ({ cx, movie, searchTerm }) => {
       label: "Thể loại",
       type: "text",
       id: "genres",
-      value:
-        movie.genres &&
-        movie.genres
-          .map((genre, index) => <span key={index}>{genre.name}</span>)
-          .join(", "),
+      value: movie.genres
+        ? movie.genres.map((genre) => genre.name).join(", ")
+        : "",
     },
     {
       label: "Ngày phát hành",
@@ -64,23 +62,19 @@ const DetailsMovie = ({ cx, movie, searchTerm }) => {
     },
     {
       label: "Nhà sản xuất",
-      type: "textarea",
+      type: "text",
       id: "production_companies",
-      value:
-        movie.production_companies &&
-        movie.production_companies
-          .map((company, index) => <span key={index}>{company.name}</span>)
-          .join(", "),
+      value: movie.production_companies
+        ? movie.production_companies.map((company) => company.name).join(", ")
+        : "",
     },
     {
       label: "Nước sản xuất",
-      type: "textarea",
+      type: "text",
       id: "production_countries",
-      value:
-        movie.production_countries &&
-        movie.production_countries
-          .map((country) => <span>{country.name}</span>)
-          .join(", "),
+      value: movie.production_countries
+        ? movie.production_countries.map((country) => country.name).join(", ")
+        : "",
     },
     {
       label: "Số lượt đánh giá",
