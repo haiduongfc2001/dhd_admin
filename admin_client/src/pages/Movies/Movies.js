@@ -189,10 +189,10 @@ function ListMovies() {
           </thead>
           <tbody>
             {(showGenreMovies && genreMovies.length !== 0
-              ? genreMovies
+              ? genreMovies.sort((a, b) => a.id - b.id)
               : showRatingsMovies && ratingsMovies.length !== 0
               ? ratingsMovies
-              : filteredMovies
+              : filteredMovies.sort((a, b) => a.id - b.id)
             )
               // .sort((a, b) => a.id - b.id)
               .map((movie) =>
