@@ -371,6 +371,32 @@ const SearchMovies = async (req, res) => {
   }
 };
 
+const SortMoviesByDecreaseRatings = async (req, res) => {
+  try {
+    const movies = await Movie.find().sort({
+      vote_average_user: -1,
+      vote_count_user: -1,
+    });
+    res.json(movies);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const SortMoviesByAscendingRatings = async (req, res) => {
+  try {
+    const movies = await Movie.find().sort({
+      vote_average_user: 1,
+      vote_count_user: 1,
+    });
+    res.json(movies);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 module.exports = {
   AllMovies,
   FindMovieById,
@@ -387,6 +413,9 @@ module.exports = {
   ListUsersRatingMovie,
   CountRatings,
   SearchMovies,
+
+  SortMoviesByDecreaseRatings,
+  SortMoviesByAscendingRatings,
 };
 
 // const FilterActionMovie = async (req, res) => {
