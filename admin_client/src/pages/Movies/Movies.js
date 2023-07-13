@@ -20,6 +20,12 @@ import SearchInput from "~/components/SearchInput/SearchInput";
 import { AiFillFilter } from "react-icons/ai";
 import FilterMovieGenre from "~/pages/Movies/FilterMovieGenre";
 import DetailsMovie from "~/pages/Movies/DetailsMovie";
+import SortMoviesByRatings from "./SortMoviesByRatings";
+import {
+  AiOutlineDown,
+  AiOutlineArrowDown,
+  AiOutlineArrowUp,
+} from "react-icons/ai";
 
 const cx = classNames.bind(styles);
 
@@ -29,6 +35,12 @@ function ListMovies() {
 
   const [genreMovies, setGenreMovies] = useState([]);
   const [showGenreMovies, setShowGenreMovies] = useState(false);
+
+  // const [decRatingsMovies, setDecRatingsMovies] = useState([]);
+  // const [ascRatingsMovies, setAscRatingsMovies] = useState([]);
+
+  const [ratingsMovies, setRatingsMovies] = useState([]);
+  const [showRatingsMovies, setShowRatingsMovies] = useState(false);
 
   const [link, setLink] = useState("");
 
@@ -178,14 +190,16 @@ function ListMovies() {
           <tbody>
             {(showGenreMovies && genreMovies.length !== 0
               ? genreMovies
+              : showRatingsMovies && ratingsMovies.length !== 0
+              ? ratingsMovies
               : filteredMovies
             )
-              .sort((a, b) => a.id - b.id)
+              // .sort((a, b) => a.id - b.id)
               .map((movie) =>
                 movie ? (
                   <tr key={movie._id}>
                     <td style={{ textAlign: "center" }}>
-                      {highlightKeyword(movie.id, searchTerm)}
+                      {movie.id && highlightKeyword(movie.id, searchTerm)}
                     </td>
                     <td>
                       <div className="d-flex align-items-center">
@@ -309,11 +323,21 @@ function ListMovies() {
             <AiFillFilter />
             <h3 className={"ms-3 mb-0"}>Lọc phim</h3>
           </div>
-          <FilterMovieGenre
-            cx={cx}
-            setGenreMovies={setGenreMovies}
-            setShowGenreMovies={setShowGenreMovies}
-          />
+          <div className={cx("filter-movie-body")}>
+            {" "}
+            <FilterMovieGenre
+              cx={cx}
+              setGenreMovies={setGenreMovies}
+              setShowGenreMovies={setShowGenreMovies}
+            />
+            <SortMoviesByRatings
+              cx={cx}
+              // setDecRatingsMovies={setDecRatingsMovies}
+              // setAscRatingsMovies={setAscRatingsMovies}
+              setRatingsMovies={setRatingsMovies}
+              setShowRatingsMovies={setShowRatingsMovies}
+            />
+          </div>
         </div>
       </div>
 
