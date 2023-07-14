@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "~/api/api";
 import { AiFillEdit } from "react-icons/ai";
+import formatReleaseDate from "~/components/formatReleaseDate";
 
 const EditMovie = ({ cx, movie, setMovies }) => {
   const [show, setShow] = useState(false);
@@ -16,6 +17,7 @@ const EditMovie = ({ cx, movie, setMovies }) => {
   const [title, setTitle] = useState("");
   const [overview, setOverview] = useState("");
   const [poster_path, setPoster_Path] = useState("");
+  const [release_date, setRelease_Date] = useState("");
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -31,10 +33,15 @@ const EditMovie = ({ cx, movie, setMovies }) => {
     setPoster_Path(e.target.value);
   };
 
+  const handleRelease_DateChange = (e) => {
+    setRelease_Date(e.target.value);
+  };
+
   const handleShow = () => {
     setTitle(movie.title);
     setOverview(movie.overview);
     setPoster_Path(movie.poster_path);
+    setRelease_Date(movie.release_date);
     setShow(true);
   };
 
@@ -55,6 +62,9 @@ const EditMovie = ({ cx, movie, setMovies }) => {
     } else if (!poster_path) {
       setErrorMessage("Xin nhập vào trường poster_path!");
       return;
+    } else if (!release_date) {
+      setErrorMessage("Xin nhập vào trường release_date!");
+      return;
     }
 
     try {
@@ -64,6 +74,7 @@ const EditMovie = ({ cx, movie, setMovies }) => {
         title,
         overview,
         poster_path,
+        release_date,
       });
 
       const updatedMovie = response.data;
@@ -147,6 +158,21 @@ const EditMovie = ({ cx, movie, setMovies }) => {
       id: "poster_path",
       value: poster_path,
       onChange: handlePoster_PathChange,
+    },
+    {
+      label: (
+        <>
+          Movie Release Date{" "}
+          <span
+            style={{ color: "red" }}
+            dangerouslySetInnerHTML={{ __html: "*" }}
+          />
+        </>
+      ),
+      type: "date",
+      id: "release_date",
+      value: formatReleaseDate(movie.release_date),
+      onChange: handleRelease_DateChange,
     },
   ];
 

@@ -12,6 +12,7 @@ function AddMovie({ cx, setMovies }) {
   const [title, setTitle] = useState("");
   const [overview, setOverview] = useState("");
   const [poster_path, setPoster_Path] = useState("");
+  const [release_date, setRelease_Date] = useState("");
 
   const handleShow = () => {
     setShow(true);
@@ -21,6 +22,7 @@ function AddMovie({ cx, setMovies }) {
     setTitle("");
     setOverview("");
     setPoster_Path("");
+    setRelease_Date("");
     setErrorMessage("");
   };
 
@@ -36,10 +38,14 @@ function AddMovie({ cx, setMovies }) {
     setPoster_Path(e.target.value);
   };
 
+  const handleRelease_DateChange = (e) => {
+    setRelease_Date(e.target.value);
+  };
+
   const handleAddMovie = async (e) => {
     e.preventDefault();
 
-    if (!title || !overview || !poster_path) {
+    if (!title || !overview || !poster_path || !release_date) {
       toast.error("Xin vui lòng nhập đầy đủ thông tin!");
       return;
     }
@@ -48,6 +54,7 @@ function AddMovie({ cx, setMovies }) {
       title: title,
       overview: overview,
       poster_path: poster_path,
+      release_date: release_date,
     };
 
     try {
@@ -59,6 +66,7 @@ function AddMovie({ cx, setMovies }) {
       setTitle("");
       setOverview("");
       setPoster_Path("");
+      setRelease_Date("");
       setErrorMessage("");
 
       // Gọi lại API để lấy danh sách movie và cập nhật state
@@ -136,6 +144,21 @@ function AddMovie({ cx, setMovies }) {
       id: "poster_path",
       value: poster_path,
       onChange: handlePoster_PathChange,
+    },
+    {
+      label: (
+        <>
+          Movie Release Date{" "}
+          <span
+            style={{ color: "red" }}
+            dangerouslySetInnerHTML={{ __html: "*" }}
+          />
+        </>
+      ),
+      type: "date",
+      id: "release_date",
+      value: release_date,
+      onChange: handleRelease_DateChange,
     },
   ];
 
