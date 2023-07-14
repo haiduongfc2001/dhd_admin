@@ -5,6 +5,7 @@ const {
   API_MOVIE_URL,
   API_MOVIE_KEY,
 } = require("../config/movies/MovieConfig");
+const { default: mongoose } = require("mongoose");
 
 // Tất cả movie
 const AllMovies = async (req, res) => {
@@ -93,10 +94,29 @@ const DeleteMovie = async (req, res) => {
     const deleteMovie = await Movie.findOneAndRemove({ _id: req.params._id });
 
     if (deleteMovie) {
-      res.send(`Movie ${req.params._id} deleted successfully!`);
+      res.status(200).send(`Movie ${req.params._id} deleted successfully!`);
     } else {
-      res.send(`Movie ${req.params._id} not found!`);
+      res.status(404).send(`Movie ${req.params._id} not found!`);
     }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+// Xóa nhiều movie
+const DeleteMovies = async (req, res) => {
+  const { movieIds } = req.body;
+
+  try {
+    // Xóa các movie theo danh sách id
+    const result = await Movie.deleteMany({ _id: { $in: movieIds } });
+
+    if (result.deletedCount > 0) {
+      res.status(200).json({ message: "Xóa movie thành công!" });
+    } else {
+      res.status(404).json({ message: "Không tìm thấy movie để xóa!" });
+    }
+    // "movieIds": ["id1", "id2", "id3"]
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -403,6 +423,7 @@ module.exports = {
   AddMovie,
   EditMovie,
   DeleteMovie,
+  DeleteMovies,
   AddMovieByLink,
   RatingMovie,
   // FilterActionMovie,

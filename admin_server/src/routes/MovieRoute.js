@@ -22,6 +22,7 @@ movieRoute.get("/movie/:_id", MovieController.FindMovieById);
 movieRoute.post("/movie", MovieController.AddMovie);
 movieRoute.put("/movie/:_id", MovieController.EditMovie);
 movieRoute.delete("/movie/:_id", MovieController.DeleteMovie);
+movieRoute.delete("/movies/delete-multiple", MovieController.DeleteMovies);
 movieRoute.post("/movie/add-link", MovieController.AddMovieByLink);
 
 movieRoute.post("/movie/:_id/rating", MovieController.RatingMovie);
