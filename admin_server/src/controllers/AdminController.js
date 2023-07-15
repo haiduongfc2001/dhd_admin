@@ -180,6 +180,10 @@ const AdminLogin = async (req, res) => {
             user.token = token;
             await user.save();
 
+            // Set session expiration time to 1 hour
+            req.session.user_id = user._id;
+            req.session.cookie.expires = new Date(Date.now() + 60 * 60 * 1000);
+
             res
               .header("Authorization", `Bearer ${token}`)
               .status(200)
