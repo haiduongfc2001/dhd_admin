@@ -22,14 +22,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log(
-    "HTTP Method: " +
-      req.method +
-      ", URL - " +
-      req.url +
-      ", Status: " +
-      res.statusCode
-  );
+  res.on("finish", () => {
+    console.log(
+      "HTTP Method: " +
+        req.method +
+        ", URL - " +
+        req.originalUrl +
+        ", Status: " +
+        res.statusCode
+    );
+  });
   next();
 });
 
