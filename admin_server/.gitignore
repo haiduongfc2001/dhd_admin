@@ -5,10 +5,7 @@
 /node_modules
 /.pnp
 .pnp.js
-/src/public/userImages
-/.vercel.json
 
-/src/config
 /src/test.js
 
 # testing
@@ -19,7 +16,7 @@
 
 # misc
 .DS_Store
-/.env
+.env
 .env.local
 .env.development.local
 .env.test.local
