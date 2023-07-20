@@ -35,12 +35,17 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, "../public/userImages"));
   },
   filename: function (req, file, cb) {
-    cb(null, new Date().toISOString() + file.originalname);
+    const name = Date.now() + "-" + file.originalname;
+    cb(null, name);
   },
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg"
+  ) {
     cb(null, true);
   } else {
     cb(null, false);
@@ -50,7 +55,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 5, // 5MB file size limit
+    fileSize: 1024 * 1024 * 10, // 10MB file size limit
   },
   fileFilter: fileFilter,
 });
