@@ -188,7 +188,7 @@ const UserRegister = async (req, res) => {
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
-        image: req.file.filename,
+        // image: req.file.filename,
         password: hashedPassword,
         is_admin: 0,
       });
