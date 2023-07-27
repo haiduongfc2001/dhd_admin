@@ -46,6 +46,13 @@ function AddUser({ cx, styles, setUsers }) {
       return;
     }
 
+    // Validate phone: số điện thoại phải gồm 10 chữ số, không được chưa ký tự nào khác ngoài số
+    const phoneRegex = /^\d{10}$/;
+    if (!phone.match(phoneRegex)) {
+      setErrorMessage("Số điện thoại phải gồm 10 số");
+      return;
+    }
+
     try {
       const response = await api.post("/admin/add-user", formData);
       // setNewUser({});
@@ -137,7 +144,7 @@ function AddUser({ cx, styles, setUsers }) {
           />
         </>
       ),
-      type: "number",
+      type: "text",
       id: "phone",
       value: phone,
       onChange: handlePhoneChange,
@@ -186,6 +193,7 @@ function AddUser({ cx, styles, setUsers }) {
               >
                 <Form.Control
                   ref={form.id === "name" ? nameInputRef : null}
+                  maxLength={form.id === "phone" ? 10 : undefined}
                   type={form.type}
                   id={form.id}
                   value={form.value}
