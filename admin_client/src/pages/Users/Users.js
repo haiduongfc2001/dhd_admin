@@ -130,7 +130,11 @@ export default function Users() {
               <td>
                 <div className="d-flex align-items-center">
                   <img
-                    src={`${api.defaults.baseURL}/userImages/${user.image}`}
+                    src={
+                      user.image
+                        ? `${api.defaults.baseURL}/userImages/${user.image}`
+                        : "https://img.freepik.com/free-icon/user_318-563642.jpg?w=360"
+                    }
                     alt="{user.name}"
                     style={{ width: "45px", height: "45px" }}
                     className="rounded-circle"
